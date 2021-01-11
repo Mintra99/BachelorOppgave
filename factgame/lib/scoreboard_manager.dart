@@ -10,23 +10,40 @@ class ScoreboardManager extends StatefulWidget {
 }
 
 class _ScoreboardManagerState extends State<ScoreboardManager> {
-  List<String> _players = ['player1'];
-
   @override
   Widget build(BuildContext context) {
   return Column(children: [Container(
       margin: EdgeInsets.all(10.0),
       child: RaisedButton(
         onPressed:() {
-          setState(() {
-            _players.add('player2');
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ScoreboardPage())
+          );
     //TODO: make it redirect to Scoreboard here
         },
         child: Text('Scoreboard')
       ),
     ),
-    Scoreboard(_players)
   ],);
+  }
+}
+
+class ScoreboardPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Scoreboard')
+      ),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text('Go back!'),
+        ),
+      ),
+    );
   }
 }

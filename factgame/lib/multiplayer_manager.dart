@@ -15,11 +15,33 @@ class _Multiplayer extends State<MultiplayerManager> {
       margin: EdgeInsets.all(10.0),
       child: RaisedButton(
         onPressed:() {
-          //TODO: make it redirect to Multiplayer here
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MultiplayerPage()),
+        );
         },
           child: Text('Multiplayer')
       ),
     ),
     ],);
+  }
+}
+
+class MultiplayerPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Multiplayer"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
   }
 }

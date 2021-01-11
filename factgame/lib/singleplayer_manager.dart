@@ -15,11 +15,32 @@ class _Singleplayer extends State<SingleplayerManager> {
       margin: EdgeInsets.all(10.0),
       child: RaisedButton(
           onPressed:() {
-            //TODO: make it redirect to Singleplayer here
-          },
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SingleplayerPage()),
+          );},
           child: Text('Singleplayer')
       ),
     ),
     ],);
+  }
+}
+
+class SingleplayerPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Singleplayer"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
   }
 }
