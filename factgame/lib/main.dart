@@ -15,12 +15,20 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Fact Game'),
+          leading: GestureDetector(
+            onTap: () {},
+            child: Icon(
+              Icons.menu,
+            ),
+          ),
         ),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SingleplayerManager(), // Does nothing currently
             MultiplayerManager(), // Does nothing currently
-            ScoreboardManager(), //The scoreboard just adds things to a list currently
+            ScoreboardManager(), // Does nothing currently
           ],
         )
       ),
