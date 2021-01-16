@@ -67,30 +67,34 @@ class ScoreboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Scoreboard')),
+      appBar: AppBar(title: Text('Scoreboard')),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return new GestureDetector(
-                  onTap: () {},
-                  child: new Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Container(
-                      color: Colors.grey,
-                      height: 100.0,
-                      child: Column(
-                        children: [
-                          //TODO: Make Scoreboard return playername and score
-                          Scoreboard(),
-                        ],
+            child: Scrollbar(
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return new GestureDetector(
+                    onTap: () {
+                      //TODO: can make this onTap navigate to their profile, else just remove the onTap
+                    },
+                    child: new Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Container(
+                        color: Colors.grey,
+                        height: 100.0,
+                        child: Column(
+                          children: [
+                            //TODO: Make Scoreboard return playername and score
+                            Scoreboard(), //Returns 'Playername'
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ],
