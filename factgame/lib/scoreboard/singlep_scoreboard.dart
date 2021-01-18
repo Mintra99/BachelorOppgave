@@ -1,15 +1,16 @@
+import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
 
 import './scoreboard.dart';
 
-class ScoreboardManager extends StatefulWidget {
+class SPScoreboardManager extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _ScoreboardManagerState();
   }
 }
 
-class _ScoreboardManagerState extends State<ScoreboardManager> {
+class _ScoreboardManagerState extends State<SPScoreboardManager> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +31,7 @@ class _ScoreboardManagerState extends State<ScoreboardManager> {
                   );
                 },
                 child: Text(
-                  'Scoreboard',
+                  'Singleplayer',
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -39,35 +40,14 @@ class _ScoreboardManagerState extends State<ScoreboardManager> {
     );
   }
 }
-/*
-class ScoreboardPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text('Scoreboard')),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Scoreboard(), // Returns just 'Text' for now
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Go back!'),
-            ),
-          ],
-        )
-    );
-  }
-}
-*/
+
+
 
 class ScoreboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Scoreboard')),
+      appBar: AppBar(title: Text('Singleplyaer Scoreboard')),
       body: Column(
         children: [
           Expanded(
@@ -102,3 +82,4 @@ class ScoreboardPage extends StatelessWidget {
     );
   }
 }
+
