@@ -1,7 +1,9 @@
 import 'package:factgame/models/global.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
-import './scoreboard.dart';
+import 'package:factgame/models/widgets/scoreboard.dart';
 
 class SPScoreboardManager extends StatefulWidget {
   @override
@@ -41,45 +43,27 @@ class _ScoreboardManagerState extends State<SPScoreboardManager> {
   }
 }
 
-
-
 class ScoreboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Singleplyaer Scoreboard')),
-      body: Column(
-        children: [
-          Expanded(
-            child: Scrollbar(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return new GestureDetector(
-                    onTap: () {
-                      //TODO: can make this onTap navigate to their profile, else just remove the onTap
-                    },
-                    child: new Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: new Container(
-                        color: Colors.grey,
-                        height: 100.0,
-                        child: Column(
-                          children: [
-                            //TODO: Make Scoreboard return playername and score
-                            Scoreboard(), //Returns 'Playername'
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+      appBar: AppBar(title: Text('Singleplyaer Scoreboard'),
+          backgroundColor: darkGrayColor),
+      body: DecoratedBox(
+        child: ListView(
+          children: getList(),
+        ),
+        decoration: BoxDecoration(color: darkGrayColor),
       ),
     );
+  }
+
+  List<Widget> getList() {
+    List<Scoreboard> list = [];
+    for (int i = 0; i< 10; i++) {
+      list.add(Scoreboard());
+    }
+    return list;
   }
 }
 
