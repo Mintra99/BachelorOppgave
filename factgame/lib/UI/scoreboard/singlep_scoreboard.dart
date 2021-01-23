@@ -1,3 +1,4 @@
+import 'package:factgame/models/classes/player.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,10 @@ class _ScoreboardManagerState extends State<SPScoreboardManager> {
   }
 }
 
+
+
 class ScoreboardPage extends StatelessWidget {
+  List <Player> player = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +65,72 @@ class ScoreboardPage extends StatelessWidget {
   List<Widget> getList() {
     List<Scoreboard> list = [];
     for (int i = 0; i< 10; i++) {
-      list.add(Scoreboard(name: "test"));
+      list.add(Scoreboard(username: "test"));
     }
     return list;
   }
+
+
+
+//Everything below does not work/not finished
+/*
+class ScoreboardPage extends StatelessWidget {
+  List <Player> player = [];
+  @override
+  Widget build(BuildContext context) {
+    player = getList();
+    return Scaffold(
+        appBar: AppBar(title: Text('Singleplyaer Scoreboard'),
+            backgroundColor: darkGrayColor),
+        body: StreamBuilder(
+          initialData: [], // provide an initial data
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot != null) {
+              if (snapshot.data.length > 0) {
+                return _buildListSimple(context, snapshot.data);
+              }
+              else if (snapshot.data.length==0){
+                return Center(child: Text('No Data'));
+              }
+            } else if (snapshot.hasError) {
+              return Container();
+            }
+            return CircularProgressIndicator();
+          },
+        )
+    );
+  }
+
+  Widget _buildScoreboardTile(BuildContext context, Player p) {
+    return ListTile(
+      key: Key(p.id),
+      title: Scoreboard(
+        username: p.username,
+       // score: p.score,
+      ),
+    );
+  }
+
+  Widget _buildListSimple(
+      BuildContext context, List<Player> player) {
+    return Theme(
+      data: ThemeData(canvasColor: Colors.transparent),
+      child: ReorderableListView(
+        padding: EdgeInsets.only(top: 300.0),
+        children:
+        player.map((Player item) => _buildScoreboardTile(context, item)).toList(),
+      ),
+    );
+  }
+
+  //Just for testing: sets in data
+  List<Player> getList() {
+    for (int i = 0; i< 10; i++) {
+      player.add(Player("Player " + i.toString(), 250, i.toString()));
+    }
+    return player;
+  }
+
+ */
 }
 

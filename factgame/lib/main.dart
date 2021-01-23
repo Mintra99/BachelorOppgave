@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:factgame/scoreboard//singlep_scoreboard.dart';
-import 'package:factgame/scoreboard//multip_scoreboard.dart';
+import 'UI/scoreboard/multip_scoreboard.dart';
+import 'UI/scoreboard/singlep_scoreboard.dart';
 import 'package:factgame/gamemode/singleplayer_manager.dart';
 import 'package:factgame/gamemode/multiplayer_manager.dart';
 import 'package:factgame/models/global.dart';
+
+
 
 void main() {
   runApp(MyApp());

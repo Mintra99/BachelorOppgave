@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import './mydrawer.dart';
+import '../../mydrawer.dart';
 class Home extends StatefulWidget{
   State<StatefulWidget> createState(){
     return HomeState();
