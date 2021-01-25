@@ -19,24 +19,12 @@ class MyApp extends StatelessWidget {
       home: Home(),
       //home: LogIn //bytt til denne når login er ferdig
       routes: {
-        /*
-        'sections': (context){
-        return Sections();
-        },
-
-         */
         'HomePage':(context){
           return Home();
         },
         'Samsung':(context){
           return Samsung();
         },
-        /*
-        'mobiledetails':(context){
-          return MobileDetails();
-        },
-
-         */
         "login":(context){
           return LogIn();
         },
