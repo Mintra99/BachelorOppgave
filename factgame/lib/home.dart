@@ -12,12 +12,7 @@ class Home extends StatefulWidget{
     return HomeState();
   }
 }
-/*
-void main() {
-  runApp(MyApp());
-}
- */
-//class MyApp extends StatelessWidget {
+
 class HomeState extends State<Home>{
   @override
   Widget build(BuildContext context) {

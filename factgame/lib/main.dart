@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Mobtech",
       home: Home(),
+      //home: LogIn //bytt til denne når login er ferdig
       routes: {
         /*
         'sections': (context){

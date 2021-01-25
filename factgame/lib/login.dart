@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-//import 'package:http/http.dart';
-import 'dart:convert' as convert;
 
 class LogIn extends StatefulWidget{
   LogIn({Key key}) : super(key: key);
@@ -24,12 +22,12 @@ class LogInState extends State<LogIn> {
 
   String validglobal (String val){
     if (val.isEmpty){
-      return "field canot be empty";
+      return "field cannot be empty";
     }
   }
   String validusername (String val){
     if (val.trim().isEmpty){
-      return "field canot be empty";
+      return "field cannot be empty";
     }
     if (val.trim().length < 4){
       return "name can not be less than 4";
@@ -40,7 +38,7 @@ class LogInState extends State<LogIn> {
   }
   String validpassword (String val){
     if (val.trim().isEmpty){
-      return "field canot be empty";
+      return "field cannot be empty";
     }
     if (val.trim().length < 4){
       return "name can not be less than 4";
@@ -51,7 +49,7 @@ class LogInState extends State<LogIn> {
   }
   String validemail (String val){
     if (val.trim().isEmpty){
-      return "field canot be empty";
+      return "field cannot be empty";
     }
     if (val.trim().length < 4){
       return "name can not be less than 4";
