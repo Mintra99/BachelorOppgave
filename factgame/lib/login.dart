@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+//import 'package:http/http.dart';
 import 'dart:convert' as convert;
 
 class LogIn extends StatefulWidget{

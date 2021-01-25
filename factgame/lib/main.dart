@@ -1,100 +1,46 @@
-import 'package:flutter/material.dart';
+//import 'package:fakenews/pages/mobiledetails.dart';
+//import 'package:factgame/sections.dart';
+//import 'sections.dart';
 
-import 'UI/scoreboard/multip_scoreboard.dart';
-import 'UI/scoreboard/singlep_scoreboard.dart';
-import 'package:factgame/gamemode/singleplayer_manager.dart';
-import 'package:factgame/gamemode/multiplayer_manager.dart';
-import 'package:factgame/models/global.dart';
+import "package:flutter/material.dart" show BuildContext, MaterialApp, StatelessWidget, Widget, runApp;
+import 'home.dart';
+import 'samsung.dart';
+import 'login.dart';
 
-
-
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return MaterialApp(
-      home: SafeArea(
-        child: DefaultTabController(
-          length: 4,
-          child: new Scaffold(
-            body: TabBarView(
-              children: [
-                new Container(
-                    color: darkGrayColor,
-                    child: Column(children: [
-                      Container(
-                        child: Title(
-                            color: Colors.black,
-                            child: Text(
-                              'Game modes',
-                              style: globalTitleStyle,
-                              textAlign: TextAlign.center,
-                            )),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                      SingleplayerManager(),
-                      MultiplayerManager(),
-                    ])),
-                new Container(
-                    color: darkGrayColor,
-                    child: Column(children: [
-                      Container(
-                        child: Title(
-                            color: Colors.black,
-                            child: Text(
-                              'Scoreboard',
-                              style: globalTitleStyle,
-                              textAlign: TextAlign.center,
-                            )),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                      SPScoreboardManager(),
-                      MPScoreboardManager(),
-                    ])),
-                new Container(
-                  color: darkGrayColor,
-                  //TODO: add profile page
-                ),
-                new Container(
-                  color: darkGrayColor,
-                  //TODO: add settings page
-                ),
-              ],
-            ),
-            bottomNavigationBar: new TabBar(
-              tabs: [
-                Tab(
-                  icon: new Icon(Icons.videogame_asset),
-                ),
-                Tab(
-                  icon: new Icon(Icons.leaderboard),
-                ),
-                Tab(
-                  icon: new Icon(Icons.perm_identity),
-                ),
-                Tab(
-                  icon: new Icon(Icons.settings),
-                )
-              ],
-              labelColor: Colors.blue,
-              unselectedLabelColor: Colors.white,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorPadding: EdgeInsets.all(5.0),
-              indicatorColor: Colors.red,
-            ),
-            backgroundColor: Colors.black,
-          ),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      title: "Mobtech",
+      home: Home(),
+      routes: {
+        /*
+        'sections': (context){
+        return Sections();
+        },
+
+         */
+        'HomePage':(context){
+          return Home();
+        },
+        'Samsung':(context){
+          return Samsung();
+        },
+        /*
+        'mobiledetails':(context){
+          return MobileDetails();
+        },
+
+         */
+        "login":(context){
+          return LogIn();
+        },
+      },
     );
   }
 }
+
