@@ -1,4 +1,4 @@
-from apps.user import User
+from resource.user import User
 
 
 class Multiplayer:
