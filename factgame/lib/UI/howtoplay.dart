@@ -69,6 +69,9 @@ class HowToPlayPage extends StatelessWidget {
                           border: Border.all(color: Colors.black, width: 1)),
                     ),
                     Container(
+                      padding: EdgeInsets.all(20.0),
+                      margin: EdgeInsets.all(20.0),
+                      alignment: Alignment.center,
                       child: Text(
                         'The proposers job is to select a sentence form the sorce which they thingk are important for providing of disproving the claim.\n'
                             'The faster the guesser succeeds in guessing the correct label of the claim higher the score they both get.'
@@ -94,6 +97,9 @@ class HowToPlayPage extends StatelessWidget {
                           border: Border.all(color: Colors.black, width: 1)),
                     ),
                     Container(
+                      padding: EdgeInsets.all(20.0),
+                      margin: EdgeInsets.all(20.0),
+                      alignment: Alignment.center,
                       child: Text(
                           'The guesser has to guess if the claim is true or false based on the evidence chosen by the proposer.\n'
                               'The faster the guesser succeeds in guessing the correct label of the claim higher the score they both get.'
