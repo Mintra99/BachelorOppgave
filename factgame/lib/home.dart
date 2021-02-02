@@ -66,13 +66,39 @@ class HomeState extends State<Home>{
                       MPScoreboardManager(),
                     ])),
                 new Container(
-                  color: darkGrayColor,
-                  //TODO: add profile page
-                ),
+                    color: darkGrayColor,
+                    child: Column(children: [
+                      Container(
+                        child: Title(
+                            color: Colors.black,
+                            child: Text(
+                              'Profile',
+                              style: globalTitleStyle,
+                              textAlign: TextAlign.center,
+                            )),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black, width: 1)),
+                      ),
+                    ])),
                 new Container(
-                  color: darkGrayColor,
-                  //TODO: add settings page
-                ),
+                    color: darkGrayColor,
+                    child: Column(children: [
+                      Container(
+                        child: Title(
+                            color: Colors.black,
+                            child: Text(
+                              'Settings',
+                              style: globalTitleStyle,
+                              textAlign: TextAlign.center,
+                            )),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black, width: 1)),
+                      ),
+                    ])),
               ],
             ),
             bottomNavigationBar: new TabBar(
