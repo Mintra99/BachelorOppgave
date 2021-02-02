@@ -1,3 +1,4 @@
+import 'package:factgame/UI/howtoplay.dart';
 import 'package:flutter/material.dart';
 
 import 'UI/scoreboard/multip_scoreboard.dart';
@@ -42,6 +43,8 @@ class HomeState extends State<Home>{
                       ),
                       SingleplayerManager(),
                       MultiplayerManager(),
+                      HowToPlayManager(),
+
                     ])),
                 new Container(
                     color: darkGrayColor,

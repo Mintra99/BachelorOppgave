@@ -11,3 +11,8 @@ TextStyle darkScoreboardName = new TextStyle(
   color: darkGrayColor,
   fontSize: 30,
 );
+
+TextStyle globalTextStyle = new TextStyle(
+  fontFamily: 'Avenir',
+  color: Colors.white
+);
