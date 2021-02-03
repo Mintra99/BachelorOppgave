@@ -30,7 +30,7 @@ class CreateNewAccountState extends State<CreateNewAccount> {
             _showDialog();
             msgStatus = 'Check email or password';
           } else {
-            // Navigator.pushReplacementNamed(context, '/dashboard');
+            // Navigator.pushReplacementNamed(context, 'home');
           }
         });
       }
