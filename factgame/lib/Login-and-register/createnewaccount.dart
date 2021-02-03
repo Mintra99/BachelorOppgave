@@ -18,8 +18,8 @@ class CreateNewAccountState extends State<CreateNewAccount> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
-  _onPressed(){
-    setState(() {
+  _onPressed() {
+     setState (() {
       if(_emailController.text.trim().toLowerCase().isNotEmpty &&
           _passwordController.text.trim().isNotEmpty && _usernameController.text.trim().isNotEmpty
           && _firstnameController.text.trim().isNotEmpty && _lastnameController.text.trim().isNotEmpty ){
@@ -28,9 +28,9 @@ class CreateNewAccountState extends State<CreateNewAccount> {
             _lastnameController.text.trim(), _firstnameController.text.trim() ,_passwordController.text.trim()).whenComplete(() {
           if (databaseHelper.Message) {
             _showDialog();
-            msgStatus = 'Check email or password';
+            msgStatus = 'You Have Account';
           } else {
-            // Navigator.pushReplacementNamed(context, 'home');
+            msgStatus= 'error';
           }
         });
       }
@@ -198,22 +198,21 @@ class CreateNewAccountState extends State<CreateNewAccount> {
             );
           }
 
-  void _showDialog(){
-    showDialog(
+  void _showDialog() async {
+    await showDialog(
         context:context ,
         builder:(BuildContext context){
-          return AlertDialog(
-            title: new Text('Failed'),
-            content:  new Text('Check your email or password'),
+           return AlertDialog(
+            title: new Text('Success'),
+            content:  new Text('You Have Account'),
             actions: <Widget>[
               new RaisedButton(
-
                 child: new Text(
-                  'Close',
+                  'LogIn',
                 ),
-
                 onPressed: (){
-                  Navigator.of(context).pop();
+                 // Navigator.of(context).pop();
+                  Navigator.pushReplacementNamed(context, 'Login');
                 },
 
               ),

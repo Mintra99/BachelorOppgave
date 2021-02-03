@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 class DatabaseHelper{
 
-  String serverUrl = "https://lmsturkey.com/api/users";
+  String serverUrl = "https://fakenews-app.com/api/users";
   var errorMessage ;
   var Message;
 
