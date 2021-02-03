@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fakenews/Controllers/databasehelper.dart';
+import 'package:factgame/Controllers/databasehelper.dart';
 
 class CreateNewAccount extends StatefulWidget {
   CreateNewAccount({Key key}) : super(key: key);
