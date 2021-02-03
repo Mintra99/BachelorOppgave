@@ -21,7 +21,7 @@ class LogInState extends State<LogIn> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passController = TextEditingController();
-  String msgStatus ;
+  String msgStatus='' ;
 
   _onPressed(){
     setState(() {
