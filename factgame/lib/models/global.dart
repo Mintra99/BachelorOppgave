@@ -14,5 +14,16 @@ TextStyle darkScoreboardName = new TextStyle(
 
 TextStyle globalTextStyle = new TextStyle(
   fontFamily: 'Avenir',
-  color: Colors.white
+  color: Colors.white,
+  fontSize: 18,
+);
+
+RoundedRectangleBorder globalButtonBorder = new RoundedRectangleBorder(
+  borderRadius: new BorderRadius.circular(18.0),
+  side: BorderSide(color: Colors.black),
+);
+
+ButtonTheme globalButtonTheme = new ButtonTheme(
+  minWidth: 200.0,
+  height: 100.0,
 );

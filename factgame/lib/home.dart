@@ -1,10 +1,10 @@
 import 'package:factgame/UI/howtoplay.dart';
 import 'package:flutter/material.dart';
 
+import 'UI/gamemode/multiplayer_manager.dart';
+import 'UI/gamemode/singleplayer_manager.dart';
 import 'UI/scoreboard/multip_scoreboard.dart';
 import 'UI/scoreboard/singlep_scoreboard.dart';
-import 'package:factgame/gamemode/singleplayer_manager.dart';
-import 'package:factgame/gamemode/multiplayer_manager.dart';
 import 'package:factgame/models/global.dart';
 
 
@@ -41,9 +41,17 @@ class HomeState extends State<Home>{
                             color: Colors.white,
                             border: Border.all(color: Colors.black, width: 1)),
                       ),
-                      SingleplayerManager(),
-                      MultiplayerManager(),
-                      HowToPlayManager(),
+                      Container(
+                        padding: EdgeInsets.only(top: 50.0),
+                          child: SingleplayerManager()
+                      ),
+                      Container(
+                        child: MultiplayerManager()
+                      ),
+                      Container(
+                        child: HowToPlayManager()
+                      ),
+
 
                     ])),
                 new Container(
@@ -62,8 +70,13 @@ class HomeState extends State<Home>{
                             color: Colors.white,
                             border: Border.all(color: Colors.black, width: 1)),
                       ),
-                      SPScoreboardManager(),
-                      MPScoreboardManager(),
+                      Container(
+                        padding: EdgeInsets.only(top: 50.0),
+                        child: SPScoreboardManager(),
+                      ),
+                      Container(
+                        child: MPScoreboardManager(),
+                      )
                     ])),
                 new Container(
                     color: darkGrayColor,
@@ -110,7 +123,7 @@ class HomeState extends State<Home>{
                   icon: new Icon(Icons.leaderboard),
                 ),
                 Tab(
-                  icon: new Icon(Icons.perm_identity),
+                  icon: new Icon(Icons.person),
                 ),
                 Tab(
                   icon: new Icon(Icons.settings),

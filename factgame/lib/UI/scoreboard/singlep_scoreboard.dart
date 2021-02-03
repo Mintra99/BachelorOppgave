@@ -21,21 +21,22 @@ class _ScoreboardManagerState extends State<SPScoreboardManager> {
         Container(
             margin: EdgeInsets.all(10.0),
             child: Center(
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(18.0),
-                  side: BorderSide(color: Colors.black),
-                ),
-                padding: EdgeInsets.fromLTRB(125, 10, 125, 10),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ScoreboardPage()),
-                  );
-                },
-                child: Text(
-                  'Singleplayer',
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+              child: ButtonTheme(
+                minWidth: 300.0,
+                height: 75.0,
+                child: RaisedButton(
+                  shape: globalButtonBorder,
+                  //padding: EdgeInsets.fromLTRB(125, 10, 125, 10),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ScoreboardPage()),
+                    );
+                  },
+                  child: Text(
+                    'Singleplayer',
+                    style: globalTextStyle,
+                  ),
                 ),
               ),
             ))
