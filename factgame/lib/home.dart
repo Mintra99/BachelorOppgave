@@ -1,3 +1,4 @@
+import 'package:factgame/Login-and-register/showdata.dart';
 import 'package:factgame/UI/howtoplay.dart';
 import 'package:flutter/material.dart';
 
