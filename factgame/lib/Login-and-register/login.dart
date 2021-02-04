@@ -34,7 +34,7 @@ class LogInState extends State<LogIn> {
             _showDialog();
             msgStatus = 'Check email or password';
           }else{
-             Navigator.pushReplacementNamed(context, 'home');
+             Navigator.pushReplacementNamed(context, '/home');
           }
         });
       }
@@ -100,7 +100,7 @@ class LogInState extends State<LogIn> {
 
                   ),),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
+                  onTap: () => Navigator.pushNamed(context, '/ForgotPassword'),
                   child: Text(
                     'Forgot Password?', style: TextStyle(color: Colors.redAccent),
                   ),
@@ -126,7 +126,7 @@ class LogInState extends State<LogIn> {
                 SizedBox( height: 20,),
                 FlatButton( child: Text('Create New Account',),splashColor: Colors.lightGreenAccent,
                   onPressed: (){
-                    Navigator.pushNamed(context, 'CreateNewAccount');
+                    Navigator.pushNamed(context, '/CreateNewAccount');
                   },
                 )
               ],

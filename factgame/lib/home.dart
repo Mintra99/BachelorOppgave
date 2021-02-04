@@ -18,9 +18,9 @@ class Home extends StatefulWidget{
 class HomeState extends State<Home>{
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
+    return Scaffold(
+      //debugShowCheckedModeBanner: false,
+      body: SafeArea(
         child: DefaultTabController(
           length: 4,
           child: new Scaffold(

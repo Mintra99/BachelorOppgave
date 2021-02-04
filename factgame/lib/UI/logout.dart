@@ -14,6 +14,7 @@ class Logout extends StatefulWidget {
 }
 class LogoutState extends State<Logout> {
   _save(String token) async {
+    SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = token;

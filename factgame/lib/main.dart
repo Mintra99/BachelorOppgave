@@ -20,23 +20,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Mobtech",
       home: LogIn(),
-      //home: LogIn //bytt til denne når login er ferdig
       routes: {
         //here is function for login and register
-        'home': (context) => Home(),
-        'Login': (context) => LogIn(),
-        'ForgotPassword': (context) => ForgotPassword(),
-        'CreateNewAccount': (context) => CreateNewAccount(),
+        '/home': (context) => Home(),
+        '/Login': (context) => LogIn(),
+        '/ForgotPassword': (context) => ForgotPassword(),
+        '/CreateNewAccount': (context) => CreateNewAccount(),
         //here is the end of functuon login and register
-        'HomePage':(context){
+        '/HomePage':(context){
           return Home();
         },
-        //'Samsung':(context){
-          //return Samsung();
-        //},
-        //"login":(context){
-          //return LogIn();
-        //},
       },
     );
   }

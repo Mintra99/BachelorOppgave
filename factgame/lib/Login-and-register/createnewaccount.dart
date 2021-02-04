@@ -189,7 +189,7 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                           child: Text('Already have an account?Login',),
                           splashColor: Colors.lightGreenAccent,
                           onPressed: () {
-                            Navigator.pushNamed(context, 'Login');
+                            Navigator.pushNamed(context, '/Login');
                           },
                         )
                       ],
@@ -213,7 +213,7 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                 ),
                 onPressed: (){
                  // Navigator.of(context).pop();
-                  Navigator.pushReplacementNamed(context, 'Login');
+                  Navigator.pushReplacementNamed(context, '/Login');
                 },
 
               ),
