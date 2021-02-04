@@ -19,6 +19,23 @@ class LogIn extends StatefulWidget{
   LogInState createState() => LogInState();
 }
 class LogInState extends State<LogIn> {
+  read() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key ) ?? 0;
+    if(value != '0'){
+      Navigator.of(context).push(
+          new MaterialPageRoute(
+            builder: (BuildContext context) =>  Home(),
+          )
+      );
+    }
+  }
+
+  @override
+  initState(){
+    read();
+  }
   DatabaseHelper databaseHelper = new DatabaseHelper();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passController = TextEditingController();
