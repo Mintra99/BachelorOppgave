@@ -1,7 +1,7 @@
 import 'package:factgame/UI/howtoplay.dart';
-import 'package:factgame/UI/logout.dart';
 import 'package:flutter/material.dart';
 
+import 'Login-and-register/logout.dart';
 import 'UI/gamemode/multiplayer_manager.dart';
 import 'UI/gamemode/singleplayer_manager.dart';
 import 'UI/scoreboard/multip_scoreboard.dart';
