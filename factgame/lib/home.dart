@@ -52,11 +52,6 @@ class HomeState extends State<Home>{
                       Container(
                         child: HowToPlayManager()
                       ),
-                      Container(
-                        child: Logout(),
-                      ),
-
-
                     ])),
                 new Container(
                     color: darkGrayColor,
@@ -100,7 +95,11 @@ class HomeState extends State<Home>{
                             color: Colors.white,
                             border: Border.all(color: Colors.black, width: 1)),
                       ),
+                      Container(
+                        child: Logout(),
+                      ),
                     ])),
+
                 new Container(
                     color: darkGrayColor,
                     child: Column(children: [
