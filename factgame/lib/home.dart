@@ -1,4 +1,5 @@
 import 'package:factgame/UI/howtoplay.dart';
+import 'package:factgame/UI/logout.dart';
 import 'package:flutter/material.dart';
 
 import 'UI/gamemode/multiplayer_manager.dart';
@@ -51,6 +52,9 @@ class HomeState extends State<Home>{
                       Container(
                         child: HowToPlayManager()
                       ),
+                      Container(
+                        child: Logout(),
+                      ),
 
 
                     ])),
@@ -79,12 +83,14 @@ class HomeState extends State<Home>{
                       )
                     ])),
                 new Container(
+
                     color: darkGrayColor,
                     child: Column(children: [
                       Container(
                         child: Title(
                             color: Colors.black,
                             child: Text(
+
                               'Profile',
                               style: globalTitleStyle,
                               textAlign: TextAlign.center,

@@ -4,6 +4,7 @@ import 'package:factgame/Controllers/databasehelper.dart';
 class CreateNewAccount extends StatefulWidget {
   CreateNewAccount({Key key}) : super(key: key);
 
+
   @override
   CreateNewAccountState createState() => CreateNewAccountState();
 }
