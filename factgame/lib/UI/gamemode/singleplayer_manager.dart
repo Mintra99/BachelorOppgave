@@ -50,7 +50,20 @@ class SingleplayerPage extends StatelessWidget {
         title: Text("Singleplayer"),
       ),
       body: Center(
-        child: ProposerManager(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProposerManager()),
+                );
+              },
+              child: Text("Start game"),
+            ),
+          ],
+        ),
       ),
     );
   }

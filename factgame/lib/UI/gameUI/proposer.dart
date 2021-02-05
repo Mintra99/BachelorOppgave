@@ -1,72 +1,80 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProposerManager extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return Proposer();
+    return _ProposerPageState();
   }
 }
 
-class Proposer extends State<ProposerManager> {
-  final isSelected = <bool>[false, false, false, false, false, false];
+class _ProposerPageState extends State<ProposerManager> {
+  //int _counter = 10;
+  int timer = 10;
+  bool canceltimer = false;
+  String showtimer = "10";
+
+  @override
+  void initState() {
+    starttimer();
+    super.initState();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  void starttimer() async {
+    const onesec = Duration(seconds: 1);
+    Timer.periodic(onesec, (Timer t) {
+      setState(() {
+        if (timer < 1) {
+          t.cancel();
+          //nextquestion();
+        } else if (canceltimer == true) {
+          t.cancel();
+        } else {
+          timer = timer - 1;
+        }
+        showtimer = timer.toString();
+      });
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          child: Text('A sentence from the source!!!'),
-        ),
-        Container(
-          child: Center(
-            child: ToggleButtons(
-              color: Colors.black.withOpacity(0.60),
-              selectedColor: Color(0xFF6200EE),
-              selectedBorderColor: Color(0xFF6200EE),
-              fillColor: Color(0xFF6200EE).withOpacity(0.08),
-              splashColor: Color(0xFF6200EE).withOpacity(0.12),
-              hoverColor: Color(0xFF6200EE).withOpacity(0.04),
-              borderRadius: BorderRadius.circular(4.0),
-              constraints: BoxConstraints(minHeight: 36.0),
-              isSelected: isSelected,
-              onPressed: (index) {
-                // Respond to button selection
-                setState(() {
-                  isSelected[index] = !isSelected[index];
-                });
-              },
-              
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('True'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('Mostly True'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('Half True'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('Mostly False'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('False'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('Pants on Fire'),
-                ),
-              ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            (timer > 0)
+                ? Text("")
+                : Text(
+              "DONE!",
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 48,
+              ),
             ),
-          ),
-        ),
-      ]
+            Text(
+              '$timer',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 48,
+              ),
+            ),
+          ],
+        )
+      ),
     );
   }
 }
