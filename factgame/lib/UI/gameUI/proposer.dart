@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,21 @@ class _ProposerPageState extends State<ProposerManager> {
     });
   }
 
+  void nextquestion() {
+    canceltimer = false;
+    timer = 10;
+    starttimer();
+  }
+
+  void checkanswer() {
+    setState(() {
+      // applying the changed color to the particular button that was selected
+      canceltimer = true;
+    });
+    //adds delay so the user can see the answer
+    Timer(Duration(seconds: 2), nextquestion);
+  }
+
 
 
   @override
@@ -62,16 +79,21 @@ class _ProposerPageState extends State<ProposerManager> {
               child: Column(
                 children: [
                   Container(
-                    child: Text('hello'),
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      //Swap 'hello' with questions from the database
+                      'hello',
+                      style: TextStyle(
+                      fontSize: 16.0,
+                      fontFamily: "Quando",
+                      ),
+                    ),
                   ),
                   Container(
                     child: RaisedButton(
                       child: Text('True'),
                       onPressed: (){
-                        setState((){
-                          timer = 10;
-                        });
-                        starttimer();
+                        checkanswer();
                       },
                     ),
                   ),
@@ -79,10 +101,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     child: RaisedButton(
                       child: Text('not enough info'),
                       onPressed: (){
-                        setState((){
-                          timer = 10;
-                        });
-                        starttimer();
+                        checkanswer();
                       },
                     ),
                   ),
@@ -90,10 +109,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     child: RaisedButton(
                       child: Text('False'),
                       onPressed: (){
-                        setState((){
-                          timer = 10;
-                        });
-                        starttimer();
+                        checkanswer();
                       },
                     ),
                   )
