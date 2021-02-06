@@ -13,6 +13,7 @@ class ProposerManager extends StatefulWidget{
 class _ProposerPageState extends State<ProposerManager> {
   //int _counter = 10;
   int timer = 10;
+  double percentage;
   bool canceltimer = false;
   String showtimer = "10";
 
@@ -42,6 +43,7 @@ class _ProposerPageState extends State<ProposerManager> {
           timer = timer - 1;
         }
         showtimer = timer.toString();
+        percentage = timer.toDouble()/10.0;
       });
     });
   }
@@ -54,8 +56,78 @@ class _ProposerPageState extends State<ProposerManager> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            (timer > 0)
+          //children: <Widget>[
+          children: [
+            new Container(
+              child: Column(
+                children: [
+                  Container(
+                    child: Text('hello'),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      child: Text('True'),
+                      onPressed: (){
+                        setState((){
+                          timer = 10;
+                        });
+                        starttimer();
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      child: Text('not enough info'),
+                      onPressed: (){
+                        setState((){
+                          timer = 10;
+                        });
+                        starttimer();
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      child: Text('False'),
+                      onPressed: (){
+                        setState((){
+                          timer = 10;
+                        });
+                        starttimer();
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            new Container(
+              child: Column(
+                children: [
+                  Container(
+                    width: 250,
+                      child: LinearProgressIndicator(
+                        value: percentage,
+                        backgroundColor: Colors.grey,
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                            Colors.blue,
+                          )
+                      )
+                  ),
+                  Container(
+                    child: Text(
+                      '$timer',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 48,
+                      ),
+                    ),
+                  )
+                ],
+
+              ),
+            )
+
+            /*(timer > 0)
                 ? Text("")
                 : Text(
               "DONE!",
@@ -71,10 +143,11 @@ class _ProposerPageState extends State<ProposerManager> {
                 fontWeight: FontWeight.bold,
                 fontSize: 48,
               ),
-            ),
+            ),*/
           ],
         )
       ),
     );
   }
 }
+
