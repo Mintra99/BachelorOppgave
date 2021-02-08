@@ -67,7 +67,8 @@ class HowToPlayPage extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(color: Colors.black, width: 1)),
+                          //border: Border.all(color: Colors.black, width: 1)
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(20.0),
@@ -95,7 +96,8 @@ class HowToPlayPage extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(color: Colors.black, width: 1)),
+                          //border: Border.all(color: Colors.black, width: 1)
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(20.0),

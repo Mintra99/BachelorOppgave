@@ -1,4 +1,4 @@
-import 'package:factgame/UI/gameUI/proposer.dart';
+import 'package:factgame/UI/gameUI/guesser.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
 
