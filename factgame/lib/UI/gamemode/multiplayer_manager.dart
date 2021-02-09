@@ -1,3 +1,4 @@
+import 'package:factgame/UI/lobby/createlobby.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class _Multiplayer extends State<MultiplayerManager> {
     );
   }
 }
-
+/*
 class MultiplayerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -54,6 +55,42 @@ class MultiplayerPage extends StatelessWidget {
             Navigator.pop(context);
           },
           child: Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+
+ */
+
+class MultiplayerPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Multiplayer"),
+      ),
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateLobby()
+                  ),
+                );
+              },
+              child: Text("Create lobby"),
+            ),
+            RaisedButton(
+                onPressed: (){
+
+                },
+              child: Text("Join lobby"),
+                )
+          ],
         ),
       ),
     );

@@ -18,9 +18,9 @@ class _ProposerPageState extends State<ProposerManager> {
 
   Map<String, Color> btncolor = {
     "True": Colors.indigoAccent,
-    "Not enough info": Colors.indigoAccent,
+    "Mostly true": Colors.indigoAccent,
+    "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
-    //"d": Colors.indigoAccent,
   };
 
   @override
@@ -108,7 +108,17 @@ class _ProposerPageState extends State<ProposerManager> {
             new Container(
               child: Column(
                 children: [
-                  Container(
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: <Widget>[
+                        BackButton(),
+                        Spacer(),
+                        Text('Score: 100'), //change this line with actual score when made
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     height: 100,
                     child: Title(
                         color: Colors.black,
@@ -117,7 +127,7 @@ class _ProposerPageState extends State<ProposerManager> {
                           textAlign: TextAlign.center,
                         )),
                     width: double.infinity,
-                  ),
+                  ),*/
                   Container(
                     padding: EdgeInsets.all(15.0),
                     child: Text(
@@ -133,7 +143,8 @@ class _ProposerPageState extends State<ProposerManager> {
                     child: Column(
                       children: <Widget>[
                         choicebutton('True'),
-                        choicebutton('Not enough info'),
+                        choicebutton('Mostly true'),
+                        choicebutton('Mostly false'),
                         choicebutton('False'),
                       ],
                     ),
