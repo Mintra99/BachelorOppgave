@@ -53,18 +53,38 @@ class SingleplayerPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RaisedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProposerManager()),
-                );
-              },
-              child: Text("Start game"),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20.0,
+              ),
+              child: MaterialButton(
+                color: Colors.indigoAccent,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProposerManager()),
+                  );
+                },
+                child: Text("Start game",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Alike",
+                    fontSize: 16.0,
+                  )
+                ),
+                splashColor: Colors.indigo[700],
+                highlightColor: Colors.indigo[700],
+                minWidth: 200.0,
+                height: 45.0,
+                shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              ),
             ),
           ],
         ),
       ),
+      backgroundColor: darkGrayColor,
     );
   }
 }

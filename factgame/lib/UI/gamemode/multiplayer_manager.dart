@@ -41,27 +41,6 @@ class _Multiplayer extends State<MultiplayerManager> {
     );
   }
 }
-/*
-class MultiplayerPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Multiplayer"),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Go back!'),
-        ),
-      ),
-    );
-  }
-}
-
- */
 
 class MultiplayerPage extends StatelessWidget {
   @override
@@ -71,28 +50,67 @@ class MultiplayerPage extends StatelessWidget {
         title: Text("Multiplayer"),
       ),
       body: Center(
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RaisedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateLobby()
-                  ),
-                );
-              },
-              child: Text("Create lobby"),
-            ),
-            RaisedButton(
-                onPressed: (){
-
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5.0,
+                horizontal: 10.0,
+              ),
+              child: MaterialButton(
+                color: Colors.indigoAccent,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateLobby()
+                    ),
+                  );
                 },
-              child: Text("Join lobby"),
-                )
+                child: Text("Create lobby",
+                  style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Alike",
+                  fontSize: 16.0,
+                  )
+                ),
+                splashColor: Colors.indigo[700],
+                highlightColor: Colors.indigo[700],
+                minWidth: 200.0,
+                height: 45.0,
+                shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5.0,
+                horizontal: 10.0,
+              ),
+              child: MaterialButton(
+                color: Colors.indigoAccent,
+                  onPressed: (){
+
+                  },
+                child: Text("Join lobby",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Alike",
+                      fontSize: 16.0,
+                    )
+                ),
+                splashColor: Colors.indigo[700],
+                highlightColor: Colors.indigo[700],
+                minWidth: 200.0,
+                height: 45.0,
+                shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                  ),
+            )
           ],
         ),
       ),
+      backgroundColor: darkGrayColor,
     );
   }
 }
