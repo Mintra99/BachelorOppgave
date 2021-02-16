@@ -1,4 +1,5 @@
 import 'package:factgame/UI/lobby/createlobby.dart';
+import 'package:factgame/UI/lobby/joinlobby.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
 
@@ -90,7 +91,11 @@ class MultiplayerPage extends StatelessWidget {
               child: MaterialButton(
                 color: Colors.indigoAccent,
                   onPressed: (){
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => JoinLobby()
+                      ),
+                    );
                   },
                 child: Text("Join lobby",
                     style: TextStyle(

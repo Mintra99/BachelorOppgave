@@ -149,34 +149,6 @@ class _ProposerPageState extends State<ProposerManager> {
                       ],
                     ),
                   ),
-
-                  /*Container(
-                    child: MaterialButton(
-                      color: Colors.indigo,
-                      child: Text('True'),
-                      onPressed: (){
-                        checkanswer();
-                      },
-                    ),
-                  ),
-                  Container(
-                    child: MaterialButton(
-                      color: Colors.indigo,
-                      child: Text('Not enough info'),
-                      onPressed: (){
-                        checkanswer();
-                      },
-                    ),
-                  ),
-                  Container(
-                    child: MaterialButton(
-                      color: Colors.indigo,
-                      child: Text('False'),
-                      onPressed: (){
-                        checkanswer();
-                      },
-                    ),
-                  )*/
                 ],
               ),
             ),

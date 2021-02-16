@@ -55,8 +55,11 @@ class ScoreboardPage extends StatelessWidget {
       appBar: AppBar(title: Text('Singleplyaer Scoreboard'),
           backgroundColor: darkGrayColor),
       body: DecoratedBox(
-        child: ListView(
-          children: getList(),
+        child: Container(
+          margin: EdgeInsets.all(10.0),
+          child: ListView(
+            children: getList(),
+          ),
         ),
         decoration: BoxDecoration(color: darkGrayColor),
       ),
