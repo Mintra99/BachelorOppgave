@@ -1,0 +1,45 @@
+version: "2.4"
+
+volumes:
+  db_data:
+    driver: local
+
+services:
+  sql_db_fakenews:
+    container_name: sql_db_fakenews
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "quiz_db"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+    ports:
+      - "33065:3306"
+    
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - sql_db_fakenews
+    ports:
+      - 5000:8080
+
+  api:
+    build: .
+    container_name: api
+    tty: true
+    restart: unless-stopped
+    depends_on:
+      - sql_db_fakenews
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:3000"
+    volumes:
+      - ./:/app/
+      - ./volumes/logs:/var/log
