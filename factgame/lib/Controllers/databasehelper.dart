@@ -9,6 +9,17 @@ class DatabaseHelper{
 
   var token ;
 
+  answerData(String answer_text, int questionid ) async{
+    String myUrl = "$serverUrl/login/?format=json";
+    final response = await  http.post(myUrl,
+        body: {
+          "username": "$answer_text",
+          "password" : "$questionid",
+        } ) ;
+    var data = json.decode(response.body);
+    return response;
+  }
+
   loginData(String username , String password) async{
 
     String myUrl = "$serverUrl/login/?format=json";
@@ -74,8 +85,5 @@ class DatabaseHelper{
   }
 
 
-
-
-
-
+  
 }

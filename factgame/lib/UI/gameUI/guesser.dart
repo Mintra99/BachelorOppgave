@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:factgame/Controllers/databasehelper.dart';
 
 class ProposerManager extends StatefulWidget{
   @override
@@ -15,6 +18,9 @@ class _ProposerPageState extends State<ProposerManager> {
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
+  String stringResponse;
+  List mapResponse;
+
 
   Map<String, Color> btncolor = {
     "True": Colors.indigoAccent,
@@ -22,10 +28,31 @@ class _ProposerPageState extends State<ProposerManager> {
     "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
   };
+   Future fitchData() async {
+
+    var response = await http.get('https://fakenews-app.com/api/game/question/');
+    if(response.statusCode==200){
+      setState(() {
+        mapResponse = json.decode(response.body)  ;
+      });
+    }
+  }
+
+  answerData(String answer_text, int questionid ) async{
+    String myUrl = "https://fakenews-app.com/api/game/answer/?format=json";
+    final response = await  http.post(myUrl,
+        body: {
+          "answer_text": "$answer_text",
+          "questionid" : "$questionid",
+        } ) ;
+    var data = json.decode(response.body);
+    return response;
+  }
 
   @override
   void initState() {
     starttimer();
+    fitchData();
     super.initState();
   }
 
@@ -55,6 +82,7 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void nextquestion() {
+     // increase index by 1
     canceltimer = false;
     timer = 10;
     starttimer();
@@ -69,7 +97,8 @@ class _ProposerPageState extends State<ProposerManager> {
     Timer(Duration(seconds: 2), nextquestion);
   }
 
-  Widget choicebutton(String k) {
+  Widget choiceButton(String k) {
+
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10.0,
@@ -130,25 +159,30 @@ class _ProposerPageState extends State<ProposerManager> {
                   ),*/
                   Container(
                     padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      //Swap 'hello' with questions from the database
-                      'hello',
+                    child:  mapResponse==null?Container(): Text(
+                      // follow youtube
+                      mapResponse[0]['question_text'].toString(),
                       style: TextStyle(
                       fontSize: 16.0,
                       fontFamily: "Quando",
                       ),
                     ),
                   ),
-                  Container(
+                  InkWell(
+                    child: Container(
                     child: Column(
                       children: <Widget>[
-                        choicebutton('True'),
-                        choicebutton('Mostly true'),
-                        choicebutton('Mostly false'),
-                        choicebutton('False'),
+                        choiceButton('True') ,
+                        choiceButton('Mostly true' ),
+                        choiceButton('Mostly false' ),
+                        choiceButton('False'),
                       ],
                     ),
                   ),
+                  onTap:(){
+
+                  } ,)
+
                 ],
               ),
             ),
