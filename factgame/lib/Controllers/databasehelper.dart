@@ -9,15 +9,22 @@ class DatabaseHelper{
 
   var token ;
 
-  answerData(String answer_text, int questionid ) async{
-    String myUrl = "$serverUrl/login/?format=json";
-    final response = await  http.post(myUrl,
+  void answerData(String answer_text, int questionid ) async{
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key) ?? 0 ;
+    String myUrl = "https://fakenews-app.com/api/game/answer/";
+     http.post(myUrl,
+        headers: {
+          'Authorization': 'Bearer $value'
+        },
         body: {
-          "username": "$answer_text",
-          "password" : "$questionid",
-        } ) ;
-    var data = json.decode(response.body);
-    return response;
+          "answer_text": "$answer_text",
+          "questionid" : "$questionid",
+        }).then((response){
+      print('Response status : ${response.statusCode}');
+      print('Response status : ${response.body} ');
+    });
   }
 
   loginData(String username , String password) async{

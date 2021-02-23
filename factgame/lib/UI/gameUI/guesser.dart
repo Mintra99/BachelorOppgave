@@ -1,12 +1,18 @@
 import 'dart:async';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
+import 'package:factgame/Controllers/databasehelper.dart';
 
 class ProposerManager extends StatefulWidget{
+
+  ProposerManager({Key key , this.title}) : super(key : key);
+  final String title;
+
+
   @override
   State<StatefulWidget> createState() {
     return _ProposerPageState();
@@ -14,6 +20,11 @@ class ProposerManager extends StatefulWidget{
 }
 
 class _ProposerPageState extends State<ProposerManager> {
+  DatabaseHelper databaseHelper = new DatabaseHelper();
+
+  final TextEditingController _answer_textController = new TextEditingController();
+  final TextEditingController _questionidController = new TextEditingController();
+
   int timer = 10;
   double percentage;
   bool canceltimer = false;
@@ -34,20 +45,12 @@ class _ProposerPageState extends State<ProposerManager> {
     if(response.statusCode==200){
       setState(() {
         mapResponse = json.decode(response.body)  ;
+        print(mapResponse);
       });
     }
   }
 
-  answerData(String answer_text, int questionid ) async{
-    String myUrl = "https://fakenews-app.com/api/game/answer/?format=json";
-    final response = await  http.post(myUrl,
-        body: {
-          "answer_text": "$answer_text",
-          "questionid" : "$questionid",
-        } ) ;
-    var data = json.decode(response.body);
-    return response;
-  }
+
 
   @override
   void initState() {
@@ -105,7 +108,7 @@ class _ProposerPageState extends State<ProposerManager> {
         horizontal: 20.0,
       ),
       child: MaterialButton(
-        onPressed: () => checkanswer(),
+        onPressed: () => databaseHelper.answerData(_answer_textController.text , _questionidController.hashCode ),
         child: Text(
           k.toString(),
           style: TextStyle(
@@ -160,8 +163,7 @@ class _ProposerPageState extends State<ProposerManager> {
                   Container(
                     padding: EdgeInsets.all(15.0),
                     child:  mapResponse==null?Container(): Text(
-                      // follow youtube
-                      mapResponse[0]['question_text'].toString(),
+                      mapResponse[1]['question_text'].toString(),
                       style: TextStyle(
                       fontSize: 16.0,
                       fontFamily: "Quando",
