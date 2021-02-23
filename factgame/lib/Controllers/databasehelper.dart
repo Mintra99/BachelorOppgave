@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,10 +10,13 @@ class DatabaseHelper{
 
   var token ;
 
+
   void answerData(String answer_text, int questionid ) async{
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0 ;
+    print(answer_text);
+    print(questionid);
     String myUrl = "https://fakenews-app.com/api/game/answer/";
      http.post(myUrl,
         headers: {
@@ -22,8 +26,11 @@ class DatabaseHelper{
           "answer_text": "$answer_text",
           "questionid" : "$questionid",
         }).then((response){
-      print('Response status : ${response.statusCode}');
-      print('Response status : ${response.body} ');
+     // print('Response status : ${response.statusCode}');
+     // print('Response status : ${response.body} ');
+       var data = json.decode(response.body);
+       print(data);
+       print('data : ${data["score"]}');
     });
   }
 

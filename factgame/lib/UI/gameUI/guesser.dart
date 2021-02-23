@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
 
 class ProposerManager extends StatefulWidget {
+  ProposerManager({Key key , this.title}) : super(key : key);
+  final String title;
   @override
   State<StatefulWidget> createState() {
     return _ProposerPageState();
@@ -14,6 +16,11 @@ class ProposerManager extends StatefulWidget {
 }
 
 class _ProposerPageState extends State<ProposerManager> {
+  DatabaseHelper databaseHelper = new DatabaseHelper();
+
+  final TextEditingController _answer_textController = new TextEditingController();
+  final TextEditingController _questionidController = new TextEditingController();
+
   int timer = 10;
   double percentage;
   bool canceltimer = false;
@@ -21,18 +28,19 @@ class _ProposerPageState extends State<ProposerManager> {
   String stringResponse;
   List mapResponse;
   String question;
+  int questionid;
+  int score;
   int i = 0;
 
   Map<String, Color> btncolor = {
-    "True": Colors.indigoAccent,
+    "true": Colors.indigoAccent,
     "Mostly true": Colors.indigoAccent,
     "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
   };
 
   Future fitchData() async {
-    var response =
-    await http.get('https://fakenews-app.com/api/game/question/');
+    var response = await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
@@ -42,15 +50,6 @@ class _ProposerPageState extends State<ProposerManager> {
     }
   }
 
-  answerData(String answer_text, int questionid) async {
-    String myUrl = "https://fakenews-app.com/api/game/answer/?format=json";
-    final response = await http.post(myUrl, body: {
-      "answer_text": "$answer_text",
-      "questionid": "$questionid",
-    });
-    var data = json.decode(response.body);
-    return response;
-  }
 
   //List shuffle(List items) {
   void shuffle(){
@@ -72,6 +71,7 @@ class _ProposerPageState extends State<ProposerManager> {
   void showQuestion() {
     if (mapResponse.length > 0){
       question = mapResponse[0]['question_text'].toString();
+      questionid = mapResponse[0]['id'];
       mapResponse.removeAt(0);
     }
   }
@@ -133,7 +133,7 @@ class _ProposerPageState extends State<ProposerManager> {
         horizontal: 20.0,
       ),
       child: MaterialButton(
-        onPressed: () => checkanswer(),
+        onPressed: () => databaseHelper.answerData( k , questionid ),
         child: Text(
           k.toString(),
           style: TextStyle(
@@ -171,7 +171,7 @@ class _ProposerPageState extends State<ProposerManager> {
                         children: <Widget>[
                           BackButton(),
                           Spacer(),
-                          Text('Score: 100'),
+                          Text('Score: $score '),
                           //change this line with actual score when made
                         ],
                       ),
@@ -204,7 +204,7 @@ class _ProposerPageState extends State<ProposerManager> {
                       child: Container(
                         child: Column(
                           children: <Widget>[
-                            choiceButton('True'),
+                            choiceButton('true'),
                             choiceButton('Mostly true'),
                             choiceButton('Mostly false'),
                             choiceButton('False'),
