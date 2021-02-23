@@ -1,26 +1,12 @@
 import 'dart:async';
-<<<<<<< HEAD
-import 'package:shared_preferences/shared_preferences.dart';
-=======
 import 'dart:math';
->>>>>>> 585c7ec59f038aecf01890405a928a4dd1985180
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
-import 'package:factgame/Controllers/databasehelper.dart';
 
-<<<<<<< HEAD
-class ProposerManager extends StatefulWidget{
-
-  ProposerManager({Key key , this.title}) : super(key : key);
-  final String title;
-
-
-=======
 class ProposerManager extends StatefulWidget {
->>>>>>> 585c7ec59f038aecf01890405a928a4dd1985180
   @override
   State<StatefulWidget> createState() {
     return _ProposerPageState();
@@ -28,11 +14,6 @@ class ProposerManager extends StatefulWidget {
 }
 
 class _ProposerPageState extends State<ProposerManager> {
-  DatabaseHelper databaseHelper = new DatabaseHelper();
-
-  final TextEditingController _answer_textController = new TextEditingController();
-  final TextEditingController _questionidController = new TextEditingController();
-
   int timer = 10;
   double percentage;
   bool canceltimer = false;
@@ -51,24 +32,16 @@ class _ProposerPageState extends State<ProposerManager> {
 
   Future fitchData() async {
     var response =
-        await http.get('https://fakenews-app.com/api/game/question/');
+    await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
-<<<<<<< HEAD
-        mapResponse = json.decode(response.body)  ;
-        print(mapResponse);
-=======
         mapResponse = json.decode(response.body);
         shuffle();
         showQuestion();
->>>>>>> 585c7ec59f038aecf01890405a928a4dd1985180
       });
     }
   }
 
-<<<<<<< HEAD
-
-=======
   answerData(String answer_text, int questionid) async {
     String myUrl = "https://fakenews-app.com/api/game/answer/?format=json";
     final response = await http.post(myUrl, body: {
@@ -78,7 +51,6 @@ class _ProposerPageState extends State<ProposerManager> {
     var data = json.decode(response.body);
     return response;
   }
->>>>>>> 585c7ec59f038aecf01890405a928a4dd1985180
 
   //List shuffle(List items) {
   void shuffle(){
@@ -161,7 +133,7 @@ class _ProposerPageState extends State<ProposerManager> {
         horizontal: 20.0,
       ),
       child: MaterialButton(
-        onPressed: () => databaseHelper.answerData(_answer_textController.text , _questionidController.hashCode ),
+        onPressed: () => checkanswer(),
         child: Text(
           k.toString(),
           style: TextStyle(
@@ -177,7 +149,7 @@ class _ProposerPageState extends State<ProposerManager> {
         minWidth: 200.0,
         height: 45.0,
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -187,24 +159,24 @@ class _ProposerPageState extends State<ProposerManager> {
     return Scaffold(
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //children: <Widget>[
-        children: [
-          new Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: <Widget>[
-                      BackButton(),
-                      Spacer(),
-                      Text('Score: 100'),
-                      //change this line with actual score when made
-                    ],
-                  ),
-                ),
-                /*Container(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //children: <Widget>[
+            children: [
+              new Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        children: <Widget>[
+                          BackButton(),
+                          Spacer(),
+                          Text('Score: 100'),
+                          //change this line with actual score when made
+                        ],
+                      ),
+                    ),
+                    /*Container(
                     height: 100,
                     child: Title(
                         color: Colors.black,
@@ -214,76 +186,61 @@ class _ProposerPageState extends State<ProposerManager> {
                         )),
                     width: double.infinity,
                   ),*/
-<<<<<<< HEAD
-                  Container(
-                    padding: EdgeInsets.all(15.0),
-                    child:  mapResponse==null?Container(): Text(
-                      mapResponse[1]['question_text'].toString(),
-                      style: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: "Quando",
+                    Container(
+                      padding: EdgeInsets.all(15.0),
+                      child: mapResponse == null
+                          ? Container()
+                          : Text(
+                        // follow youtube
+                        '$question',
+                        //mapResponse[0]['question_text'].toString(),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: "Quando",
+                        ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                    child: Container(
-=======
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  child: mapResponse == null
-                      ? Container()
-                      : Text(
-                          // follow youtube
-                          '$question',
-                          //mapResponse[0]['question_text'].toString(),
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: "Quando",
-                          ),
+                    InkWell(
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            choiceButton('True'),
+                            choiceButton('Mostly true'),
+                            choiceButton('Mostly false'),
+                            choiceButton('False'),
+                          ],
                         ),
+                      ),
+                      onTap: () {},
+                    )
+                  ],
                 ),
-                InkWell(
-                  child: Container(
->>>>>>> 585c7ec59f038aecf01890405a928a4dd1985180
-                    child: Column(
-                      children: <Widget>[
-                        choiceButton('True'),
-                        choiceButton('Mostly true'),
-                        choiceButton('Mostly false'),
-                        choiceButton('False'),
-                      ],
-                    ),
-                  ),
-                  onTap: () {},
-                )
-              ],
-            ),
-          ),
-          new Container(
-            child: Column(
-              children: [
-                Container(
-                    width: 250,
-                    child: LinearProgressIndicator(
-                        value: percentage,
-                        backgroundColor: Colors.grey,
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                          Colors.blue,
-                        ))),
-                Container(
-                  child: Text(
-                    '$timer',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 48,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      )),
+              ),
+              new Container(
+                child: Column(
+                  children: [
+                    Container(
+                        width: 250,
+                        child: LinearProgressIndicator(
+                            value: percentage,
+                            backgroundColor: Colors.grey,
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                              Colors.blue,
+                            ))),
+                    Container(
+                      child: Text(
+                        '$timer',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 48,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )),
     );
   }
 }
