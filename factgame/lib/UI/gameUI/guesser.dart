@@ -41,12 +41,12 @@ class _ProposerPageState extends State<ProposerManager> {
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
+        print(mapResponse);
         shuffle();
         showQuestion();
       });
     }
   }
-
 
   //List shuffle(List items) {
   void shuffle(){
