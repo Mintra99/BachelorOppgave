@@ -25,9 +25,9 @@ class _ProposerPageState extends State<ProposerManager> {
   String stringResponse;
   List mapResponse;
   String question;
+  String answer;
   int questionid;
-  int score;
-  int i = 0;
+  int score = 0;
 
   Map<String, Color> btncolor = {
     "true": Colors.indigoAccent,
@@ -42,13 +42,12 @@ class _ProposerPageState extends State<ProposerManager> {
       setState(() {
         mapResponse = json.decode(response.body);
         shuffle();
+        print(mapResponse);
         showQuestion();
       });
     }
   }
 
-
-  //List shuffle(List items) {
   void shuffle(){
     var random = new Random();
 
@@ -63,16 +62,14 @@ class _ProposerPageState extends State<ProposerManager> {
     }
   }
 
-
-
   void showQuestion() {
     if (mapResponse.length > 0){
       question = mapResponse[0]['question_text'].toString();
-      questionid = mapResponse[0]['id'];
+      answer = mapResponse[0]['correct_answer'].toString();
+      questionid = mapResponse[0]['id'].toInt();
       mapResponse.removeAt(0);
     }
   }
-
 
   @override
   void initState() {
@@ -114,7 +111,11 @@ class _ProposerPageState extends State<ProposerManager> {
     starttimer();
   }
 
-  void checkanswer() {
+  void checkanswer(String k) {
+    databaseHelper.answerData( k , questionid );
+    if (answer == k) {
+      score += 1;
+    }
     setState(() {
       // applying the changed color to the particular button that was selected
       canceltimer = true;
@@ -130,7 +131,9 @@ class _ProposerPageState extends State<ProposerManager> {
         horizontal: 20.0,
       ),
       child: MaterialButton(
-        onPressed: () => databaseHelper.answerData( k , questionid ),
+        onPressed: () {
+          checkanswer(k);
+        },
         child: Text(
           k.toString(),
           style: TextStyle(
@@ -168,29 +171,18 @@ class _ProposerPageState extends State<ProposerManager> {
                         children: <Widget>[
                           BackButton(),
                           Spacer(),
-                          Text('Score: '),
+                          Text('Score: '+ '$score'),
                           //change this line with actual score when made
                         ],
                       ),
                     ),
-                    /*Container(
-                    height: 100,
-                    child: Title(
-                        color: Colors.black,
-                        child: Text(
-                          'Score:',
-                          textAlign: TextAlign.center,
-                        )),
-                    width: double.infinity,
-                  ),*/
                     Container(
                       padding: EdgeInsets.all(15.0),
                       child: mapResponse == null
                           ? Container()
                           : Text(
-                        // follow youtube
+                        // Shows the question to the guesser
                         '$question',
-                        //mapResponse[0]['question_text'].toString(),
                         style: TextStyle(
                           fontSize: 16.0,
                           fontFamily: "Quando",
