@@ -26,12 +26,15 @@ class DatabaseHelper{
           "answer_text": "$answer_text",
           "questionid" : "$questionid",
         }).then((response){
-     // print('Response status : ${response.statusCode}');
-     // print('Response status : ${response.body} ');
+       print('Response status : ${response.statusCode}');
+       print('Response status : ${response.body} ');
        var data = json.decode(response.body);
        print(data);
-       print('data : ${data["score"]}');
+       var dataScore= data["score"];
+       print(dataScore);
+
     });
+
   }
 
   loginData(String username , String password) async{

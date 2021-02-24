@@ -18,9 +18,6 @@ class ProposerManager extends StatefulWidget {
 class _ProposerPageState extends State<ProposerManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
 
-  final TextEditingController _answer_textController = new TextEditingController();
-  final TextEditingController _questionidController = new TextEditingController();
-
   int timer = 10;
   double percentage;
   bool canceltimer = false;
@@ -171,7 +168,7 @@ class _ProposerPageState extends State<ProposerManager> {
                         children: <Widget>[
                           BackButton(),
                           Spacer(),
-                          Text('Score: $score '),
+                          Text('Score: '),
                           //change this line with actual score when made
                         ],
                       ),
