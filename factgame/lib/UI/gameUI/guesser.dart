@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
 
+import '../../home.dart';
+
 class ProposerManager extends StatefulWidget {
-  ProposerManager({Key key , this.title}) : super(key : key);
+  ProposerManager({Key key, this.title}) : super(key: key);
   final String title;
+
   @override
   State<StatefulWidget> createState() {
     return _ProposerPageState();
@@ -21,6 +25,7 @@ class _ProposerPageState extends State<ProposerManager> {
   int timer = 10;
   double percentage;
   bool canceltimer = false;
+  bool done = false;
   String showtimer = "10";
   String stringResponse;
   List mapResponse;
@@ -37,7 +42,8 @@ class _ProposerPageState extends State<ProposerManager> {
   };
 
   Future fitchData() async {
-    var response = await http.get('https://fakenews-app.com/api/game/question/');
+    var response =
+        await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
@@ -48,7 +54,7 @@ class _ProposerPageState extends State<ProposerManager> {
     }
   }
 
-  void shuffle(){
+  void shuffle() {
     var random = new Random();
 
     // Go through all elements.
@@ -63,12 +69,21 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void showQuestion() {
-    if (mapResponse.length > 0){
+    if (mapResponse.length > 0) {
+      print("length" + mapResponse.length.toString());
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       questionid = mapResponse[0]['id'].toInt();
-      mapResponse.removeAt(0);
+    } else {
+      print("done");
+      mapResponse = null;
+      canceltimer = true;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => GameFinished()),
+      );
     }
+    mapResponse.removeAt(0);
   }
 
   @override
@@ -112,7 +127,7 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void checkanswer(String k) {
-    databaseHelper.answerData( k , questionid );
+    databaseHelper.answerData(k, questionid);
     if (answer == k) {
       score += 1;
     }
@@ -149,7 +164,7 @@ class _ProposerPageState extends State<ProposerManager> {
         minWidth: 200.0,
         height: 45.0,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -159,77 +174,120 @@ class _ProposerPageState extends State<ProposerManager> {
     return Scaffold(
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //children: <Widget>[
-            children: [
-              new Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        children: <Widget>[
-                          BackButton(),
-                          Spacer(),
-                          Text('Score: '+ '$score'),
-                          //change this line with actual score when made
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(15.0),
-                      child: mapResponse == null
-                          ? Container()
-                          : Text(
-                        // Shows the question to the guesser
-                        '$question',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontFamily: "Quando",
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            choiceButton('true'),
-                            choiceButton('Mostly true'),
-                            choiceButton('Mostly false'),
-                            choiceButton('False'),
-                          ],
-                        ),
-                      ),
-                      onTap: () {},
-                    )
-                  ],
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //children: <Widget>[
+        children: [
+          new Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    children: <Widget>[
+                      BackButton(),
+                      Spacer(),
+                      Text('Score: ' + '$score'),
+                      //change this line with actual score when made
+                    ],
+                  ),
                 ),
+                Container(
+                  padding: EdgeInsets.all(15.0),
+                  child: mapResponse == null
+                      ? Container()
+                      : Text(
+                          // Shows the question to the guesser
+                          '$question',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: "Quando",
+                          ),
+                        ),
+                ),
+                InkWell(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        choiceButton('true'),
+                        choiceButton('Mostly true'),
+                        choiceButton('Mostly false'),
+                        choiceButton('False'),
+                      ],
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ),
+          ),
+          new Container(
+            child: Column(
+              children: [
+                Container(
+                    width: 250,
+                    child: LinearProgressIndicator(
+                        value: percentage,
+                        backgroundColor: Colors.grey,
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                          Colors.blue,
+                        ))),
+                Container(
+                  child: Text(
+                    '$timer',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 48,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      )),
+    );
+  }
+}
+
+class GameFinished extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5.0,
+                horizontal: 10.0,
               ),
-              new Container(
-                child: Column(
-                  children: [
-                    Container(
-                        width: 250,
-                        child: LinearProgressIndicator(
-                            value: percentage,
-                            backgroundColor: Colors.grey,
-                            valueColor: new AlwaysStoppedAnimation<Color>(
-                              Colors.blue,
-                            ))),
-                    Container(
-                      child: Text(
-                        '$timer',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 48,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          )),
+              child: MaterialButton(
+                color: Colors.indigoAccent,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                  );
+                },
+                child: Text("Return to main menu",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Alike",
+                      fontSize: 16.0,
+                    )),
+                splashColor: Colors.indigo[700],
+                highlightColor: Colors.indigo[700],
+                minWidth: 200.0,
+                height: 45.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: darkGrayColor,
     );
   }
 }
