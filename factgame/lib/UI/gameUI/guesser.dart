@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home.dart';
 
@@ -42,18 +43,19 @@ class _ProposerPageState extends State<ProposerManager> {
   };
 
   Future fitchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
         await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
-        print(mapResponse);
         shuffle();
-        print(mapResponse);
         showQuestion();
+        score = prefs.getInt('score');
       });
     }
   }
+
 
   //List shuffle(List items) {
   void shuffle(){
@@ -188,7 +190,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     children: <Widget>[
                       BackButton(),
                       Spacer(),
-                      Text('Score: ' + '$score'),
+                      Text('Score:' + '$score'),
                       //change this line with actual score when made
                     ],
                   ),

@@ -31,8 +31,7 @@ class DatabaseHelper{
        var data = json.decode(response.body);
        print(data);
        var dataScore= data["score"];
-       print(dataScore);
-
+       prefs.setInt('score', dataScore);
     });
 
   }
