@@ -7,8 +7,17 @@ class CreateLobby extends StatefulWidget{
 }
 
 class _CreateLobbyState extends State<CreateLobby> {
-  /*void _makeLobby(BuildContext context, String groupName) async {
-    Navigator.push(
+  List lobbyList = [];
+  Map<String, List> lobby;
+
+  TextEditingController _lobbyNameController = TextEditingController();
+
+  void _makeLobby(BuildContext context, String lobbyName) async {
+    List<String> playerList = new List(2);
+    playerList.add("player");
+    lobby[lobbyName] = playerList;
+    lobbyList.add(lobby);
+    /*Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => OurAddBook(
@@ -18,7 +27,8 @@ class _CreateLobbyState extends State<CreateLobby> {
         ),
       ),
     );
-  }*/
+     */
+  }
 
   TextEditingController _groupNameController = TextEditingController();
   @override
@@ -39,7 +49,7 @@ class _CreateLobbyState extends State<CreateLobby> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    controller: _groupNameController,
+                    controller: _lobbyNameController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.group),
                       hintText: "Group Name",
@@ -60,7 +70,15 @@ class _CreateLobbyState extends State<CreateLobby> {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      /*
+                      if (_lobbyNameController == "") {
+                        content: Text("Need a lobbyname!");
+                      } else {
+                        _makeLobby(context, _lobbyNameController)
+                      }
+                       */
+                    },
                   ),
                 ],
               ),
