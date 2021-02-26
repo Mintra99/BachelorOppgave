@@ -33,6 +33,10 @@ class _ProposerPageState extends State<ProposerManager> {
   int questionid;
   int score = 0;
 
+  Color colortoshow = Colors.indigoAccent;
+  Color right = Colors.green;
+  Color wrong = Colors.red;
+
   Map<String, Color> btncolor = {
     "true": Colors.indigoAccent,
     "Mostly true": Colors.indigoAccent,
@@ -54,9 +58,8 @@ class _ProposerPageState extends State<ProposerManager> {
     }
   }
 
-
   //List shuffle(List items) {
-  void shuffle(){
+  void shuffle() {
     var random = new Random();
 
     // Go through all elements.
@@ -72,12 +75,10 @@ class _ProposerPageState extends State<ProposerManager> {
 
   void showQuestion() {
     if (mapResponse.length > 0) {
-      print("length" + mapResponse.length.toString());
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       questionid = mapResponse[0]['id'].toInt();
     } else {
-      print("done");
       mapResponse = null;
       canceltimer = true;
       Navigator.push(
@@ -121,10 +122,13 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void nextquestion() {
-    // increase index by 1
     showQuestion();
     canceltimer = false;
     timer = 10;
+    btncolor["true"] = Colors.indigoAccent;
+    btncolor["Mostly true"] = Colors.indigoAccent;
+    btncolor["Mostly false"] = Colors.indigoAccent;
+    btncolor["false"] = Colors.indigoAccent;
     starttimer();
   }
 
@@ -132,9 +136,13 @@ class _ProposerPageState extends State<ProposerManager> {
     databaseHelper.answerData(k, questionid);
     if (answer == k) {
       score += 1;
+      colortoshow = right;
+    } else {
+      colortoshow = wrong;
     }
     setState(() {
       // applying the changed color to the particular button that was selected
+      btncolor[k] = colortoshow;
       canceltimer = true;
     });
     //adds delay so the user can see the answer
