@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +7,7 @@ import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../home.dart';
+import 'endscreen.dart';
 
 class ProposerManager extends StatefulWidget {
   ProposerManager({Key key, this.title}) : super(key: key);
@@ -26,7 +25,6 @@ class _ProposerPageState extends State<ProposerManager> {
   int timer = 10;
   double percentage;
   bool canceltimer = false;
-  bool done = false;
   String showtimer = "10";
   String stringResponse;
   List mapResponse;
@@ -84,7 +82,7 @@ class _ProposerPageState extends State<ProposerManager> {
       canceltimer = true;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GameFinished()),
+        MaterialPageRoute(builder: (context) => GameFinishedManager()),
       );
     }
     mapResponse.removeAt(0);
@@ -249,49 +247,6 @@ class _ProposerPageState extends State<ProposerManager> {
           )
         ],
       )),
-    );
-  }
-}
-
-class GameFinished extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 5.0,
-                horizontal: 10.0,
-              ),
-              child: MaterialButton(
-                color: Colors.indigoAccent,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
-                },
-                child: Text("Return to main menu",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Alike",
-                      fontSize: 16.0,
-                    )),
-                splashColor: Colors.indigo[700],
-                highlightColor: Colors.indigo[700],
-                minWidth: 200.0,
-                height: 45.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-              ),
-            ),
-          ],
-        ),
-      ),
-      backgroundColor: darkGrayColor,
     );
   }
 }
