@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class DatabaseHelper{
 
   String serverUrl = "https://fakenews-app.com/api/users";
@@ -15,9 +16,7 @@ class DatabaseHelper{
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0 ;
-    print(answer_text);
-    print(questionid);
-    String myUrl = "https://fakenews-app.com/api/game/answer/";
+    String myUrl = "https://fakenews-app.com/api/game/answer_single/";
      http.post(myUrl,
         headers: {
           'Authorization': 'Bearer $value'
