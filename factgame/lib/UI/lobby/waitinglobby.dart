@@ -1,111 +1,108 @@
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
+import 'package:factgame/models/classes/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../home.dart';
 import 'lobbydatabasehelper.dart';
-import 'waitinglobby.dart';
 
-class CreateLobby extends StatefulWidget{
-  CreateLobby({Key key, this.title}) : super(key: key);
+class WaitingLobby extends StatefulWidget {
+  WaitingLobby({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _CreateLobbyState createState() => _CreateLobbyState();
+  _WaitingLobbyState createState() => _WaitingLobbyState();
 }
 
-class _CreateLobbyState extends State<CreateLobby> {
+class _WaitingLobbyState extends State<WaitingLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gamenameController = new TextEditingController();
-  //List lobbyList = [];
-  //Map<String, List> lobby;
 
   TextEditingController _lobbyNameController = TextEditingController();
-/*
-  void _makeLobby(BuildContext context, String lobbyName) async {
-    List<String> playerList = new List(2);
-    playerList.add("player");
-    lobby[lobbyName] = playerList;
-    lobbyList.add(lobby);
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OurAddBook(
-          onGroupCreation: true,
-          onError: false,
-          groupName: groupName,
-        ),
-      ),
-    );
-     */
+  TextEditingController _groupNameController = TextEditingController();
+
+  /*
+  List<Widget> getPlayerLobbyList() {
+    List<Player> list = [];
+   //return all players in the lobby
+    return list;
   }
 
- */
-
-  TextEditingController _groupNameController = TextEditingController();
+   */
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Create Game',
+      title: 'Lobby',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Create Game'),
+          title: Text('Lobby'),
+          /*
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.arrow_back_ios),
-              onPressed: ()=>Navigator.of(context).push(
-                  new MaterialPageRoute(
-                    builder: (BuildContext context) => new Home(),
-                  )
-              ),
+              onPressed: ()=>
             )
           ],
+           */
         ),
-        body:
-        Container(
+        body: Container(
           child: ListView(
             padding: const EdgeInsets.only(
                 top: 250, left: 12.0, right: 12.0, bottom: 12.0),
             children: <Widget>[
+              /*
               Container(
                 height: 50,
-                child: new TextField(
-                  controller: _gamenameController,
-                  decoration: InputDecoration(
-                    hintText: 'Group Name',
-                    icon: new Icon(Icons.group),
-                  ),
+                child: ListView(
+                  children: getPlayerLobbyList(),
                 ),
               ),
               SizedBox(
                 height: 20.0,
               ),
+
+               */
               Container(
                 height: 50,
                 child: new RaisedButton(
-
                   onPressed: () {
-                    databaseHelper.createGame(
-                        _gamenameController.text.trim());
-                    Navigator.of(context).push(
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) => new WaitingLobby(),
-                        )
-                    );
+                    //TODO: if all players in the lobby have pressed this button, start the game
                   },
                   color: Colors.blue,
                   child: new Text(
-                    'Create Game',
+                    'Start game',
                     style: new TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,),),
+                      fontSize: 20.0,
+                    ),
+                  ),
                 ),
               ),
-
-
+              Container(
+                height: 50,
+                child: new RaisedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        new MaterialPageRoute(
+                          builder: (BuildContext context) => new Home(),
+                        )
+                    );
+                    // TODO: leave the lobby (if there are none left in the lobby, remove it)
+                  },
+                  color: Colors.blue,
+                  child: new Text(
+                    'Leave lobby',
+                    style: new TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

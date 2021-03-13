@@ -89,6 +89,7 @@ class _JoinLobbyState extends State<JoinLobby> {
                   onPressed: () {
                     databaseHelper.joinGame(
                         _gameidController.text.length , _user_status.text.trim(), _userController.text.length);
+                    //TODO: when pressed and finds the lobby, make it redirect to correct WaitingLobby
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new Home(),
