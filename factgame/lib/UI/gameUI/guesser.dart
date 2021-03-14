@@ -38,7 +38,7 @@ class _ProposerPageState extends State<ProposerManager> {
   Color wrong = Colors.red;
 
   Map<String, Color> btncolor = {
-    "true": Colors.indigoAccent,
+    "True": Colors.indigoAccent,
     "Mostly true": Colors.indigoAccent,
     "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
@@ -77,6 +77,7 @@ class _ProposerPageState extends State<ProposerManager> {
     if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
+      print(answer);
       questionid = mapResponse[0]['id'].toInt();
     } else {
       mapResponse = null;
@@ -125,15 +126,15 @@ class _ProposerPageState extends State<ProposerManager> {
     showQuestion();
     canceltimer = false;
     timer = 10;
-    btncolor["true"] = Colors.indigoAccent;
+    btncolor["True"] = Colors.indigoAccent;
     btncolor["Mostly true"] = Colors.indigoAccent;
     btncolor["Mostly false"] = Colors.indigoAccent;
-    btncolor["false"] = Colors.indigoAccent;
+    btncolor["False"] = Colors.indigoAccent;
     starttimer();
   }
 
   void checkanswer(String k) {
-    databaseHelper.answerData(k, questionid);
+    databaseHelper.answerData(k.toLowerCase(), questionid);
     if (answer == k) {
       score += 1;
       colortoshow = right;
@@ -196,8 +197,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     children: <Widget>[
                       BackButton(),
                       Spacer(),
-                      Text('Score:' + '$score'),
-                      //change this line with actual score when made
+                      //Text('Score:' + '$score'),
                     ],
                   ),
                 ),
@@ -218,7 +218,7 @@ class _ProposerPageState extends State<ProposerManager> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        choiceButton('true'),
+                        choiceButton('True'),
                         choiceButton('Mostly true'),
                         choiceButton('Mostly false'),
                         choiceButton('False'),
