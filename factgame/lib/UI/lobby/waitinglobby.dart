@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
 import 'package:factgame/models/classes/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../home.dart';
 import 'lobbydatabasehelper.dart';
 
@@ -17,9 +20,21 @@ class WaitingLobby extends StatefulWidget {
 class _WaitingLobbyState extends State<WaitingLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gamenameController = new TextEditingController();
+  List mapResponse; //lobby name
 
   TextEditingController _lobbyNameController = TextEditingController();
   TextEditingController _groupNameController = TextEditingController();
+
+  Future fitchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response =
+    await http.get('https://fakenews-app.com/api/game/question/');
+    if (response.statusCode == 200) {
+      setState(() {
+        mapResponse = json.decode(response.body);
+      });
+    }
+  }
 
   /*
   List<Widget> getPlayerLobbyList() {
@@ -52,6 +67,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
             padding: const EdgeInsets.only(
                 top: 250, left: 12.0, right: 12.0, bottom: 12.0),
             children: <Widget>[
+
               /*
               Container(
                 height: 50,
@@ -64,6 +80,10 @@ class _WaitingLobbyState extends State<WaitingLobby> {
               ),
 
                */
+              Container(
+                height: 50,
+                child: new Text('Lobby name:'),
+              ),
               Container(
                 height: 50,
                 child: new RaisedButton(

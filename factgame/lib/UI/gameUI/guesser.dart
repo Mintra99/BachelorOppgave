@@ -53,7 +53,7 @@ class _ProposerPageState extends State<ProposerManager> {
         mapResponse = json.decode(response.body);
         shuffle();
         showQuestion();
-        score = prefs.getInt('score');
+        //score = prefs.getInt('score');
       });
     }
   }
@@ -77,6 +77,7 @@ class _ProposerPageState extends State<ProposerManager> {
     if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
+      answer.toLowerCase();
       print(answer);
       questionid = mapResponse[0]['id'].toInt();
     } else {
@@ -134,11 +135,15 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void checkanswer(String k) {
-    databaseHelper.answerData(k.toLowerCase(), questionid);
-    if (answer == k) {
+    databaseHelper.answerData(k, questionid);
+    k.toLowerCase();
+    print(k.toLowerCase());
+    if (answer == k.toLowerCase()) {
       score += 1;
+      print('correct');
       colortoshow = right;
     } else {
+      print('wrong');
       colortoshow = wrong;
     }
     setState(() {
@@ -197,7 +202,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     children: <Widget>[
                       BackButton(),
                       Spacer(),
-                      //Text('Score:' + '$score'),
+                      Text('Score:' + '$score'),
                     ],
                   ),
                 ),
