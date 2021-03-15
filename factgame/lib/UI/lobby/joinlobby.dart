@@ -2,9 +2,11 @@ import 'package:factgame/models/global.dart';
 import 'package:factgame/models/widgets/lobby.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../../home.dart';
 import 'lobbydatabasehelper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class JoinLobby extends StatefulWidget {
   JoinLobby({Key key, this.title}) : super(key: key);
@@ -16,8 +18,25 @@ class JoinLobby extends StatefulWidget {
 class _JoinLobbyState extends State<JoinLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gameidController = new TextEditingController();
-  final TextEditingController _user_status = new TextEditingController();
-  final TextEditingController _userController = new TextEditingController();
+  Map mapResponse;
+  List listOfFacts;
+  // function api to bring the list of available game
+  Future fitchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response =
+    await http.get('https://fakenews-app.com/api/game/available_game/');
+    if (response.statusCode == 200) {
+      setState(() {
+        mapResponse = json.decode(response.body);
+        listOfFacts = mapResponse['games'];
+      });
+    }
+  }
+  @override
+  void initState() {
+    fitchData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,78 +57,29 @@ class _JoinLobbyState extends State<JoinLobby> {
           ],
         ),
         body:
-        Container(
-          child: ListView(
-            padding: const EdgeInsets.only(
-                top: 250, left: 12.0, right: 12.0, bottom: 12.0),
-            children: <Widget>[
-              Container(
-                height: 50,
-                child: new TextField(
-                  controller:  _gameidController,
-                  decoration: InputDecoration(
-                    hintText: 'Group id',
-                    icon: new Icon(Icons.group),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Container(
-                height: 50,
-                child: new TextField(
-                  controller:  _user_status,
-                  decoration: InputDecoration(
-                    hintText: 'user_status',
-                    icon: new Icon(Icons.group),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Container(
-                height: 50,
-                child: new TextField(
-                  controller:  _userController,
-                  decoration: InputDecoration(
-                    hintText: 'user_id',
-                    icon: new Icon(Icons.group),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Container(
-                height: 50,
-                child: new RaisedButton(
-
-                  onPressed: () {
-                    databaseHelper.joinGame(
-                        _gameidController.text.length , _user_status.text.trim(), _userController.text.length);
-                    //TODO: when pressed and finds the lobby, make it redirect to correct WaitingLobby
-                    Navigator.of(context).push(
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) => new Home(),
-                        )
-                    );
-                  },
-                  color: Colors.blue,
-                  child: new Text(
-                    'Create Game',
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,),),
-                ),
-              ),
-
-
-            ],
-          ),
-        ),
+        mapResponse==null?Container():SingleChildScrollView(
+        child:Column(
+          children: <Widget>[
+            Text(
+                mapResponse['message'].toString()
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context,index){
+                return Container(
+                  child: Column(
+                    children:<Widget> [
+                      Text(
+                           listOfFacts[index]['fields']['game_name'].toString()
+                      ),
+                    ],
+                  )
+                );
+               },
+            itemCount:listOfFacts==null ? 0 : listOfFacts.length ,
+        ) ]
+        )
+        )
       ),
     );
   }
