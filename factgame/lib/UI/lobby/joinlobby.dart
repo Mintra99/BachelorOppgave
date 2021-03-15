@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class JoinLobby extends StatefulWidget {
   JoinLobby({Key key, this.title}) : super(key: key);
   final String title;
+
   @override
   _JoinLobbyState createState() => _JoinLobbyState();
 }
@@ -20,11 +21,14 @@ class _JoinLobbyState extends State<JoinLobby> {
   final TextEditingController _gameidController = new TextEditingController();
   Map mapResponse;
   List listOfFacts;
+
+  //List list = [];
+
   // function api to bring the list of available game
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
-    await http.get('https://fakenews-app.com/api/game/available_game/');
+        await http.get('https://fakenews-app.com/api/game/available_game/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
@@ -32,56 +36,55 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
+
+  List<Widget> getList() {
+    List<Lobby> list = [];
+    for (int i = 0; i < listOfFacts.length; i++) {
+      list.add(
+          Lobby(lobbyname: listOfFacts[i]['fields']['game_name'].toString()));
+    }
+    return list;
+  }
+
   @override
   void initState() {
     fitchData();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Join Game',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Join Game'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: ()=>Navigator.of(context).push(
-                  new MaterialPageRoute(
-                    builder: (BuildContext context) => new Home(),
-                  )
-              ),
-            )
-          ],
+    return Scaffold(
+      appBar: AppBar(title: Text('Join Game'), backgroundColor: darkGrayColor),
+      body: DecoratedBox(
+        child: Container(
+          margin: EdgeInsets.all(10.0),
+          child: ListView(
+            children: getList(),
+          ),
         ),
-        body:
-        mapResponse==null?Container():SingleChildScrollView(
-        child:Column(
-          children: <Widget>[
-            Text(
-                mapResponse['message'].toString()
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context,index){
-                return Container(
-                  child: Column(
-                    children:<Widget> [
-                      Text(
-                           listOfFacts[index]['fields']['game_name'].toString()
-                      ),
-                    ],
-                  )
-                );
-               },
-            itemCount:listOfFacts==null ? 0 : listOfFacts.length ,
-        ) ]
-        )
-        )
+        decoration: BoxDecoration(color: darkGrayColor),
       ),
     );
-  }
+    /*
+                mapResponse == null
+                    ? Container()
+                    : SingleChildScrollView(
+                        child: Column(children: <Widget>[
+                        Text(mapResponse['message'].toString()),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Container(
+                                child: Column(
+                                  children: getList(),
+                            ));
+                          },
+                          itemCount:
+                              listOfFacts == null ? 0 : listOfFacts.length,
+                        )
+                      ]))));
 
+     */
+  }
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../global.dart';
 
 class Lobby extends StatelessWidget {
-  final String username;
+  final String lobbyname;
 
-  Lobby({this.username});
+  Lobby({this.lobbyname});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class Lobby extends StatelessWidget {
           Container(
             margin: EdgeInsets.all(10.0),
             child: Text(
-              username,
+              lobbyname,
               style: darkScoreboardName,
             ),
           ),

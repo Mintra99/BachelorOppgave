@@ -104,8 +104,6 @@ class _CreateLobbyState extends State<CreateLobby> {
                       fontSize: 20.0,),),
                 ),
               ),
-
-
             ],
           ),
         ),
