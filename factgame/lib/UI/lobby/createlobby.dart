@@ -16,7 +16,7 @@ class CreateLobby extends StatefulWidget{
 
 class _CreateLobbyState extends State<CreateLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
-  final TextEditingController _gamenameController = new TextEditingController();
+  final TextEditingController _gamenameController =  new TextEditingController();
   //List lobbyList = [];
   //Map<String, List> lobby;
 

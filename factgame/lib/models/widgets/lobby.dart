@@ -1,8 +1,13 @@
+import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
+import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:flutter/material.dart';
 
 import '../global.dart';
 
 class Lobby extends StatelessWidget {
+  LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
+  final TextEditingController _gameidController = new TextEditingController();
+  //we need to get the correct game_id (pk)
   final String lobbyname;
 
   Lobby({this.lobbyname});
@@ -36,8 +41,26 @@ class Lobby extends StatelessWidget {
               child: RaisedButton(
                 onPressed: () {
                   //TODO: make the button add the player to the lobby
-                },
-                child: Text('Join'),
+                  databaseHelper.joinGame(
+                      _gameidController.text.trim());
+                  print('zzzzzzzzzzzzzzzzzzz');
+                  print(_gameidController);
+                  Navigator.of(context).push(
+                      new MaterialPageRoute(
+                      builder: (BuildContext context) => new WaitingLobby(),
+                      ));
+                  },
+                child: new TextField(
+                  controller: _gameidController,
+                  decoration: InputDecoration(
+                    hintText: 'Join',
+                      hintStyle: TextStyle(
+                          height: 20.0,
+                          color: Colors.black
+                      )
+
+                  ),
+                ),
               )),
         ],
       ),

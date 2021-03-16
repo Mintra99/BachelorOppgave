@@ -20,7 +20,7 @@ class _JoinLobbyState extends State<JoinLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gameidController = new TextEditingController();
   Map mapResponse;
-  List listOfFacts;
+  List listOfGame;
 
   //List list = [];
 
@@ -32,16 +32,17 @@ class _JoinLobbyState extends State<JoinLobby> {
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
-        listOfFacts = mapResponse['games'];
+        listOfGame = mapResponse['games'];
       });
     }
   }
 
+
   List<Widget> getList() {
     List<Lobby> list = [];
-    for (int i = 0; i < listOfFacts.length; i++) {
+    for (int i = 0; i < listOfGame.length; i++) {
       list.add(
-          Lobby(lobbyname: listOfFacts[i]['fields']['game_name'].toString()));
+          Lobby(lobbyname: listOfGame[i]['fields']['game_name'].toString()));
     }
     return list;
   }
