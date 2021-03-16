@@ -40,14 +40,7 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
-  void showAvailableGame() {
-    for (int i = 0; i < listOfGame.length; i++) {
-      gameName = listOfGame[i]['fields']['game_name'].toString();
-      gamePk = listOfGame[i]['pk'].toInt();
-    }
-  }
 /*
->>>>>>> bcec6c84bcab2adec01573a520ba6e8a4ac4d014
   List<Widget> getList() {
     List<Lobby> list = [];
     listOfGame == null ? 0 : listOfGame.length;
@@ -114,8 +107,14 @@ class _JoinLobbyState extends State<JoinLobby> {
                         
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1)),
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            boxShadow: [
+                              new BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 10.0,
+                              )
+                            ]),
                       ),
                     );
                   },
