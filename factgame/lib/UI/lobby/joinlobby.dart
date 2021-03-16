@@ -25,7 +25,6 @@ class _JoinLobbyState extends State<JoinLobby> {
   String gameName;
   int gamePk;
 
-
   //List list = [];
 
   // function api to bring the list of available game
@@ -40,6 +39,7 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
+
 /*
   List<Widget> getList() {
     List<Lobby> list = [];
@@ -82,43 +82,52 @@ class _JoinLobbyState extends State<JoinLobby> {
             ? Container()
             : SingleChildScrollView(
                 child: Column(children: <Widget>[
-                Text(mapResponse['message'].toString()),
-                ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        //TODO: on tap, make the player join the lobby
-                        databaseHelper.joinGame(listOfGame[index]['pk']);
-                        Navigator.of(context).push(
-                            new MaterialPageRoute(
-                              builder: (BuildContext context) => new WaitingLobby(),
+                //Text(mapResponse['message'].toString()),     //Trenger ikke denne
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          onTap: () {
+                            databaseHelper.joinGame(listOfGame[index]['pk']);
+                            Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new WaitingLobby(),
                             ));
-                      },
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Text(listOfGame[index]['fields']['game_name']
-                                .toString()),
-
-                          ],
-                        ),
-                        
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            boxShadow: [
-                              new BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                blurRadius: 10.0,
-                              )
-                            ]),
-                      ),
-                    );
-                  },
-                  itemCount: listOfGame == null ? 0 : listOfGame.length,
+                          },
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Spacer(),
+                                Text(
+                                  listOfGame[index]['fields']['game_name']
+                                      .toString(),
+                                  style: darkScoreboardName,
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                            margin: EdgeInsets.all(10.0),
+                            height: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                boxShadow: [
+                                  new BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    blurRadius: 10.0,
+                                  )
+                                ]),
+                          ),
+                        );
+                    },
+                    itemCount: listOfGame == null ? 0 : listOfGame.length,
+                  ),
                 )
               ])));
   }
