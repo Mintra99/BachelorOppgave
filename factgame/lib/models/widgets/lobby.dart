@@ -12,6 +12,8 @@ class Lobby extends StatelessWidget {
 
   Lobby({this.lobbyname});
 
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,6 +29,7 @@ class Lobby extends StatelessWidget {
             )
           ]),
       child: Row(
+
         children: <Widget>[
           Container(
             margin: EdgeInsets.all(10.0),
@@ -37,8 +40,10 @@ class Lobby extends StatelessWidget {
           ),
           Spacer(),
           Container(
+
               margin: EdgeInsets.all(10.0),
               child: RaisedButton(
+
                 onPressed: () {
                   //TODO: make the button add the player to the lobby
                   databaseHelper.joinGame(
@@ -50,17 +55,7 @@ class Lobby extends StatelessWidget {
                       builder: (BuildContext context) => new WaitingLobby(),
                       ));
                   },
-                child: new TextField(
-                  controller: _gameidController,
-                  decoration: InputDecoration(
-                    hintText: 'Join',
-                      hintStyle: TextStyle(
-                          height: 20.0,
-                          color: Colors.black
-                      )
-
-                  ),
-                ),
+                child: Text('Join'),
               )),
         ],
       ),

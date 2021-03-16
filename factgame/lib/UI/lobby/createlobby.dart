@@ -89,6 +89,8 @@ class _CreateLobbyState extends State<CreateLobby> {
                   onPressed: () {
                     databaseHelper.createGame(
                         _gamenameController.text.trim());
+                    print('77777777777777777777777777777777777777777');
+                    print(_gamenameController);
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new WaitingLobby(),
