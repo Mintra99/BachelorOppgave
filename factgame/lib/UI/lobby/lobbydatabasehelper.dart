@@ -29,14 +29,11 @@ class LobbydatabaseHelper {
       print('Response status : ${response.body} ');
     });
   }
-  joinGame(String game_id) async {
+  joinGame(int game_id) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0;
     print('ssssssssssssssssssssssss');
-    print('$game_id');
-    int id =int.parse(game_id);
-    print(id);
     print(game_id);
     String myUrl = "$serverUrl/game/join_game/";
     final response = await http.post(myUrl,
@@ -44,7 +41,7 @@ class LobbydatabaseHelper {
           'Authorization': 'Bearer $value'
         },
         body: {
-          "game_id": '$id',
+          "game_id": '$game_id',
         }).then((response) {
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');

@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 import 'endscreen.dart';
 
 class ProposerManager extends StatefulWidget {
@@ -43,6 +44,7 @@ class _ProposerPageState extends State<ProposerManager> {
     "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
   };
+
 
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -134,12 +136,14 @@ class _ProposerPageState extends State<ProposerManager> {
     starttimer();
   }
 
-  void checkanswer(String k) {
+  void checkanswer(String k) async{
     databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answer == k.toLowerCase()) {
       score += 1;
+      prefs.setInt('guesserScore', score);// we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
       print('correct');
       colortoshow = right;
     } else {

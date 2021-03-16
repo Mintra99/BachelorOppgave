@@ -14,7 +14,15 @@ class GameFinishedManager extends StatefulWidget {
 }
 
 class _GameFinished extends State<GameFinishedManager> {
+  int finalScore;
   int score;
+
+
+  @override
+  void initState() {
+    fitchData();
+    super.initState();
+  }
 
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -22,16 +30,12 @@ class _GameFinished extends State<GameFinishedManager> {
     await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
-        score = prefs.getInt('score');
+        finalScore = prefs.getInt('guesserScore');// we are get the score from local storage (we already this integer in guesser.dart file)
+        print(finalScore);
       });
     }
   }
 
-  @override
-  void initState() {
-    fitchData();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,7 @@ class _GameFinished extends State<GameFinishedManager> {
                   vertical: 5.0,
                   horizontal: 10.0,
                 ),
-              child: Text("Final Score: " + '$score', style: globalTextStyle),
+              child: Text("Final Score: " + '$finalScore', style: globalTextStyle),
             ),
             Padding(
               padding: EdgeInsets.symmetric(

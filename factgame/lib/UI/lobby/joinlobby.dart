@@ -1,3 +1,4 @@
+import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/global.dart';
 import 'package:factgame/models/widgets/lobby.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _JoinLobbyState extends State<JoinLobby> {
   String gameName;
   int gamePk;
 
+
   //List list = [];
 
   // function api to bring the list of available game
@@ -38,11 +40,12 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
-<<<<<<< HEAD
-
-
-
-=======
+  void showAvailableGame() {
+    for (int i = 0; i < listOfGame.length; i++) {
+      gameName = listOfGame[i]['fields']['game_name'].toString();
+      gamePk = listOfGame[i]['pk'].toInt();
+    }
+  }
 /*
 >>>>>>> bcec6c84bcab2adec01573a520ba6e8a4ac4d014
   List<Widget> getList() {
@@ -94,15 +97,21 @@ class _JoinLobbyState extends State<JoinLobby> {
                     return InkWell(
                       onTap: () {
                         //TODO: on tap, make the player join the lobby
-                        print('åååååååååååååååååååååååååååå');
+                        databaseHelper.joinGame(listOfGame[index]['pk']);
+                        Navigator.of(context).push(
+                            new MaterialPageRoute(
+                              builder: (BuildContext context) => new WaitingLobby(),
+                            ));
                       },
                       child: Container(
                         child: Column(
                           children: <Widget>[
                             Text(listOfGame[index]['fields']['game_name']
                                 .toString()),
+
                           ],
                         ),
+                        
                         width: double.infinity,
                         decoration: BoxDecoration(
                             color: Colors.white,

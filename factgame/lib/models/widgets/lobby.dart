@@ -46,14 +46,14 @@ class Lobby extends StatelessWidget {
 
                 onPressed: () {
                   //TODO: make the button add the player to the lobby
-                  databaseHelper.joinGame(
+                  /*databaseHelper.joinGame(
                       _gameidController.text.trim());
                   print('zzzzzzzzzzzzzzzzzzz');
                   print(_gameidController);
                   Navigator.of(context).push(
                       new MaterialPageRoute(
                       builder: (BuildContext context) => new WaitingLobby(),
-                      ));
+                      ));*/
                   },
                 child: Text('Join'),
               )),
