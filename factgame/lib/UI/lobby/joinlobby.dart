@@ -36,16 +36,18 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
-
-
+/*
   List<Widget> getList() {
     List<Lobby> list = [];
+    listOfGame == null ? 0 : listOfGame.length;
     for (int i = 0; i < listOfGame.length; i++) {
       list.add(
           Lobby(lobbyname: listOfGame[i]['fields']['game_name'].toString()));
     }
     return list;
   }
+
+ */
 
   @override
   void initState() {
@@ -55,7 +57,7 @@ class _JoinLobbyState extends State<JoinLobby> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    /*return Scaffold(
       appBar: AppBar(title: Text('Join Game'), backgroundColor: darkGrayColor),
       body: DecoratedBox(
         child: Container(
@@ -67,25 +69,41 @@ class _JoinLobbyState extends State<JoinLobby> {
         decoration: BoxDecoration(color: darkGrayColor),
       ),
     );
-    /*
-                mapResponse == null
-                    ? Container()
-                    : SingleChildScrollView(
-                        child: Column(children: <Widget>[
-                        Text(mapResponse['message'].toString()),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Container(
-                                child: Column(
-                                  children: getList(),
-                            ));
-                          },
-                          itemCount:
-                              listOfFacts == null ? 0 : listOfFacts.length,
-                        )
-                      ]))));
-
      */
+
+    return Scaffold(
+        appBar:
+            AppBar(title: Text('Join Game'), backgroundColor: darkGrayColor),
+        body: mapResponse == null
+            ? Container()
+            : SingleChildScrollView(
+                child: Column(children: <Widget>[
+                Text(mapResponse['message'].toString()),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        //TODO: on tap, make the player join the lobby
+                        print('åååååååååååååååååååååååååååå');
+                      },
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            Text(listOfGame[index]['fields']['game_name']
+                                .toString()),
+                          ],
+                        ),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black, width: 1)),
+                      ),
+                    );
+                  },
+                  itemCount: listOfGame == null ? 0 : listOfGame.length,
+                )
+              ])));
   }
 }
