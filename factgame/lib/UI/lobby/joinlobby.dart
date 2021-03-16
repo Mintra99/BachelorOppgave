@@ -38,13 +38,8 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
-<<<<<<< HEAD
 
-
-
-=======
 /*
->>>>>>> bcec6c84bcab2adec01573a520ba6e8a4ac4d014
   List<Widget> getList() {
     List<Lobby> list = [];
     listOfGame == null ? 0 : listOfGame.length;
@@ -99,14 +94,27 @@ class _JoinLobbyState extends State<JoinLobby> {
                       child: Container(
                         child: Column(
                           children: <Widget>[
-                            Text(listOfGame[index]['fields']['game_name']
-                                .toString()),
+                            Spacer(),
+                            Text(
+                              listOfGame[index]['fields']['game_name']
+                                  .toString(),
+                              style: darkScoreboardName,
+                            ),
+                            Spacer(),
                           ],
                         ),
-                        width: double.infinity,
+                        margin:
+                            EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                        height: 100,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1)),
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            boxShadow: [
+                              new BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 10.0,
+                              )
+                            ]),
                       ),
                     );
                   },
