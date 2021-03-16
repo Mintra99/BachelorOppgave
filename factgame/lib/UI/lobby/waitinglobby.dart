@@ -82,6 +82,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                */
               Container(
                 height: 50,
+                //TODO: trenger lobby name
                 child: new Text('Lobby name:'),
               ),
               Container(
