@@ -21,6 +21,8 @@ class _JoinLobbyState extends State<JoinLobby> {
   final TextEditingController _gameidController = new TextEditingController();
   Map mapResponse;
   List listOfGame;
+  String gameName;
+  int gamePk;
 
   //List list = [];
 
@@ -36,6 +38,7 @@ class _JoinLobbyState extends State<JoinLobby> {
       });
     }
   }
+
 
 
   List<Widget> getList() {
