@@ -2,6 +2,7 @@ import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../home.dart';
 import 'lobbydatabasehelper.dart';
 import 'waitinglobby.dart';
@@ -74,7 +75,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                 child: new TextField(
                   controller: _gamenameController,
                   decoration: InputDecoration(
-                    hintText: 'Group Name',
+                    hintText: 'Game Name',
                     icon: new Icon(Icons.group),
                   ),
                 ),
@@ -86,11 +87,10 @@ class _CreateLobbyState extends State<CreateLobby> {
                 height: 50,
                 child: new RaisedButton(
 
-                  onPressed: () {
-                    databaseHelper.createGame(
-                        _gamenameController.text.trim());
-                    print('77777777777777777777777777777777777777777');
-                    print(_gamenameController);
+                  onPressed: () async{
+                    databaseHelper.createGame(_gamenameController.text.trim());
+                    print('ssssssssssssssssssss');
+                    print(_gamenameController.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new WaitingLobby(),

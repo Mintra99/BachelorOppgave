@@ -7,11 +7,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LobbydatabaseHelper {
 
   String serverUrl = "https://fakenews-app.com/api";
-  var errorMessage;
-
-  var Message;
-
   var token;
+  int myId;
+  String myName;
+
+  getData(int id , String name) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    myId = id;
+    myName = name;
+    prefs.setInt('gameId',id);
+    prefs.setString('gameNavn', name);
+    print(myName);
+    print(myId);
+    print(id);
+    print(name);
+
+    return (myName);
+  }
 
   createGame(String game_name) async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,12 +41,10 @@ class LobbydatabaseHelper {
       print('Response status : ${response.body} ');
     });
   }
-  joinGame(int game_id) async {
+  joinGame(int game_id, String game_name) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    print('ssssssssssssssssssssssss');
-    print(game_id);
     String myUrl = "$serverUrl/game/join_game/";
     final response = await http.post(myUrl,
         headers: {

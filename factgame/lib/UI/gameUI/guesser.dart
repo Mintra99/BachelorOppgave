@@ -55,7 +55,6 @@ class _ProposerPageState extends State<ProposerManager> {
         mapResponse = json.decode(response.body);
         shuffle();
         showQuestion();
-        //score = prefs.getInt('score');
       });
     }
   }

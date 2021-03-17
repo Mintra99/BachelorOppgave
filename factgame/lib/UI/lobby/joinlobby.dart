@@ -93,7 +93,7 @@ class _JoinLobbyState extends State<JoinLobby> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            databaseHelper.joinGame(listOfGame[index]['pk']);
+                            databaseHelper.getData(listOfGame[index]['pk'], listOfGame[index]['fields']['game_name']);
                             Navigator.of(context).push(new MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   new WaitingLobby(),

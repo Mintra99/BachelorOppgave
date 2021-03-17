@@ -13,14 +13,20 @@ class WaitingLobby extends StatefulWidget {
   WaitingLobby({Key key, this.title}) : super(key: key);
   final String title;
 
+
   @override
   _WaitingLobbyState createState() => _WaitingLobbyState();
 }
+class GetData{
 
+
+}
 class _WaitingLobbyState extends State<WaitingLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
-  final TextEditingController _gamenameController = new TextEditingController();
-  List mapResponse; //lobby name
+  List mapQuestionResponse; //lobby name
+  String lobbyNavn;
+  Map mapResponse;
+  List listOfGame;
 
   TextEditingController _lobbyNameController = TextEditingController();
   TextEditingController _groupNameController = TextEditingController();
@@ -28,10 +34,27 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
-    await http.get('https://fakenews-app.com/api/game/question/');
+    await http.get('https://fakenews-app.com/api/game/available_game/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
+        listOfGame = mapResponse['games'];
+      });
+    }
+  }
+
+  prama()async{
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   prefs.getString('gameNavn');
+  }
+
+  Future fitchQuestionData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response =
+    await http.get('https://fakenews-app.com/api/game/question/');
+    if (response.statusCode == 200) {
+      setState(() {
+        mapQuestionResponse = json.decode(response.body);
       });
     }
   }
@@ -83,13 +106,19 @@ class _WaitingLobbyState extends State<WaitingLobby> {
               Container(
                 height: 50,
                 //TODO: trenger lobby name
-                child: new Text('Lobby name:'),
+
+                child: new Text('Lobby name: $lobbyNavn'),
               ),
               Container(
                 height: 50,
                 child: new RaisedButton(
-                  onPressed: () {
+                  onPressed: () async{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.getString('gameNavn');
                     //TODO: if all players in the lobby have pressed this button, start the game
+                    prefs.getInt('gameId');
+                    prefs.getString('gameNavn');
+                    databaseHelper.joinGame( prefs.getInt('gameId'),prefs.getString('gameNavn'));
                   },
                   color: Colors.blue,
                   child: new Text(
@@ -111,7 +140,6 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                           builder: (BuildContext context) => new Home(),
                         )
                     );
-                    // TODO: leave the lobby (if there are none left in the lobby, remove it)
                   },
                   color: Colors.blue,
                   child: new Text(
