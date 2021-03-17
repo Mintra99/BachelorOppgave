@@ -78,20 +78,20 @@ class _JoinLobbyState extends State<JoinLobby> {
     return Scaffold(
         appBar:
             AppBar(title: Text('Join Game'), backgroundColor: darkGrayColor),
-        body: mapResponse == null
-            ? Container()
-            : SingleChildScrollView(
-                child: Column(children: <Widget>[
-                //Text(mapResponse['message'].toString()),     //Trenger ikke denne
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
+        body: SafeArea(
+          child: mapResponse == null
+              ? Container()
+              : SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: Column(children: <Widget>[
+                    //Text(mapResponse['message'].toString()),     //Trenger ikke denne
+                    ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
+                      //physics: AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
                           onTap: () {
                             databaseHelper.joinGame(listOfGame[index]['pk']);
                             Navigator.of(context).push(new MaterialPageRoute(
@@ -125,10 +125,10 @@ class _JoinLobbyState extends State<JoinLobby> {
                                 ]),
                           ),
                         );
-                    },
-                    itemCount: listOfGame == null ? 0 : listOfGame.length,
-                  ),
-                )
-              ])));
+                      },
+                      itemCount: listOfGame == null ? 0 : listOfGame.length,
+                    )
+                  ])),
+        ));
   }
 }
