@@ -8,8 +8,7 @@ import 'lobbydatabasehelper.dart';
 import 'waitinglobby.dart';
 
 class CreateLobby extends StatefulWidget{
-  CreateLobby({Key key, this.title}) : super(key: key);
-  final String title;
+
 
   @override
   _CreateLobbyState createState() => _CreateLobbyState();
@@ -21,7 +20,6 @@ class _CreateLobbyState extends State<CreateLobby> {
   //List lobbyList = [];
   //Map<String, List> lobby;
 
-  TextEditingController _lobbyNameController = TextEditingController();
 /*
   void _makeLobby(BuildContext context, String lobbyName) async {
     List<String> playerList = new List(2);
@@ -43,7 +41,6 @@ class _CreateLobbyState extends State<CreateLobby> {
 
  */
 
-  TextEditingController _groupNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +86,6 @@ class _CreateLobbyState extends State<CreateLobby> {
 
                   onPressed: () async{
                     databaseHelper.createGame(_gamenameController.text.trim());
-                    print('ssssssssssssssssssss');
-                    print(_gamenameController.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new WaitingLobby(),

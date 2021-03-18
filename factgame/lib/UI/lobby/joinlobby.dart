@@ -10,8 +10,7 @@ import 'lobbydatabasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JoinLobby extends StatefulWidget {
-  JoinLobby({Key key, this.title}) : super(key: key);
-  final String title;
+
 
   @override
   _JoinLobbyState createState() => _JoinLobbyState();

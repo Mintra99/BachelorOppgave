@@ -10,42 +10,28 @@ import '../../home.dart';
 import 'lobbydatabasehelper.dart';
 
 class WaitingLobby extends StatefulWidget {
-  WaitingLobby({Key key, this.title}) : super(key: key);
-  final String title;
-
 
   @override
   _WaitingLobbyState createState() => _WaitingLobbyState();
 }
-class GetData{
 
 
-}
 class _WaitingLobbyState extends State<WaitingLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   List mapQuestionResponse; //lobby name
-  String lobbyNavn;
-  Map mapResponse;
-  List listOfGame;
+  String navn;
 
-  TextEditingController _lobbyNameController = TextEditingController();
-  TextEditingController _groupNameController = TextEditingController();
-
-  Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-    await http.get('https://fakenews-app.com/api/game/available_game/');
-    if (response.statusCode == 200) {
-      setState(() {
-        mapResponse = json.decode(response.body);
-        listOfGame = mapResponse['games'];
-      });
-    }
+  @override
+  void initState() {
+    lobbyName();
+    super.initState();
   }
-
-  prama()async{
+  // this function return the name for the game ; Lobbyname
+  lobbyName()async{
    SharedPreferences prefs = await SharedPreferences.getInstance();
-   prefs.getString('gameNavn');
+   setState(() {
+     navn =  prefs.getString('gameNavn');// we are get the score from local storage (we already this string in lobbydatabasehelper.dart file)
+   });
   }
 
   Future fitchQuestionData() async {
@@ -107,7 +93,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                 height: 50,
                 //TODO: trenger lobby name
 
-                child: new Text('Lobby name: $lobbyNavn'),
+                child: new Text('Lobby name: ' + '$navn' ),
               ),
               Container(
                 height: 50,
@@ -116,8 +102,8 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     //TODO: if all players in the lobby have pressed this button, start the game
-                    prefs.getInt('gameId');
-                    prefs.getString('gameNavn');
+                     prefs.getInt('gameId');
+                     prefs.getString('gameNavn');
                     databaseHelper.joinGame( prefs.getInt('gameId'),prefs.getString('gameNavn'));
                   },
                   color: Colors.blue,

@@ -17,12 +17,6 @@ class LobbydatabaseHelper {
     myName = name;
     prefs.setInt('gameId',id);
     prefs.setString('gameNavn', name);
-    print(myName);
-    print(myId);
-    print(id);
-    print(name);
-
-    return (myName);
   }
 
   createGame(String game_name) async {
