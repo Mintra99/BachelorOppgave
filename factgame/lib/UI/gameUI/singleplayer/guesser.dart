@@ -6,9 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-import 'endscreen.dart';
+import 'package:factgame/UI/gameUI/endscreen.dart';
 
 class ProposerManager extends StatefulWidget {
   ProposerManager({Key key, this.title}) : super(key: key);
