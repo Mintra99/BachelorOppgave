@@ -1,4 +1,4 @@
-import 'package:factgame/UI/gameUI/guesser.dart';
+import 'package:factgame/UI/gameUI/singleplayer/guesser.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +63,7 @@ class SingleplayerPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProposerManager()),
+                    MaterialPageRoute(builder: (context) => GuesserManager()),
                   );
                 },
                 child: Text("Start game",

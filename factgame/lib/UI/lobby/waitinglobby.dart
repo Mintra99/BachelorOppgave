@@ -102,6 +102,8 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                         await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     //TODO: if all players in the lobby have pressed this button, start the game
+                    //TODO: if player is guesser --> multiplayer/guesser.dart
+                    //TODO: if player is proposer --> multiplayer/proposer.dart
                     prefs.getInt('gameId');
                     prefs.getString('gameNavn');
                     databaseHelper.joinGame(

@@ -8,17 +8,17 @@ import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
-class ProposerManager extends StatefulWidget {
-  ProposerManager({Key key, this.title}) : super(key: key);
+class GuesserManager extends StatefulWidget {
+  GuesserManager({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
   State<StatefulWidget> createState() {
-    return _ProposerPageState();
+    return _GuesserPageState();
   }
 }
 
-class _ProposerPageState extends State<ProposerManager> {
+class _GuesserPageState extends State<GuesserManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
 
   int timer = 10;
