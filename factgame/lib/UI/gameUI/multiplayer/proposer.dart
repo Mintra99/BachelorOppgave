@@ -77,7 +77,6 @@ class _ProposerPageState extends State<ProposerManager> {
                           ListView.builder(
                             scrollDirection: Axis.vertical,
                             physics: NeverScrollableScrollPhysics(),
-                            //physics: AlwaysScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return GestureDetector(

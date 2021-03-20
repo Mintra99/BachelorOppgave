@@ -24,8 +24,6 @@ class _JoinLobbyState extends State<JoinLobby> {
   String gameName;
   int gamePk;
 
-  //List list = [];
-
   // function api to bring the list of available game
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -39,19 +37,6 @@ class _JoinLobbyState extends State<JoinLobby> {
     }
   }
 
-/*
-  List<Widget> getList() {
-    List<Lobby> list = [];
-    listOfGame == null ? 0 : listOfGame.length;
-    for (int i = 0; i < listOfGame.length; i++) {
-      list.add(
-          Lobby(lobbyname: listOfGame[i]['fields']['game_name'].toString()));
-    }
-    return list;
-  }
-
- */
-
   @override
   void initState() {
     fitchData();
@@ -60,20 +45,6 @@ class _JoinLobbyState extends State<JoinLobby> {
 
   @override
   Widget build(BuildContext context) {
-    /*return Scaffold(
-      appBar: AppBar(title: Text('Join Game'), backgroundColor: darkGrayColor),
-      body: DecoratedBox(
-        child: Container(
-          margin: EdgeInsets.all(10.0),
-          child: ListView(
-            children: getList(),
-          ),
-        ),
-        decoration: BoxDecoration(color: darkGrayColor),
-      ),
-    );
-     */
-
     return Scaffold(
         appBar:
             AppBar(title: Text('Join Game'), backgroundColor: darkGrayColor),
@@ -83,7 +54,6 @@ class _JoinLobbyState extends State<JoinLobby> {
               : SingleChildScrollView(
                   physics: ScrollPhysics(),
                   child: Column(children: <Widget>[
-                    //Text(mapResponse['message'].toString()),     //Trenger ikke denne
                     ListView.builder(
                       scrollDirection: Axis.vertical,
                       physics: NeverScrollableScrollPhysics(),

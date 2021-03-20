@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:factgame/UI/gameUI/multiplayer/proposer.dart';
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
 import 'package:factgame/models/classes/player.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,14 +46,20 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     }
   }
 
-  /*
-  List<Widget> getPlayerLobbyList() {
-    List<Player> list = [];
-   //return all players in the lobby
-    return list;
+ /*
+  void assignRole() {
+     if player.role == "proposer"{
+        Navigator.push(
+             context,
+             MaterialPageRoute(builder: (context) => ProposerManager()),
+           );}
+     if player.role == "guesser"{
+        Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+                );}
   }
-
-   */
+ */
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +109,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                         await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     //TODO: if all players in the lobby have pressed this button, start the game
-                    //TODO: if player is guesser --> multiplayer/guesser.dart
-                    //TODO: if player is proposer --> multiplayer/proposer.dart
+                    //assignRole(); // Sender spillerene i lobbyen til guesser/proposer siden
                     prefs.getInt('gameId');
                     prefs.getString('gameNavn');
                     databaseHelper.joinGame(
