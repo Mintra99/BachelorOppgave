@@ -48,12 +48,12 @@ class _WaitingLobbyState extends State<WaitingLobby> {
 
  /*
   void assignRole() {
-     if player.role == "proposer"{
+     if player.role == "questioner"{
         Navigator.push(
              context,
              MaterialPageRoute(builder: (context) => ProposerManager()),
            );}
-     if player.role == "guesser"{
+     if player.role == "respondent"{
         Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => GuesserManagerMP()),
