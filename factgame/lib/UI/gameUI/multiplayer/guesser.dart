@@ -57,10 +57,9 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     }
   }
 
-  //List shuffle(List items) {
+  //TODO: make the questions available for both guesser and proposer so they get the same questions
   void shuffle() {
     var random = new Random();
-
     // Go through all elements.
     for (var i = mapResponse.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
@@ -146,6 +145,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     } else {
       print('wrong');
       colortoshow = wrong;
+      //TODO: let proposer give a hint before guesser can guess again
     }
     setState(() {
       // applying the changed color to the particular button that was selected
@@ -192,7 +192,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //children: <Widget>[
             children: [
               new Container(
                 child: Column(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:factgame/UI/gameUI/multiplayer/guesser.dart';
 import 'package:factgame/UI/gameUI/multiplayer/proposer.dart';
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
 import 'package:factgame/models/classes/player.dart';
@@ -46,7 +47,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     }
   }
 
- /*
+  /*
   void assignRole() {
      if player.role == "questioner"{
         Navigator.push(
@@ -114,6 +115,17 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     prefs.getString('gameNavn');
                     databaseHelper.joinGame(
                         prefs.getInt('gameId'), prefs.getString('gameNavn'));
+                    /*
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProposerManager()),
+                    );
+
+                     */
+
+
+                    print('game started');
                   },
                   color: Colors.blue,
                   child: new Text(

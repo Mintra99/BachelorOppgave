@@ -192,7 +192,6 @@ class _GuesserPageState extends State<GuesserManager> {
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //children: <Widget>[
         children: [
           new Container(
             child: Column(
