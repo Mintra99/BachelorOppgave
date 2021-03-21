@@ -32,7 +32,6 @@ class _ProposerPageState extends State<ProposerManager> {
   int questionid;
   int score = 0;
 
-
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
@@ -139,6 +138,36 @@ class _ProposerPageState extends State<ProposerManager> {
     Timer(Duration(seconds: 2), nextquestion);
   }
 
+  Widget hintButton(String k) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 10.0,
+        horizontal: 20.0,
+      ),
+      child: MaterialButton(
+        onPressed: () {
+          checkanswer(k);
+        },
+        child: Text(
+          k.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Alike",
+            fontSize: 16.0,
+          ),
+          maxLines: 1,
+        ),
+        color: hints[k],
+        splashColor: Colors.indigo[700],
+        highlightColor: Colors.indigo[700],
+        minWidth: 200.0,
+        height: 45.0,
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,7 +205,8 @@ class _ProposerPageState extends State<ProposerManager> {
                       child: Container(
                         child: Column(
                           children: <Widget>[
-                            //TODO: list of hints the proposer can give the guesser
+                            // TODO: list of hints the proposer can give the guesser (bruk hintButton(String k)
+                            // Eks: hintButton(dette er et hint)
                           ],
                         ),
                       ),

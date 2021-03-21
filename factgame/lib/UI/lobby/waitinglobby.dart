@@ -70,32 +70,13 @@ class _WaitingLobbyState extends State<WaitingLobby> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Lobby'),
-          /*
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: ()=>
-            )
-          ],
-           */
         ),
         body: Container(
           child: ListView(
             padding: const EdgeInsets.only(
                 top: 250, left: 12.0, right: 12.0, bottom: 12.0),
             children: <Widget>[
-              /*
-              Container(
-                height: 50,
-                child: ListView(
-                  children: getPlayerLobbyList(),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
 
-               */
               Container(
                 height: 50,
                 //TODO: trenger lobby name
@@ -115,15 +96,12 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     prefs.getString('gameNavn');
                     databaseHelper.joinGame(
                         prefs.getInt('gameId'), prefs.getString('gameNavn'));
-                    /*
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProposerManager()),
                     );
-
-                     */
-
 
                     print('game started');
                   },
