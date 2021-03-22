@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
+import 'dart:io';
+
 
 class GuesserManager extends StatefulWidget {
   GuesserManager({Key key, this.title}) : super(key: key);
@@ -45,9 +47,10 @@ class _GuesserPageState extends State<GuesserManager> {
 
 
   Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-        await http.get('https://fakenews-app.com/api/game/question/');
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    var response = await http.get('https://fakenews-app.com/api/game/question/',headers: {HttpHeaders.authorizationHeader: "Bearer $value"},);
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);

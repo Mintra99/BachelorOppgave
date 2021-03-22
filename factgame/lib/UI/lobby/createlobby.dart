@@ -1,4 +1,5 @@
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
+import 'package:factgame/UI/lobby/selectquestions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -88,7 +89,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                     databaseHelper.createGame(_gamenameController.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
-                          builder: (BuildContext context) => new WaitingLobby(),
+                          builder: (BuildContext context) => new SelectQuestion(),
                         )
                     );
                   },

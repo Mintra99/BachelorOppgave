@@ -157,7 +157,7 @@ class _ProposerPageState extends State<ProposerManager> {
           ),
           maxLines: 1,
         ),
-        color: hints[k],
+        //color: hints[k],
         splashColor: Colors.indigo[700],
         highlightColor: Colors.indigo[700],
         minWidth: 200.0,
