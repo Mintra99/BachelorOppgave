@@ -91,11 +91,9 @@ class _GuesserPageState extends State<GuesserManager> {
     }
   }
 
-
-
   void showQuestion() {
     if (counter <= cap) {
-    //if (mapResponse.length > 0) {
+      //if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       answer.toLowerCase();
@@ -156,7 +154,6 @@ class _GuesserPageState extends State<GuesserManager> {
     _visible = false;
     answered = false;
     starttimer();
-
   }
 
   void _toggle() {
@@ -185,7 +182,7 @@ class _GuesserPageState extends State<GuesserManager> {
         colortoshow = wrong;
       }
       _toggle();
-    }else{
+    } else {
       if (answer == k.toLowerCase()) {
         colortoshow = right;
       } else {
@@ -329,7 +326,8 @@ class _GuesserPageState extends State<GuesserManager> {
                               //TODO: show source
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => sourcePage()),
+                                MaterialPageRoute(
+                                    builder: (context) => sourcePage()),
                               );
                             },
                             child: Text(
@@ -419,16 +417,14 @@ class sourcePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Sources"),
-          backgroundColor: darkGrayColor,
+        backgroundColor: darkGrayColor,
       ),
       body: DecoratedBox(
         child: Container(
           margin: EdgeInsets.all(10.0),
           child: ListView(
             //TODO: add sources
-            children: [
-              Text("Sources")
-            ],
+            children: [Text("Sources")],
           ),
         ),
         decoration: BoxDecoration(color: Colors.white),
