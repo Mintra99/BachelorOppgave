@@ -142,7 +142,8 @@ class _GuesserPageState extends State<GuesserManager> {
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answer == k.toLowerCase()) {
-      score += 1;
+      score += (100*(timer) ~/ 10);
+      print(score);
       prefs.setInt('guesserScore', score);// we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
       print('correct');
       colortoshow = right;
