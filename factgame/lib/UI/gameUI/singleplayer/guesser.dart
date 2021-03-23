@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 import 'dart:io';
 
-
 class GuesserManager extends StatefulWidget {
   GuesserManager({Key key, this.title}) : super(key: key);
   final String title;
@@ -33,6 +32,9 @@ class _GuesserPageState extends State<GuesserManager> {
   String answer;
   int questionid;
   int score = 0;
+  bool _visible = false;
+
+  bool answered = false;
 
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
@@ -45,12 +47,14 @@ class _GuesserPageState extends State<GuesserManager> {
     "False": Colors.indigoAccent,
   };
 
-
   Future fitchData() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    var response = await http.get('https://fakenews-app.com/api/game/question/',headers: {HttpHeaders.authorizationHeader: "Bearer $value"},);
+    var response = await http.get(
+      'https://fakenews-app.com/api/game/question/',
+      headers: {HttpHeaders.authorizationHeader: "Bearer $value"},
+    );
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
@@ -113,7 +117,7 @@ class _GuesserPageState extends State<GuesserManager> {
       setState(() {
         if (timer < 1) {
           t.cancel();
-          nextquestion();
+          _toggle();
         } else if (canceltimer == true) {
           t.cancel();
         } else {
@@ -133,31 +137,51 @@ class _GuesserPageState extends State<GuesserManager> {
     btncolor["Mostly true"] = Colors.indigoAccent;
     btncolor["Mostly false"] = Colors.indigoAccent;
     btncolor["False"] = Colors.indigoAccent;
+    _visible = false;
+    answered = false;
     starttimer();
+
   }
 
-  void checkanswer(String k) async{
+  void _toggle() {
+    setState(() {
+      _visible = true;
+    });
+  }
+
+  void checkanswer(String k) async {
     databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (answer == k.toLowerCase()) {
-      score += (100*(timer) ~/ 10);
-      print(score);
-      prefs.setInt('guesserScore', score);// we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
-      print('correct');
-      colortoshow = right;
-    } else {
-      print('wrong');
-      colortoshow = wrong;
+    if (answered == false) {
+      if (answer == k.toLowerCase()) {
+        score += (100 * (timer) ~/ 10);
+        print(score);
+        prefs.setInt('guesserScore',
+            score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        print('correct');
+        answered = true;
+        colortoshow = right;
+      } else {
+        print('wrong');
+        answered = true;
+        colortoshow = wrong;
+      }
+      _toggle();
+    }else{
+      if (answer == k.toLowerCase()) {
+        colortoshow = right;
+      } else {
+        colortoshow = wrong;
+      }
     }
     setState(() {
       // applying the changed color to the particular button that was selected
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
-    //adds delay so the user can see the answer
-    Timer(Duration(seconds: 2), nextquestion);
+    //Timer(Duration(seconds: 2), nextquestion);
   }
 
   Widget choiceButton(String k) {
@@ -236,6 +260,108 @@ class _GuesserPageState extends State<GuesserManager> {
                   ),
                   onTap: () {},
                 )
+              ],
+            ),
+          ),
+          new Container(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 20.0,
+                  ),
+                  child: MaterialButton(
+                    onPressed: () {
+                      //TODO: show hint
+                    },
+                    child: Text(
+                      "Hint",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Alike",
+                        fontSize: 16.0,
+                      ),
+                      maxLines: 1,
+                    ),
+                    color: Colors.indigoAccent,
+                    splashColor: Colors.indigo[700],
+                    highlightColor: Colors.indigo[700],
+                    minWidth: 200.0,
+                    height: 45.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                  ),
+                )
+              ],
+            ),
+          ),
+          new Container(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                        visible: _visible,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 20.0,
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              //TODO: show source
+                            },
+                            child: Text(
+                              "Source",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Alike",
+                                fontSize: 16.0,
+                              ),
+                              maxLines: 1,
+                            ),
+                            color: Colors.indigoAccent,
+                            splashColor: Colors.indigo[700],
+                            highlightColor: Colors.indigo[700],
+                            minWidth: 150.0,
+                            height: 45.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                        )),
+                    Visibility(
+                        visible: _visible,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 20.0,
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              nextquestion();
+                            },
+                            child: Text(
+                              "Next question",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Alike",
+                                fontSize: 16.0,
+                              ),
+                              maxLines: 1,
+                            ),
+                            color: Colors.indigoAccent,
+                            splashColor: Colors.indigo[700],
+                            highlightColor: Colors.indigo[700],
+                            minWidth: 150.0,
+                            height: 45.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                        ))
+                  ],
+                ),
               ],
             ),
           ),
