@@ -110,7 +110,12 @@ class _SelectQuestionState extends State<SelectQuestion> {
                   },
                   dataSource: [
                     // Todo insert question list inside dataSource
-                   getList()
+                    //getList(),
+                    for (var i = 0; i < questions.length; i++)
+                      {
+                        "display": questions[i].display,
+                        "value": questions[i].value,
+                      },
                     /*
                     {
                       "display": "Running",
