@@ -1,11 +1,5 @@
-//import 'package:fakenews/pages/mobiledetails.dart';
-//import 'package:factgame/sections.dart';
-//import 'sections.dart';
-
 import "package:flutter/material.dart" show BuildContext, MaterialApp, StatelessWidget, Widget, runApp;
 import 'home.dart';
-//import 'samsung.dart';
-//import 'login.dart';
 import './Login-and-register/forgetpassword.dart';
 import './Login-and-register/login.dart';
 import './Login-and-register/createnewaccount.dart';
