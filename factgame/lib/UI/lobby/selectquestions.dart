@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() => runApp(YourApp());
 
 class YourApp extends StatelessWidget {
@@ -28,19 +27,24 @@ class _SelectQuestionState extends State<SelectQuestion> {
   final formKey = new GlobalKey<FormState>();
   List<Question> questions = [];
 
-
   Future<List<Question>> getQuestion() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    var response = await http.get('https://fakenews-app.com/api/game/question/',headers: {HttpHeaders.authorizationHeader: "Bearer $value"},);
+    var response = await http.get(
+      'https://fakenews-app.com/api/game/question/',
+      headers: {HttpHeaders.authorizationHeader: "Bearer $value"},
+    );
     var jsonData = json.decode(response.body);
-    for(var u in jsonData){
-      Question user = Question(u["question_text"]);
+    for (var u in jsonData) {
+      print(u);
+      String display = (u["question_text"]);
+      Question user = Question(display: display, value: u);
       questions.add(user);
     }
     print(questions.length);
-    print(questions);
+    print('------------------------------');
+    print(questions[1].display);
     return questions;
   }
 
@@ -60,6 +64,15 @@ class _SelectQuestionState extends State<SelectQuestion> {
         _myActivitiesResult = _myActivities.toString();
       });
     }
+  }
+
+  List<Question> getList() {
+    List<Question> list = [];
+    for (int i = 0; i< questions.length; i++) {
+      list.add(Question(display: questions[i].display, value: questions[i].value
+      ));
+    }
+    return list;
   }
 
   @override
@@ -97,6 +110,8 @@ class _SelectQuestionState extends State<SelectQuestion> {
                   },
                   dataSource: [
                     // Todo insert question list inside dataSource
+                   getList()
+                    /*
                     {
                       "display": "Running",
                       "value": "Running",
@@ -125,6 +140,8 @@ class _SelectQuestionState extends State<SelectQuestion> {
                       "display": "Football Practice",
                       "value": "Football Practice",
                     },
+
+                     */
                   ],
                   textField: 'display',
                   valueField: 'value',
@@ -158,8 +175,10 @@ class _SelectQuestionState extends State<SelectQuestion> {
     );
   }
 }
-class Question {
-  final String question_text;
-  Question(this.question_text);
 
+class Question {
+  Question({this.display, this.value});
+
+  final String display;
+  Map value;
 }
