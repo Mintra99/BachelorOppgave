@@ -23,20 +23,31 @@ class GuesserManager extends StatefulWidget {
 class _GuesserPageState extends State<GuesserManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
 
+  // Used to create timer
   int timer = 10;
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
+
+  // Used to retrieve data from database
   String stringResponse;
   List mapResponse;
+
+  // Used to show question/score and check answer
   String question;
   String answer;
   int questionid;
   int score = 0;
-  bool _visible = false;
 
+  // Used to hide/show source/next question
+  bool _visible = false;
   bool answered = false;
 
+  // Used to limit amount of questions
+  int cap = 10;
+  int counter = 1;
+
+  // Colors for choicebuttons
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
   Color wrong = Colors.red;
@@ -80,12 +91,16 @@ class _GuesserPageState extends State<GuesserManager> {
     }
   }
 
+
+
   void showQuestion() {
-    if (mapResponse.length > 0) {
+    if (counter <= cap) {
+    //if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       answer.toLowerCase();
       print(answer);
+      counter += 1;
       questionid = mapResponse[0]['id'].toInt();
     } else {
       mapResponse = null;
