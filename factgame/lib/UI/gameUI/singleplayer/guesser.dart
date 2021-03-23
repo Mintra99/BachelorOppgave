@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -181,7 +182,6 @@ class _GuesserPageState extends State<GuesserManager> {
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
-    //Timer(Duration(seconds: 2), nextquestion);
   }
 
   Widget choiceButton(String k) {
@@ -312,6 +312,10 @@ class _GuesserPageState extends State<GuesserManager> {
                           child: MaterialButton(
                             onPressed: () {
                               //TODO: show source
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => sourcePage()),
+                              );
                             },
                             child: Text(
                               "Source",
@@ -390,6 +394,30 @@ class _GuesserPageState extends State<GuesserManager> {
           )
         ],
       )),
+    );
+  }
+}
+
+class sourcePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Sources"),
+          backgroundColor: darkGrayColor,
+      ),
+      body: DecoratedBox(
+        child: Container(
+          margin: EdgeInsets.all(10.0),
+          child: ListView(
+            //TODO: add sources
+            children: [
+              Text("Sources")
+            ],
+          ),
+        ),
+        decoration: BoxDecoration(color: Colors.white),
+      ),
     );
   }
 }
