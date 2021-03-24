@@ -27,8 +27,7 @@ class _JoinLobbyState extends State<JoinLobby> {
   // function api to bring the list of available game
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-        await http.get('https://fakenews-app.com/api/game/available_game/');
+    var response = await http.get('https://fakenews-app.com/api/game/available_game/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'lobbydatabasehelper.dart';
+
 void main() => runApp(YourApp());
 
 class YourApp extends StatelessWidget {
@@ -22,58 +24,59 @@ class SelectQuestion extends StatefulWidget {
 }
 
 class _SelectQuestionState extends State<SelectQuestion> {
+  LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   List _myActivities;
   String _myActivitiesResult;
   final formKey = new GlobalKey<FormState>();
-  List<Question> questions = [];
-
-  Future<List<Question>> getQuestion() async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'access';
-    final value = prefs.get(key) ?? 0;
-    var response = await http.get(
-      'https://fakenews-app.com/api/game/question/',
-      headers: {HttpHeaders.authorizationHeader: "Bearer $value"},
-    );
-    var jsonData = json.decode(response.body);
-    for (var u in jsonData) {
-      print(u);
-      String display = (u["question_text"]);
-      Question user = Question(display: display, value: u);
-      questions.add(user);
-    }
-    print(questions.length);
-    print('------------------------------');
-    print(questions[1].display);
-    return questions;
-  }
+  List questions = [];
+  int gameId;
+  int Id;
 
   @override
   void initState() {
+    Question();
     getQuestion();
     super.initState();
     _myActivities = [];
     _myActivitiesResult = '';
   }
 
-  _saveForm() {
+  Future getQuestion() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    var response = await http.get('https://fakenews-app.com/api/game/question/', headers: {HttpHeaders.authorizationHeader: "Bearer $value"},
+    );
+    var jsonData = json.decode(response.body);
+    for (var u in jsonData) {
+      String display = (u["question_text"]);
+      Question singleQuestion = Question(display: display, value: u);
+      questions.add(singleQuestion);
+    }
+   // return questions;
+  }
+
+
+  _saveForm() async{
     var form = formKey.currentState;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (form.validate()) {
       form.save();
       setState(() {
         _myActivitiesResult = _myActivities.toString();
+        databaseHelper.addGameQuestions(_myActivitiesResult);
       });
     }
   }
 
-  List<Question> getList() {
+  /*List<Question> getList() {
     List<Question> list = [];
     for (int i = 0; i< questions.length; i++) {
       list.add(Question(display: questions[i].display, value: questions[i].value
       ));
     }
     return list;
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -116,37 +119,6 @@ class _SelectQuestionState extends State<SelectQuestion> {
                         "display": questions[i].display,
                         "value": questions[i].value,
                       },
-                    /*
-                    {
-                      "display": "Running",
-                      "value": "Running",
-                    },
-                    {
-                      "display": "Climbing",
-                      "value": "Climbing",
-                    },
-                    {
-                      "display": "Walking",
-                      "value": "Walking",
-                    },
-                    {
-                      "display": "Swimming",
-                      "value": "Swimming",
-                    },
-                    {
-                      "display": "Soccer Practice",
-                      "value": "Soccer Practice",
-                    },
-                    {
-                      "display": "Baseball Practice",
-                      "value": "Baseball Practice",
-                    },
-                    {
-                      "display": "Football Practice",
-                      "value": "Football Practice",
-                    },
-
-                     */
                   ],
                   textField: 'display',
                   valueField: 'value',

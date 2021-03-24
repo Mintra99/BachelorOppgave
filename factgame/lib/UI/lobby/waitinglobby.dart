@@ -31,15 +31,13 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   lobbyName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      navn = prefs.getString(
-          'gameNavn'); // we are get the score from local storage (we already this string in lobbydatabasehelper.dart file)
+      navn = prefs.getString('gameNavn'); // we are get the gameName from local storage (we already this string in lobbydatabasehelper.dart file)
     });
   }
 
   Future fitchQuestionData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-        await http.get('https://fakenews-app.com/api/game/question/');
+    var response = await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
         mapQuestionResponse = json.decode(response.body);
@@ -87,15 +85,10 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
-                    //TODO: if all players in the lobby have pressed this button, start the game
-                    //assignRole(); // Sender spillerene i lobbyen til guesser/proposer siden
                     prefs.getInt('gameId');
-                    prefs.getString('gameNavn');
-                    databaseHelper.joinGame(
-                        prefs.getInt('gameId'), prefs.getString('gameNavn'));
+                    databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
 
                     Navigator.push(
                       context,
