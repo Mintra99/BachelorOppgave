@@ -38,7 +38,6 @@ class _SelectQuestionState extends State<SelectQuestion> {
     getQuestion();
     super.initState();
     _myActivities = [];
-    _myActivitiesResult = '';
   }
 
   Future getQuestion() async {
@@ -63,8 +62,7 @@ class _SelectQuestionState extends State<SelectQuestion> {
     if (form.validate()) {
       form.save();
       setState(() {
-        _myActivitiesResult = _myActivities.toString();
-        databaseHelper.addGameQuestions(_myActivitiesResult);
+        databaseHelper.addGameQuestions(_myActivities);
       });
     }
   }
