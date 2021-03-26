@@ -13,6 +13,7 @@ class DatabaseHelper{
 
 
   void answerData(String answer_text, int questionid ) async{
+    answer_text = answer_text.toLowerCase();
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0 ;
@@ -28,7 +29,6 @@ class DatabaseHelper{
        print('Response status : ${response.statusCode}');
        print('Response status : ${response.body} ');
        var data = json.decode(response.body);
-       print(data);
        var dataScore= data["score"];
        prefs.setInt('score', dataScore);
     });

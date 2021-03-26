@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
@@ -54,14 +55,13 @@ class _SelectQuestionState extends State<SelectQuestion> {
     }
    // return questions;
   }
-
-
   _saveForm() async{
     var form = formKey.currentState;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (form.validate()) {
       form.save();
       setState(() {
+
         databaseHelper.addGameQuestions(_myActivities);
       });
     }
@@ -117,6 +117,7 @@ class _SelectQuestionState extends State<SelectQuestion> {
                         "display": questions[i].display,
                         "value": questions[i].value,
                       },
+
                   ],
                   textField: 'display',
                   valueField: 'value',
@@ -139,10 +140,10 @@ class _SelectQuestionState extends State<SelectQuestion> {
                   onPressed: _saveForm,
                 ),
               ),
-              Container(
+              /*Container(
                 padding: EdgeInsets.all(16),
                 child: Text(_myActivitiesResult),
-              )
+              )*/
             ],
           ),
         ),
