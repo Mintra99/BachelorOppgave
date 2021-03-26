@@ -100,6 +100,7 @@ class _GuesserPageState extends State<GuesserManager> {
       print(answer);
       counter += 1;
       questionid = mapResponse[0]['id'].toInt();
+      mapResponse.removeAt(0);
     } else {
       mapResponse = null;
       canceltimer = true;
@@ -108,7 +109,6 @@ class _GuesserPageState extends State<GuesserManager> {
         MaterialPageRoute(builder: (context) => GameFinishedManager()),
       );
     }
-    mapResponse.removeAt(0);
   }
 
   @override

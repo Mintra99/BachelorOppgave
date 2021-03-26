@@ -28,7 +28,9 @@ class _GameFinished extends State<GameFinishedManager> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
     await http.get('https://fakenews-app.com/api/game/question/');
-    if (response.statusCode == 200) {
+    print(response.statusCode);
+    int err = response.statusCode;
+    if (response.statusCode == err) {
       setState(() {
         finalScore = prefs.getInt('guesserScore');// we are get the score from local storage (we already this integer in guesser.dart file)
         print(finalScore);
