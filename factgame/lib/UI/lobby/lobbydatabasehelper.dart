@@ -58,10 +58,10 @@ class LobbydatabaseHelper {
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
       var data = json.decode(response.body);
-     // var dataQuestions = data['questions']; we have to fix api first
-      // dataQuestions inculde all questions related to this game.
-      // Todo we need to load questions page dataQuestions
-      // i need to do the same as showQuestion() function in quesser.dart and instead of mapresponse we use dataQuestions.
+      var dataQuestions = data['question_set'];
+      print('questionononononono');
+      print(dataQuestions);// dataQuestions inculde all questions related to this spesific game.
+      // Todo we need to load dataQuestions, we need to do the same as showQuestion() function in singleplayer/quesser.dart and instead of mapresponse we use dataQuestions.
     });
   }
 

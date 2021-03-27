@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,7 @@ class GuesserManagerMP extends StatefulWidget {
 
 class _GuesserPageState extends State<GuesserManagerMP> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
+  LobbydatabaseHelper lobbyDatabaseHelper = new LobbydatabaseHelper();
 
   int timer = 10;
   double percentage;
