@@ -79,7 +79,6 @@ class _GuesserPageState extends State<GuesserManager> {
   //List shuffle(List items) {
   void shuffle() {
     var random = new Random();
-
     // Go through all elements.
     for (var i = mapResponse.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
@@ -166,7 +165,7 @@ class _GuesserPageState extends State<GuesserManager> {
     databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (answered == false) {
       if (answer == k.toLowerCase()) {
         score += (100 * (timer) ~/ 10);

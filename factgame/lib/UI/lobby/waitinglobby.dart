@@ -90,10 +90,12 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     prefs.getInt('gameId');
                     databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
 
+                    //TODO: make proposer change pageroute to Proposer()
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ProposerManager()),
+                          builder: (context) =>GuesserManagerMP()),
                     );
 
                     print('game started');
