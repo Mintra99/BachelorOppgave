@@ -165,7 +165,7 @@ class _GuesserPageState extends State<GuesserManager> {
     databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answered == false) {
       if (answer == k.toLowerCase()) {
         score += (100 * (timer) ~/ 10);
