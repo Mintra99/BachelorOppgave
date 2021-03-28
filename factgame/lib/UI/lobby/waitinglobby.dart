@@ -18,6 +18,7 @@ class WaitingLobby extends StatefulWidget {
 
 class _WaitingLobbyState extends State<WaitingLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
+  MultiPlayer multiPlayer = new MultiPlayer();
   List mapQuestionResponse; //lobby name
   String navn;
 
@@ -88,14 +89,14 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     prefs.getInt('gameId');
-                    databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
+                    //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
+                    multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
 
-                    //TODO: make proposer change pageroute to Proposer()
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>GuesserManagerMP()),
+                          builder: (context) => GuesserManagerMP()),
                     );
 
                     print('game started');

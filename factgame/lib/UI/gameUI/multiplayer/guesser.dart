@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +9,28 @@ import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
+List dataQ;
+class MultiPlayer{
+  joinGame(int game_id, String game_name) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    String myUrl = "https://fakenews-app.com/api/game/join_game/";
+    final response = await http.post(myUrl,
+        headers: {
+          'Authorization': 'Bearer $value'
+        },
+        body: {
+          "game_id": '$game_id',
+        }).then((response) {
+      print('Response status : ${response.statusCode}');
+      print('Response status : ${response.body} ');
+      var data = json.decode(response.body);
+      dataQ = data['question_set'];
+    });
+  }
+
+}
 class GuesserManagerMP extends StatefulWidget {
   GuesserManagerMP({Key key, this.title}) : super(key: key);
   final String title;
@@ -21,23 +42,25 @@ class GuesserManagerMP extends StatefulWidget {
 }
 
 class _GuesserPageState extends State<GuesserManagerMP> {
+  DatabaseHelper databaseHelper = new DatabaseHelper();
   LobbydatabaseHelper lobbyDatabaseHelper = new LobbydatabaseHelper();
+  MultiPlayer MP = new MultiPlayer();
 
-  // Used to create timer
   int timer = 10;
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
-
-  // Used to retrieve data from database
   String stringResponse;
-  List mapResponse;
-
-  // Used to show question/score and check answer
   String question;
   String answer;
   int questionid;
   int score = 0;
+  // Used to limit amount of questions
+  int cap = 10;
+  int counter = 1;
+  // Used to hide/show source/next question
+  bool _visible = false;
+  bool answered = false;
 
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
@@ -50,74 +73,48 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     "False": Colors.indigoAccent,
   };
 
-  /*
-  Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final key = 'access';
-    final value = prefs.get(key) ?? 0;
-    var response = await http.get(
-      'https://fakenews-app.com/api/game/question/',
-      headers: {HttpHeaders.authorizationHeader: "Bearer $value"},
-    );
-    print('errrrrrrrrrrrrrrrrrrrrrrrrrrr');
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      setState(() {
-        mapResponse = json.decode(response.body);
-        print(mapResponse);
-        shuffle();
-        showQuestion();
-      });
-    }
-  }
 
-   */
-/*
-  getQuestions() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    lobbyDatabaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-    question = prefs.getString(question);
-  }
-
- */
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
   void shuffle() {
     var random = new Random();
     // Go through all elements.
-    for (var i = mapResponse.length - 1; i > 0; i--) {
+    for (var i = dataQ.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
 
-      var temp = mapResponse[i];
-      mapResponse[i] = mapResponse[n];
-      mapResponse[n] = temp;
+      var temp = dataQ[i];
+      dataQ[i] = dataQ[n];
+      dataQ[n] = temp;
     }
   }
 
-  void showQuestion() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (mapResponse.length > 0) {
-      // question = question = prefs.getString(question);
-      question = mapResponse[0]['question_text'].toString();
-      answer = mapResponse[0]['correct_answer'].toString();
+  void showQuestion() {
+    print('gamequesiton');
+    print(dataQ);
+    if (counter <= cap) {
+      question = dataQ[0]['fields']['question_text'].toString();
+      answer = dataQ[0]['fields']['correct_answer'].toString();
       answer.toLowerCase();
       print(answer);
-      questionid = mapResponse[0]['id'].toInt();
-      mapResponse.removeAt(0);
+      counter += 1;
+      print('we print the id of question');
+      print(dataQ[0]['pk']);
+      questionid = dataQ[0]['pk'].toInt();
+      print(questionid);
     } else {
-      mapResponse = null;
+      dataQ = null;
       canceltimer = true;
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => GameFinishedManager()),
       );
     }
+    dataQ.removeAt(0);
   }
 
   @override
   void initState() {
-    //fitchData();
     starttimer();
     super.initState();
   }
@@ -135,7 +132,8 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       setState(() {
         if (timer < 1) {
           t.cancel();
-          nextquestion();
+          //nextquestion();
+          _toggle();
         } else if (canceltimer == true) {
           t.cancel();
         } else {
@@ -155,18 +153,23 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     btncolor["Mostly true"] = Colors.indigoAccent;
     btncolor["Mostly false"] = Colors.indigoAccent;
     btncolor["False"] = Colors.indigoAccent;
+    _visible = false;
+    answered = false;
     starttimer();
   }
-
-  void checkanswer(String k) async {
-    lobbyDatabaseHelper.answerData(k, questionid);
+  void _toggle() {
+    setState(() {
+      _visible = true;
+    });
+  }
+  void checkanswer(String k) async{
+    databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answer == k.toLowerCase()) {
       score += 1;
-      prefs.setInt('guesserScore',
-          score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+      prefs.setInt('guesserScore', score);// we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
       print('correct');
       colortoshow = right;
     } else {
@@ -208,7 +211,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
         minWidth: 200.0,
         height: 45.0,
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -218,75 +221,75 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     return Scaffold(
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          new Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: <Widget>[
-                      BackButton(),
-                      Spacer(),
-                      Text('Score:' + '$score'),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  child: mapResponse == null
-                      ? Container()
-                      : Text(
-                          // Shows the question to the guesser
-                          '$question',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: "Quando",
-                          ),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              new Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        children: <Widget>[
+                          BackButton(),
+                          Spacer(),
+                          Text('Score:' + '$score'),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(15.0),
+                      child: dataQ == null
+                          ? Container()
+                          : Text(
+                        // Shows the question to the guesser
+                        '$question',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: "Quando",
                         ),
+                      ),
+                    ),
+                    InkWell(
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            choiceButton('True'),
+                            choiceButton('Mostly true'),
+                            choiceButton('Mostly false'),
+                            choiceButton('False'),
+                          ],
+                        ),
+                      ),
+                      onTap: () {},
+                    )
+                  ],
                 ),
-                InkWell(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        choiceButton('True'),
-                        choiceButton('Mostly true'),
-                        choiceButton('Mostly false'),
-                        choiceButton('False'),
-                      ],
-                    ),
-                  ),
-                  onTap: () {},
-                )
-              ],
-            ),
-          ),
-          new Container(
-            child: Column(
-              children: [
-                Container(
-                    width: 250,
-                    child: LinearProgressIndicator(
-                        value: percentage,
-                        backgroundColor: Colors.grey,
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                          Colors.blue,
-                        ))),
-                Container(
-                  child: Text(
-                    '$timer',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 48,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      )),
+              ),
+              new Container(
+                child: Column(
+                  children: [
+                    Container(
+                        width: 250,
+                        child: LinearProgressIndicator(
+                            value: percentage,
+                            backgroundColor: Colors.grey,
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                              Colors.blue,
+                            ))),
+                    Container(
+                      child: Text(
+                        '$timer',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 48,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )),
     );
   }
 }
