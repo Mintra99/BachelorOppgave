@@ -201,10 +201,10 @@ class _GuesserPageState extends State<GuesserManager> {
 
   Widget choiceButton(String k) {
     return Padding(
-      padding:  EdgeInsets.symmetric(
-      vertical: 10.0,
-      horizontal: 20.0,
-    ),
+      padding: EdgeInsets.symmetric(
+        vertical: 10.0,
+        horizontal: 20.0,
+      ),
       child: MaterialButton(
         onPressed: () {
           checkanswer(k);
@@ -223,8 +223,8 @@ class _GuesserPageState extends State<GuesserManager> {
         highlightColor: Colors.indigo[700],
         minWidth: 150.0,
         height: 45.0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -287,7 +287,6 @@ class _GuesserPageState extends State<GuesserManager> {
                             choiceButton('Pants on Fire'),
                           ],
                         ),
-
                       ],
                     ),
                   ),

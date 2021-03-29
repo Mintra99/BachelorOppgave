@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
+import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -10,27 +11,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
 List dataQ;
-class MultiPlayer{
+
+class MultiPlayer {
   joinGame(int game_id, String game_name) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0;
     String myUrl = "https://fakenews-app.com/api/game/join_game/";
-    final response = await http.post(myUrl,
-        headers: {
-          'Authorization': 'Bearer $value'
-        },
-        body: {
-          "game_id": '$game_id',
-        }).then((response) {
+    final response = await http.post(myUrl, headers: {
+      'Authorization': 'Bearer $value'
+    }, body: {
+      "game_id": '$game_id',
+    }).then((response) {
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
       var data = json.decode(response.body);
       dataQ = data['question_set'];
     });
   }
-
 }
+
 class GuesserManagerMP extends StatefulWidget {
   GuesserManagerMP({Key key, this.title}) : super(key: key);
   final String title;
@@ -55,9 +55,11 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   String answer;
   int questionid;
   int score = 0;
+
   // Used to limit amount of questions
   int cap = 10;
   int counter = 1;
+
   // Used to hide/show source/next question
   bool _visible = false;
   bool answered = false;
@@ -75,7 +77,14 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     "Pants on Fire": Colors.indigoAccent,
   };
 
-
+  Future Startup() async {
+    print('before!!!!!!!!!');
+    print(dataQ);
+    shuffle();
+    print('after!!!!!!!!!');
+    print(dataQ);
+    showQuestion();
+  }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
   void shuffle() {
@@ -117,6 +126,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   @override
   void initState() {
+    Startup();
     starttimer();
     super.initState();
   }
@@ -161,33 +171,45 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     answered = false;
     starttimer();
   }
+
   void _toggle() {
     setState(() {
       _visible = true;
     });
   }
-  void checkanswer(String k) async{
+
+  void checkanswer(String k) async {
     databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (answer == k.toLowerCase()) {
-      score += 1;
-      prefs.setInt('guesserScore', score);// we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
-      print('correct');
-      colortoshow = right;
+    if (answered == false) {
+      if (answer == k.toLowerCase()) {
+        score += (100 * (timer) ~/ 10);
+        print(score);
+        prefs.setInt('guesserScore',
+            score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        print('correct');
+        answered = true;
+        colortoshow = right;
+      } else {
+        print('wrong');
+        answered = true;
+        colortoshow = wrong;
+      }
+      _toggle();
     } else {
-      print('wrong');
-      colortoshow = wrong;
-      //TODO: let proposer give a hint before guesser can guess again
+      if (answer == k.toLowerCase()) {
+        colortoshow = right;
+      } else {
+        colortoshow = wrong;
+      }
     }
     setState(() {
       // applying the changed color to the particular button that was selected
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
-    //adds delay so the user can see the answer
-    Timer(Duration(seconds: 2), nextquestion);
   }
 
   Widget choiceButton(String k) {
@@ -212,7 +234,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
         color: btncolor[k],
         splashColor: Colors.indigo[700],
         highlightColor: Colors.indigo[700],
-        minWidth: 200.0,
+        minWidth: 150.0,
         height: 45.0,
         shape:
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -290,6 +312,113 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                 child: Column(
                   children: [
                     Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 20.0,
+                      ),
+                      child: MaterialButton(
+                        onPressed: () {
+                          //TODO: show hint
+                        },
+                        child: Text(
+                          "Hint",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Alike",
+                            fontSize: 16.0,
+                          ),
+                          maxLines: 1,
+                        ),
+                        color: Colors.indigoAccent,
+                        splashColor: Colors.indigo[700],
+                        highlightColor: Colors.indigo[700],
+                        minWidth: 200.0,
+                        height: 45.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              new Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Visibility(
+                            visible: _visible,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 20.0,
+                              ),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  //TODO: show source
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => sourcePage()),
+                                  );
+                                },
+                                child: Text(
+                                  "Source",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Alike",
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                                color: Colors.indigoAccent,
+                                splashColor: Colors.indigo[700],
+                                highlightColor: Colors.indigo[700],
+                                minWidth: 150.0,
+                                height: 45.0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0)),
+                              ),
+                            )),
+                        Visibility(
+                            visible: _visible,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 20.0,
+                              ),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  nextquestion();
+                                },
+                                child: Text(
+                                  "Next question",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Alike",
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                                color: Colors.indigoAccent,
+                                splashColor: Colors.indigo[700],
+                                highlightColor: Colors.indigo[700],
+                                minWidth: 150.0,
+                                height: 45.0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0)),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              new Container(
+                child: Column(
+                  children: [
+                    Container(
                         width: 250,
                         child: LinearProgressIndicator(
                             value: percentage,
@@ -311,6 +440,28 @@ class _GuesserPageState extends State<GuesserManagerMP> {
               )
             ],
           )),
+    );
+  }
+}
+
+class sourcePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Sources"),
+        backgroundColor: darkGrayColor,
+      ),
+      body: DecoratedBox(
+        child: Container(
+          margin: EdgeInsets.all(10.0),
+          child: ListView(
+            //TODO: add sources
+            children: [Text("Sources")],
+          ),
+        ),
+        decoration: BoxDecoration(color: Colors.white),
+      ),
     );
   }
 }
