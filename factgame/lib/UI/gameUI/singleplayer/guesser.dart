@@ -55,8 +55,10 @@ class _GuesserPageState extends State<GuesserManager> {
   Map<String, Color> btncolor = {
     "True": Colors.indigoAccent,
     "Mostly true": Colors.indigoAccent,
+    "Half true": Colors.indigoAccent,
     "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
+    "Pants on Fire": Colors.indigoAccent,
   };
 
   Future fitchData() async {
@@ -148,8 +150,10 @@ class _GuesserPageState extends State<GuesserManager> {
     timer = 10;
     btncolor["True"] = Colors.indigoAccent;
     btncolor["Mostly true"] = Colors.indigoAccent;
+    btncolor["Half true"] = Colors.indigoAccent;
     btncolor["Mostly false"] = Colors.indigoAccent;
     btncolor["False"] = Colors.indigoAccent;
+    btncolor["Pants on Fire"] = Colors.indigoAccent;
     _visible = false;
     answered = false;
     starttimer();
@@ -197,10 +201,10 @@ class _GuesserPageState extends State<GuesserManager> {
 
   Widget choiceButton(String k) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 20.0,
-      ),
+      padding:  EdgeInsets.symmetric(
+      vertical: 10.0,
+      horizontal: 20.0,
+    ),
       child: MaterialButton(
         onPressed: () {
           checkanswer(k);
@@ -217,10 +221,10 @@ class _GuesserPageState extends State<GuesserManager> {
         color: btncolor[k],
         splashColor: Colors.indigo[700],
         highlightColor: Colors.indigo[700],
-        minWidth: 200.0,
+        minWidth: 150.0,
         height: 45.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -262,10 +266,28 @@ class _GuesserPageState extends State<GuesserManager> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        choiceButton('True'),
-                        choiceButton('Mostly true'),
-                        choiceButton('Mostly false'),
-                        choiceButton('False'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            choiceButton('True'),
+                            choiceButton('Mostly true'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            choiceButton('Half true'),
+                            choiceButton('Mostly false'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            choiceButton('False'),
+                            choiceButton('Pants on Fire'),
+                          ],
+                        ),
+
                       ],
                     ),
                   ),
