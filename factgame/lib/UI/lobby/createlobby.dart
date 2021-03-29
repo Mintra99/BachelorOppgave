@@ -1,6 +1,7 @@
 import 'package:factgame/UI/lobby/selectquestions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../home.dart';
 import 'lobbydatabasehelper.dart';
 
@@ -15,6 +16,7 @@ class CreateLobby extends StatefulWidget{
 class _CreateLobbyState extends State<CreateLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gamenameController =  new TextEditingController();
+  final TextEditingController numOfPlayrs = new TextEditingController();
   //List lobbyList = [];
   //Map<String, List> lobby;
 
@@ -68,6 +70,19 @@ class _CreateLobbyState extends State<CreateLobby> {
               Container(
                 height: 50,
                 child: new TextField(
+                  controller: numOfPlayrs,
+                  decoration: InputDecoration(
+                    hintText: 'Number Player',
+                    icon: new Icon(Icons.add),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Container(
+                height: 50,
+                child: new TextField(
                   controller: _gamenameController,
                   decoration: InputDecoration(
                     hintText: 'Game Name',
@@ -83,7 +98,10 @@ class _CreateLobbyState extends State<CreateLobby> {
                 child: new RaisedButton(
 
                   onPressed: () async{
-                    databaseHelper.createGame(_gamenameController.text.trim());
+                    //databaseHelper.createGetData(Game Name)
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.getString('numPlayers');
+                    databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayrs.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new SelectQuestion(),

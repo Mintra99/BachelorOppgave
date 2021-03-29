@@ -78,8 +78,6 @@ class _WaitingLobbyState extends State<WaitingLobby> {
 
               Container(
                 height: 50,
-                //TODO: trenger lobby name
-
                 child: new Text('Lobby name: ' + '$navn'),
               ),
               Container(
@@ -91,15 +89,11 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     prefs.getInt('gameId');
                     //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
                     multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => GuesserManagerMP()),
                     );
-
-                    print('game started');
                   },
                   color: Colors.blue,
                   child: new Text(

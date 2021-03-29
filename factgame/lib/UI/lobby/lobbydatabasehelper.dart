@@ -13,7 +13,13 @@ class LobbydatabaseHelper {
   String myName;
   var mapResponse;
   int currentGameId;
-  List dataQuestions = [];
+
+
+  /*createGetData(int number)async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    numberPlayers = number;
+    prefs.setInt('numPlayers', number);
+  }*/
 
   getData(int id , String name) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,8 +29,8 @@ class LobbydatabaseHelper {
     prefs.setString('gameNavn', name);
   }
 
-  createGame(String game_name) async {
-    //SharedPreferences pref = await SharedPreferences.getInstance();
+  createGame(String game_name,String numPlayers) async {
+    var number = int.parse(numPlayers);
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0;
@@ -35,6 +41,7 @@ class LobbydatabaseHelper {
         },
         body: {
           "game_name": "$game_name",
+          "num_of_players": '$number',
         }).then((response) {
       mapResponse = json.decode(response.body);
       print('Response status : ${response.statusCode}');

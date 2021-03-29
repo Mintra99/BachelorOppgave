@@ -43,7 +43,6 @@ class GuesserManagerMP extends StatefulWidget {
 
 class _GuesserPageState extends State<GuesserManagerMP> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
-  LobbydatabaseHelper lobbyDatabaseHelper = new LobbydatabaseHelper();
   MultiPlayer MP = new MultiPlayer();
 
   int timer = 10;
@@ -101,8 +100,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   }
 
   void showQuestion() {
-    print('gamequesiton');
-    print(dataQ);
     if (counter <= cap) {
       question = dataQ[0]['fields']['question_text'].toString();
       answer = dataQ[0]['fields']['correct_answer'].toString();
@@ -187,8 +184,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       if (answer == k.toLowerCase()) {
         score += (100 * (timer) ~/ 10);
         print(score);
-        prefs.setInt('guesserScore',
-            score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        prefs.setInt('guesserScore', score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
         print('correct');
         answered = true;
         colortoshow = right;
