@@ -100,7 +100,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   }
 
   void showQuestion() {
-    if (counter <= cap) {
+    if (counter <= dataQ.length) {
       question = dataQ[0]['fields']['question_text'].toString();
       answer = dataQ[0]['fields']['correct_answer'].toString();
       answer.toLowerCase();
