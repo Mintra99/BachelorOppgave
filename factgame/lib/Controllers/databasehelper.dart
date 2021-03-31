@@ -72,8 +72,18 @@ class DatabaseHelper{
     //errorMessage = response.body.contains('error');
 
     var data = json.decode(response.body);
-    print(data);
-    Message = data["message"].contains('User Created Successfully');
+    print("message");
+    print(data["message"]);
+
+    //Message = data["message"].contains('User Created Successfully');
+
+    if (data["message"] == null) {
+      print("test");
+    } else {
+      Message = data["message"].contains('User Created Successfully');
+    }
+
+
     // errorMessage = data['message'].contains("This field may not be blank.") || data['message'].contains("Enter a valid email address.");
 
     //print(data)

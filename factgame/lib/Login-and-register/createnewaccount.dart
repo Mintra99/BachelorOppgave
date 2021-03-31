@@ -18,6 +18,8 @@ class CreateNewAccountState extends State<CreateNewAccount> {
   final TextEditingController _passwordController = new TextEditingController();
 
   _onPressed() {
+    print("email");
+    print(EmailValidator.validate(_emailController.text.trim()));
     setState(() {
       if (_emailController.text.trim().toLowerCase().isNotEmpty &&
           _passwordController.text.trim().isNotEmpty &&
@@ -35,6 +37,17 @@ class CreateNewAccountState extends State<CreateNewAccount> {
             msgStatus = 'error';
           }
         });
+      }
+    });
+  }
+
+  checkForm() {
+    setState(() {
+      if (EmailValidator.validate(_emailController.text.trim()) != true) {
+        _emailError();
+      }
+      if (_usernameController.text.trim().isEmpty) {
+        _emptyUsername();
       }
     });
   }
@@ -81,7 +94,8 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                           color: Colors.red,
                         )),
                   ),
-                  validator: (value) => value.trim().isEmpty ? true :  'Username is required',
+                  validator: (value) =>
+                      value.trim().isEmpty ? true : 'Username is required',
                 ),
                 /*SizedBox(
                   height: 20,
@@ -111,7 +125,10 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                           color: Colors.red,
                         )),
                   ),
-                  validator: (value) => EmailValidator.validate(value) ? null : "Please enter a valid email",
+                  // validator: checkEmail(),
+                  validator: (value) => EmailValidator.validate(value)
+                      ? null
+                      : "Please enter a valid email",
                 ),
                 Padding(padding: EdgeInsets.only(top: 20)),
                 TextFormField(
@@ -146,12 +163,14 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                     width: 500,
                     height: 50,
                     child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      color: Colors.lightGreenAccent,
-                      child: Text('Register', style: TextStyle(fontSize: 32)),
-                      onPressed: _onPressed,
-                    )),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Colors.lightGreenAccent,
+                        child: Text('Register', style: TextStyle(fontSize: 32)),
+                        onPressed: () {
+                          checkForm();
+                          _onPressed();
+                        })),
                 SizedBox(
                   height: 20,
                 ),
@@ -168,6 +187,44 @@ class CreateNewAccountState extends State<CreateNewAccount> {
             ),
           )),
     );
+  }
+
+  void _emailError() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Email field is wrong'),
+            content: new Text('Check if your email is correct/email is required'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _emptyUsername() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Username field is empty'),
+            content: new Text('Username is required'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 
   void _showDialog() async {
