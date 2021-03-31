@@ -22,12 +22,13 @@ class CreateNewAccountState extends State<CreateNewAccount> {
       if (_emailController.text.trim().toLowerCase().isNotEmpty &&
           _passwordController.text.trim().isNotEmpty &&
           _usernameController.text.trim().isNotEmpty) {
-        databaseHelper.registerData(
+        databaseHelper
+            .registerData(
                 _usernameController.text.trim(),
                 _emailController.text.trim().toLowerCase(),
                 _passwordController.text.trim())
             .whenComplete(() {
-          if (databaseHelper.Message) {
+          if (databaseHelper.Message != null) {
             _showDialog();
             msgStatus = 'You Have Account';
           } else {
@@ -80,7 +81,7 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                           color: Colors.red,
                         )),
                   ),
-                  validator: (value) => value.trim().isEmpty ? true :  "Username is required",
+                  validator: (value) => value.trim().isEmpty ? true :  'Username is required',
                 ),
                 /*SizedBox(
                   height: 20,

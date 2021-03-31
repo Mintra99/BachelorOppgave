@@ -69,10 +69,13 @@ class DatabaseHelper{
           "username": "$username",
           "password" : "$password",
           "email": "$email",
+          'first_name': "",
+          'last_name' : "",
         } ) ;
     //errorMessage = response.body.contains('error');
 
     var data = json.decode(response.body);
+    print(data);
     Message = data["message"].contains('User Created Successfully');
     // errorMessage = data['message'].contains("This field may not be blank.") || data['message'].contains("Enter a valid email address.");
 

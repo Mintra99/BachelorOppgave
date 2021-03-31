@@ -49,7 +49,7 @@ class LogInState extends State<LogIn> {
             _passController.text.trim()).whenComplete((){
           if(databaseHelper.errorMessage){
             _showDialog();
-            msgStatus = 'Check email or password';
+            msgStatus = 'Check username or password';
           }else{
              Navigator.pushReplacementNamed(context, '/home');
           }
