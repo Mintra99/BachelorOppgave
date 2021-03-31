@@ -14,19 +14,16 @@ class CreateNewAccountState extends State<CreateNewAccount> {
   String msgStatus = '';
 
   final TextEditingController _usernameController = new TextEditingController();
-  final TextEditingController _firstnameController = new TextEditingController();
-  final TextEditingController _lastnameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
   _onPressed() {
      setState (() {
       if(_emailController.text.trim().toLowerCase().isNotEmpty &&
-          _passwordController.text.trim().isNotEmpty && _usernameController.text.trim().isNotEmpty
-          && _firstnameController.text.trim().isNotEmpty && _lastnameController.text.trim().isNotEmpty ){
+          _passwordController.text.trim().isNotEmpty && _usernameController.text.trim().isNotEmpty ){
         databaseHelper.registerData(_usernameController.text.trim(),_emailController.text.trim().toLowerCase(),
 
-            _lastnameController.text.trim(), _firstnameController.text.trim() ,_passwordController.text.trim()).whenComplete(() {
+             _passwordController.text.trim()).whenComplete(() {
           if (databaseHelper.Message) {
             _showDialog();
             msgStatus = 'You Have Account';
@@ -75,53 +72,6 @@ class CreateNewAccountState extends State<CreateNewAccount> {
 
                           ),),
                         SizedBox(height: 20,),
-                        TextFormField(
-                          controller: _firstnameController,
-                          decoration: InputDecoration(
-                            hintText: 'Firstname',
-                            filled: true,
-                            fillColor: Colors.blueGrey[100],
-                            prefixIcon: Icon(
-                              Icons.person, size: 40, color: Colors.blue,),
-                            labelText: "Firstname",
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(40),
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                )
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                )
-                            ),
-
-                          ),),
-                        Padding(padding: EdgeInsets.only(top: 20)),
-                        TextFormField(
-                          controller: _lastnameController,
-                          decoration: InputDecoration(
-                            hintText: 'Lastname',
-                            filled: true,
-                            fillColor: Colors.blueGrey[100],
-                            prefixIcon: Icon(
-                              Icons.person, size: 40, color: Colors.blue,),
-                            labelText: "Lastname",
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(40),
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                )
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                )
-                            ),
-
-                          ),),
                         Padding(padding: EdgeInsets.only(top: 20)),
                         TextFormField(
                           controller: _emailController,

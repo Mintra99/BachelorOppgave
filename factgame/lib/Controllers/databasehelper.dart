@@ -58,7 +58,7 @@ class DatabaseHelper{
 
   }
 
-  registerData(String username ,String email , String password, String first_name, String last_name) async{
+  registerData(String username ,String email , String password) async{
 
     String myUrl = "$serverUrl/register";
     final response = await  http.post(myUrl,
@@ -69,8 +69,6 @@ class DatabaseHelper{
           "username": "$username",
           "password" : "$password",
           "email": "$email",
-          'first_name': "$first_name",
-          'last_name' : "$last_name",
         } ) ;
     //errorMessage = response.body.contains('error');
 
