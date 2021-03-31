@@ -15,12 +15,6 @@ class LobbydatabaseHelper {
   int currentGameId;
 
 
-  /*createGetData(int number)async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    numberPlayers = number;
-    prefs.setInt('numPlayers', number);
-  }*/
-
   getData(int id , String name) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     myId = id;
@@ -74,6 +68,28 @@ class LobbydatabaseHelper {
       // Todo we need to load dataQuestions, we need to do the same as showQuestion() function in singleplayer/quesser.dart and instead of mapresponse we use dataQuestions.
     });
   }*/
+  void answerMultiPlayer(String answer_text, int questionid, int game_id)async{
+    answer_text = answer_text.toLowerCase();
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key) ?? 0 ;
+    print(game_id);
+    String myUrl = "https://fakenews-app.com/api/game/answer_game/";
+    http.post(myUrl,
+        headers: {
+          'Authorization': 'Bearer $value'
+        },
+        body: {
+          "answer_text": "$answer_text",
+          "questionid" : "$questionid",
+          "game_id" : "$game_id",
+        }).then((response){
+      print('Response status : ${response.statusCode}');
+      print('Response status : ${response.body} ');
+      var data = json.decode(response.body);
+    });
+
+  }
 
   addGameQuestions(List questions) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
