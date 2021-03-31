@@ -12,11 +12,8 @@ class DatabaseHelper{
   var token ;
 
 
-  void answerData(String answer_text, int questionid ) async{
+  void answerData(String answer_text, int questionid) async{
     answer_text = answer_text.toLowerCase();
-    print('dddddddddddddddddddddddddddddddddddddd');
-    print(answer_text);
-    print(questionid);
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key) ?? 0 ;

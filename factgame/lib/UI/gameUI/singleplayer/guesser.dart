@@ -166,7 +166,6 @@ class _GuesserPageState extends State<GuesserManager> {
   }
 
   void checkanswer(String k) async {
-    databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -174,8 +173,7 @@ class _GuesserPageState extends State<GuesserManager> {
       if (answer == k.toLowerCase()) {
         score += (100 * (timer) ~/ 10);
         print(score);
-        prefs.setInt('guesserScore',
-            score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        prefs.setInt('guesserScore', score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
         print('correct');
         answered = true;
         colortoshow = right;
@@ -197,6 +195,7 @@ class _GuesserPageState extends State<GuesserManager> {
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
+    databaseHelper.answerData(k, questionid);
   }
 
   Widget choiceButton(String k) {

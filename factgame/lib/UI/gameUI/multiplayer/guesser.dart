@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
 List dataQ;
+int dataGame;
 
 class MultiPlayer {
   joinGame(int game_id, String game_name) async {
@@ -27,6 +28,11 @@ class MultiPlayer {
       print('Response status : ${response.body} ');
       var data = json.decode(response.body);
       dataQ = data['question_set'];
+      dataGame= data['player']['game_id'];
+      print('sssssssssssssssssssssssssssssssss');
+      print(dataQ);
+      print('ppppppppppppppppppppppppppppppppp');
+      print(data['player']['game_id']);
     });
   }
 }
@@ -43,6 +49,7 @@ class GuesserManagerMP extends StatefulWidget {
 
 class _GuesserPageState extends State<GuesserManagerMP> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
+  LobbydatabaseHelper lobbyDataHelper = new LobbydatabaseHelper();
   MultiPlayer MP = new MultiPlayer();
 
   int timer = 10;
@@ -176,7 +183,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   }
 
   void checkanswer(String k) async {
-    databaseHelper.answerData(k, questionid);
+    lobbyDataHelper.answerMultiPlayer(k, questionid, dataGame);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -260,9 +267,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                     ),
                     Container(
                       padding: EdgeInsets.all(15.0),
-                      child: dataQ == null
-                          ? Container()
-                          : Text(
+                      child: dataQ == null ? Container() : Text(
                         // Shows the question to the guesser
                         '$question',
                         style: TextStyle(
