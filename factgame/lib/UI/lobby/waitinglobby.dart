@@ -36,15 +36,26 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     });
   }
 
-  Future fitchQuestionData() async {
+  _onPressed()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get('https://fakenews-app.com/api/game/question/');
-    if (response.statusCode == 200) {
-      setState(() {
-        mapQuestionResponse = json.decode(response.body);
-      });
-    }
-  }
+    setState((){
+      if(multiPlayer.noQuestions){
+        _showDialog();
+      }else if(multiPlayer.playerIn){
+        _showDialogJoin();
+      }else{
+        prefs.getString('gameNavn');
+        prefs.getInt('gameId');
+        //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
+        multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => GuesserManagerMP()),
+        );}
+
+    });}
+
 
   /*
   void assignRole() {
@@ -83,18 +94,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
               Container(
                 height: 50,
                 child: new RaisedButton(
-                  onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.getString('gameNavn');
-                    prefs.getInt('gameId');
-                    //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-                    multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GuesserManagerMP()),
-                    );
-                  },
+                  onPressed: _onPressed,
                   color: Colors.blue,
                   child: new Text(
                     'Start game',
@@ -129,6 +129,50 @@ class _WaitingLobbyState extends State<WaitingLobby> {
           ),
         ),
       ),
+    );
+  }
+  void _showDialog(){
+    showDialog(
+        context:context ,
+        builder:(BuildContext context){
+          return AlertDialog(
+            title: new Text('Failed'),
+            content:  new Text('You have to wait,game has no questions'),
+            actions: <Widget>[
+              new RaisedButton(
+                child: new Text(
+                  'Close',
+                ),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+
+              ),
+            ],
+          );
+        }
+    );
+  }
+  void _showDialogJoin(){
+    showDialog(
+        context:context ,
+        builder:(BuildContext context){
+          return AlertDialog(
+            title: new Text('Failed'),
+            content:  new Text('Can not join this game You already joined the game'),
+            actions: <Widget>[
+              new RaisedButton(
+                child: new Text(
+                  'Close',
+                ),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+
+              ),
+            ],
+          );
+        }
     );
   }
 }
