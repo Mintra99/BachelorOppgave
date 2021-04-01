@@ -39,7 +39,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
 
   _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (multiPlayer.noQuestions != null) {
+    if (multiPlayer.noQuestions != null && multiPlayer.playerIn == null) {
       _noQuestions();
     } else if (multiPlayer.playerIn != null) {
       _alreadyIn();
