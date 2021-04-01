@@ -40,7 +40,7 @@ class MultiPlayer {
     if(noQuestions){
       print('game has no questions: $data');
     }
-    if(playerIn){
+    else if(playerIn){
       print('Player already joined the game: $data');
     } else{
       dataQ = data['question_set'];
