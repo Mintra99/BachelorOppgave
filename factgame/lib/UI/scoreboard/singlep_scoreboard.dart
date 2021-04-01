@@ -69,7 +69,7 @@ class ScoreboardPage extends StatelessWidget {
   List<Widget> getList() {
     List<Scoreboard> list = [];
     for (int i = 0; i< 10; i++) {
-      list.add(Scoreboard(username: "test"));
+      list.add(Scoreboard(username: "test", score: 700,));
     }
     return list;
   }
