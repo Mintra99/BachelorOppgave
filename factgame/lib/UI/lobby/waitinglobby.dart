@@ -39,9 +39,9 @@ class _WaitingLobbyState extends State<WaitingLobby> {
 
   _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (multiPlayer.noQuestions == null) {
+    if (multiPlayer.noQuestions != null) {
       _noQuestions();
-    } else if (multiPlayer.playerIn == null) {
+    } else if (multiPlayer.playerIn != null) {
       _alreadyIn();
     } else {
       multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
@@ -128,7 +128,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                 child: new RaisedButton(
                   onPressed: () async {
                     SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
+                    await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     prefs.getInt('gameId');
                     _onPressed();
@@ -170,25 +170,5 @@ class _WaitingLobbyState extends State<WaitingLobby> {
       ),
     );
   }
-
-  void _showDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text('Failed'),
-            content: new Text('Check your email or password'),
-            actions: <Widget>[
-              new RaisedButton(
-                child: new Text(
-                  'Close',
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
-  }
 }
+

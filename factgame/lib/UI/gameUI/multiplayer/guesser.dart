@@ -32,15 +32,19 @@ class MultiPlayer {
     print('Response status : ${response.body} ');
     print('response.body ::::::::' + response.body);
 
-
+/*
     switch (response.body) {
       case '"restult":"You can not join the game because there are no questions"':
-        noQuestions = response.body.contains('restult');
+
         break;
       default:
-        playerIn = response.body.contains('user already joined the game');
+
         break;
     }
+
+ */
+    noQuestions = response.body.contains('restult');
+    playerIn = response.body.contains('user already joined the game');
 
     var data = json.decode(response.body);
     //dataQ = data['question_set'];
@@ -71,10 +75,6 @@ class MultiPlayer {
   }*/
   }
 }
-
-
-
-
 
 class GuesserManagerMP extends StatefulWidget {
   GuesserManagerMP({Key key, this.title}) : super(key: key);
