@@ -4,9 +4,11 @@ import '../global.dart';
 
 class Scoreboard extends StatelessWidget {
   final String username;
-  //final String id;
-  //final int score;
-  Scoreboard({this.username});
+  final String id;
+  final int score;
+
+  Scoreboard({this.username, this.score, this.id});
+
   //Scoreboard({this.username, this.id});
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,15 @@ class Scoreboard extends StatelessWidget {
           ]),
       child: Row(
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              Text(
-                username,
-                style: darkScoreboardName,
-              )
-            ],
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 25, 0)),
+          Text(
+            username,
+            style: darkScoreboardName,
+          ),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 175, 0)),
+          Text(
+            score.toString(),
+            style: darkScoreboardName,
           )
         ],
       ),

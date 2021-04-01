@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:factgame/models/classes/question.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -33,9 +34,11 @@ class _SelectQuestionState extends State<SelectQuestion> {
   int gameId;
   int Id;
 
+  List<Question> list = [];
+
+
   @override
   void initState() {
-    Question();
     getQuestion();
     super.initState();
     _myActivities = [];
@@ -53,28 +56,32 @@ class _SelectQuestionState extends State<SelectQuestion> {
       Question singleQuestion = Question(display: display, value: u);
       questions.add(singleQuestion);
     }
-   // return questions;
+    print ("Question!!!!!!!!!!!");
+    print(questions);
+    await addList();
   }
+
   _saveForm() async{
     var form = formKey.currentState;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (form.validate()) {
       form.save();
       setState(() {
-
         databaseHelper.addGameQuestions(_myActivities);
       });
     }
   }
 
-  /*List<Question> getList() {
-    List<Question> list = [];
+  addList() async {
     for (int i = 0; i< questions.length; i++) {
-      list.add(Question(display: questions[i].display, value: questions[i].value
+      list.add(new Question(display: questions[i].display, value: questions[i].value
       ));
     }
-    return list;
-  }*/
+    String jsonTags = jsonEncode(list);
+    print("JSON");
+    print(jsonTags);
+    print('avaevaerv');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,13 +118,20 @@ class _SelectQuestionState extends State<SelectQuestion> {
                   },
                   dataSource: [
                     // Todo insert question list inside dataSource
-                    //getList(),
+
+                    for (var i = 0; i < list.length; i++){
+                      "display": list[i].display,
+                      "value": list[i].value,
+                    }
+
+                    /*
                     for (var i = 0; i < questions.length; i++)
                       {
                         "display": questions[i].display,
                         "value": questions[i].value,
                       },
 
+                     */
                   ],
                   textField: 'display',
                   valueField: 'value',
@@ -152,9 +166,3 @@ class _SelectQuestionState extends State<SelectQuestion> {
   }
 }
 
-class Question {
-  Question({this.display, this.value});
-
-  final String display;
-  Map value;
-}

@@ -1,32 +1,27 @@
 import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/global.dart';
-import 'package:factgame/models/widgets/lobby.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../home.dart';
+//import '../../home.dart';
 import 'lobbydatabasehelper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class JoinLobby extends StatefulWidget {
-
-
   @override
   _JoinLobbyState createState() => _JoinLobbyState();
 }
 
 class _JoinLobbyState extends State<JoinLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
-  final TextEditingController _gameidController = new TextEditingController();
   Map mapResponse;
   List listOfGame;
-  String gameName;
   int gamePk;
 
   // function api to bring the list of available game
   Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get('https://fakenews-app.com/api/game/available_game/');
     if (response.statusCode == 200) {
       setState(() {
@@ -56,7 +51,6 @@ class _JoinLobbyState extends State<JoinLobby> {
                     ListView.builder(
                       scrollDirection: Axis.vertical,
                       physics: NeverScrollableScrollPhysics(),
-                      //physics: AlwaysScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return GestureDetector(

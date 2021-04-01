@@ -16,10 +16,9 @@ class CreateNewAccountState extends State<CreateNewAccount> {
   final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
+  final TextEditingController _confirmPassController = new TextEditingController();
 
   _onPressed() {
-    print("email");
-    print(EmailValidator.validate(_emailController.text.trim()));
     setState(() {
       if (_emailController.text.trim().toLowerCase().isNotEmpty &&
           _passwordController.text.trim().isNotEmpty &&
@@ -42,12 +41,23 @@ class CreateNewAccountState extends State<CreateNewAccount> {
   }
 
   checkForm() {
+    print("password");
+    print(_passwordController.text.trim());
     setState(() {
       if (EmailValidator.validate(_emailController.text.trim()) != true) {
         _emailError();
       }
-      if (_usernameController.text.trim().isEmpty) {
+      else if (_usernameController.text.trim().isEmpty) {
         _emptyUsername();
+      }
+      else if (_passwordController.text.trim().length < 8){
+        _tooShortPw();
+      }
+      else if (_passwordController.text.trim() != _confirmPassController.text.trim()) {
+        _notMatching();
+      }
+       else {
+        _onPressed();
       }
     });
   }
@@ -156,6 +166,32 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                         )),
                   ),
                 ),
+                Padding(padding: EdgeInsets.only(top: 20)),
+                TextFormField(
+                  controller: _confirmPassController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Confirm Password',
+                    filled: true,
+                    fillColor: Colors.blueGrey[100],
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      size: 40,
+                      color: Colors.blue,
+                    ),
+                    labelText: "Confirm Password",
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        )),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                        )),
+                  ),
+                ),
                 SizedBox(
                   height: 25,
                 ),
@@ -169,7 +205,7 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                         child: Text('Register', style: TextStyle(fontSize: 32)),
                         onPressed: () {
                           checkForm();
-                          _onPressed();
+                          //_onPressed();
                         })),
                 SizedBox(
                   height: 20,
@@ -215,6 +251,44 @@ class CreateNewAccountState extends State<CreateNewAccount> {
           return AlertDialog(
             title: new Text('Username field is empty'),
             content: new Text('Username is required'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _notMatching() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Passwords not matching'),
+            content: new Text('Password are not matching'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _tooShortPw() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Password is too short'),
+            content: new Text('Password must be at least 8 characters'),
             actions: <Widget>[
               new FlatButton(
                 child: Text("OK"),
