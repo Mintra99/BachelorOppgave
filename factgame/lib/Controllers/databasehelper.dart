@@ -47,7 +47,7 @@ class DatabaseHelper{
 
     var data = json.decode(response.body);
     if(errorMessage){
-      print('No active account ${data}');
+      print('No active account $data');
     }else{
       print('data : ${data["access"]}');
       _save(data["access"]);
@@ -69,24 +69,15 @@ class DatabaseHelper{
           'first_name': "",
           'last_name' : "",
         } ) ;
-    //errorMessage = response.body.contains('error');
-
     var data = json.decode(response.body);
     print("message");
     print(data["message"]);
-
-    //Message = data["message"].contains('User Created Successfully');
-
     if (data["message"] == null) {
       print("test");
     } else {
       Message = data["message"].contains('User Created Successfully');
     }
 
-
-    // errorMessage = data['message'].contains("This field may not be blank.") || data['message'].contains("Enter a valid email address.");
-
-    //print(data)
     if(Message){
       print('data : ${data["message"]}');
     }else{

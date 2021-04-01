@@ -14,6 +14,8 @@ List dataQ;
 int dataGame;
 
 class MultiPlayer {
+  var noQuestions;
+  var playerIn ;
   joinGame(int game_id, String game_name) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
@@ -23,19 +25,41 @@ class MultiPlayer {
       'Authorization': 'Bearer $value'
     }, body: {
       "game_id": '$game_id',
-    }).then((response) {
+    });
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
+      noQuestions = response.body.contains('restult');
+      playerIn = response.body.contains('user already joined the game');
+      
       var data = json.decode(response.body);
+      //dataQ = data['question_set'];
+      //dataGame= data['player']['game_id'];
+      print('222222222222222222222222222223333333333');
+      print(noQuestions);
+      print(playerIn);
+    if(noQuestions){
+      print('game has no questions: $data');
+    }
+    if(playerIn){
+      print('Player already joined the game: $data');
+    } else{
       dataQ = data['question_set'];
       dataGame= data['player']['game_id'];
-      print('sssssssssssssssssssssssssssssssss');
-      print(dataQ);
-      print('ppppppppppppppppppppppppppppppppp');
-      print(data['player']['game_id']);
-    });
+      print('game is ok and you join the game: ${data['message']}');
+    }
+   /* status = response.body.contains('You can not join the game because there are no questions');
+    var data = json.decode(response.body);
+    dataQ = data['question_set'];
+    dataGame= data['player']['game_id'];
+    print(status);
+    if(status){
+      print('game has no questions: $data');
+    }else{
+      print('game is ok: ${data['message']}');
+    }
   }
-}
+  }*/
+}}
 
 class GuesserManagerMP extends StatefulWidget {
   GuesserManagerMP({Key key, this.title}) : super(key: key);
@@ -86,10 +110,13 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   Future Startup() async {
     print('before!!!!!!!!!');
     print(dataQ);
+    if (dataQ == null){
+      print('nooooooooo');
+    }else{
     shuffle();
     print('after!!!!!!!!!');
     print(dataQ);
-    showQuestion();
+    showQuestion();}
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
@@ -99,7 +126,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     for (var i = dataQ.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
-
       var temp = dataQ[i];
       dataQ[i] = dataQ[n];
       dataQ[n] = temp;

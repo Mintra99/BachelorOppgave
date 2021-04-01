@@ -45,29 +45,6 @@ class LobbydatabaseHelper {
     prefs.setInt('currentGameId', mapResponse['game']['id']);
   }
 
-  /*joinGame(int game_id, String game_name) async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'access';
-    final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/join_game/";
-    final response = await http.post(myUrl,
-        headers: {
-          'Authorization': 'Bearer $value'
-        },
-        body: {
-          "game_id": '$game_id',
-        }).then((response) {
-      print('Response status : ${response.statusCode}');
-      print('Response status : ${response.body} ');
-      var data = json.decode(response.body);
-      //print('datatatatatatatatatatat');
-      //print(data);
-      dataQuestions = data['question_set'];
-      //print('questionaotnaotnaot');
-      //print(dataQuestions[0]['fields']);// dataQuestions inculde all questions related to this spesific game.
-      // Todo we need to load dataQuestions, we need to do the same as showQuestion() function in singleplayer/quesser.dart and instead of mapresponse we use dataQuestions.
-    });
-  }*/
   void answerMultiPlayer(String answer_text, int questionid, int game_id)async{
     answer_text = answer_text.toLowerCase();
     final prefs = await SharedPreferences.getInstance();
