@@ -32,26 +32,26 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   lobbyName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      navn = prefs.getString('gameNavn'); // we are get the gameName from local storage (we already this string in lobbydatabasehelper.dart file)
+      navn = prefs.getString(
+          'gameNavn'); // we are get the gameName from local storage (we already this string in lobbydatabasehelper.dart file)
     });
   }
 
-  _onPressed() async{
+  _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (multiPlayer.noQuestions == null){
+    if (multiPlayer.noQuestions == null) {
       _noQuestions();
-    }
-    else if(multiPlayer.playerIn == null){
+    } else if (multiPlayer.playerIn == null) {
       _alreadyIn();
     } else {
       multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => GuesserManagerMP()),
+        MaterialPageRoute(builder: (context) => GuesserManagerMP()),
       );
     }
   }
+
   void _noQuestions() async {
     await showDialog(
         context: context,
@@ -90,7 +90,6 @@ class _WaitingLobbyState extends State<WaitingLobby> {
         });
   }
 
-
   /*
   void assignRole() {
      if player.role == "questioner"{
@@ -120,7 +119,6 @@ class _WaitingLobbyState extends State<WaitingLobby> {
             padding: const EdgeInsets.only(
                 top: 250, left: 12.0, right: 12.0, bottom: 12.0),
             children: <Widget>[
-
               Container(
                 height: 50,
                 child: new Text('Lobby name: ' + '$navn'),
@@ -129,7 +127,8 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     prefs.getInt('gameId');
                     _onPressed();
@@ -171,26 +170,25 @@ class _WaitingLobbyState extends State<WaitingLobby> {
       ),
     );
   }
-  void _showDialog(){
+
+  void _showDialog() {
     showDialog(
-        context:context ,
-        builder:(BuildContext context){
+        context: context,
+        builder: (BuildContext context) {
           return AlertDialog(
             title: new Text('Failed'),
-            content:  new Text('Check your email or password'),
+            content: new Text('Check your email or password'),
             actions: <Widget>[
               new RaisedButton(
                 child: new Text(
                   'Close',
                 ),
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
-
               ),
             ],
           );
-        }
-    );
+        });
   }
 }
