@@ -36,15 +36,60 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     });
   }
 
-  Future fitchQuestionData() async {
+  _onPressed() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get('https://fakenews-app.com/api/game/question/');
-    if (response.statusCode == 200) {
-      setState(() {
-        mapQuestionResponse = json.decode(response.body);
-      });
+    if (multiPlayer.noQuestions == null){
+      _noQuestions();
+    }
+    else if(multiPlayer.playerIn == null){
+      _alreadyIn();
+    } else {
+      multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => GuesserManagerMP()),
+      );
     }
   }
+  void _noQuestions() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Questions are not ready'),
+            content: new Text('Proposer have not added questions yet'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _alreadyIn() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Player already in'),
+            content: new Text('This player is already in game'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
 
   /*
   void assignRole() {
@@ -87,13 +132,8 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.getString('gameNavn');
                     prefs.getInt('gameId');
+                    _onPressed();
                     //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-                    multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GuesserManagerMP()),
-                    );
                   },
                   color: Colors.blue,
                   child: new Text(
@@ -129,6 +169,28 @@ class _WaitingLobbyState extends State<WaitingLobby> {
           ),
         ),
       ),
+    );
+  }
+  void _showDialog(){
+    showDialog(
+        context:context ,
+        builder:(BuildContext context){
+          return AlertDialog(
+            title: new Text('Failed'),
+            content:  new Text('Check your email or password'),
+            actions: <Widget>[
+              new RaisedButton(
+                child: new Text(
+                  'Close',
+                ),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+
+              ),
+            ],
+          );
+        }
     );
   }
 }

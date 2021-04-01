@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
+import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,8 @@ int dataGame;
 
 class MultiPlayer {
   var noQuestions;
-  var playerIn ;
+  var playerIn;
+
   joinGame(int game_id, String game_name) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
@@ -26,28 +28,36 @@ class MultiPlayer {
     }, body: {
       "game_id": '$game_id',
     });
-      print('Response status : ${response.statusCode}');
-      print('Response status : ${response.body} ');
-      noQuestions = response.body.contains('restult');
-      playerIn = response.body.contains('user already joined the game');
-      
-      var data = json.decode(response.body);
-      //dataQ = data['question_set'];
-      //dataGame= data['player']['game_id'];
-      print('222222222222222222222222222223333333333');
-      print(noQuestions);
-      print(playerIn);
-    if(noQuestions){
-      print('game has no questions: $data');
+    print('Response status : ${response.statusCode}');
+    print('Response status : ${response.body} ');
+    print('response.body ::::::::' + response.body);
+
+
+    switch (response.body) {
+      case '"restult":"You can not join the game because there are no questions"':
+        noQuestions = response.body.contains('restult');
+        break;
+      default:
+        playerIn = response.body.contains('user already joined the game');
+        break;
     }
-    else if(playerIn){
+
+    var data = json.decode(response.body);
+    //dataQ = data['question_set'];
+    //dataGame= data['player']['game_id'];
+    print('222222222222222222222222222223333333333');
+    print(noQuestions);
+    print(playerIn);
+    if (noQuestions) {
+      print('game has no questions: $data');
+    } else if (playerIn) {
       print('Player already joined the game: $data');
-    } else{
+    } else {
       dataQ = data['question_set'];
-      dataGame= data['player']['game_id'];
+      dataGame = data['player']['game_id'];
       print('game is ok and you join the game: ${data['message']}');
     }
-   /* status = response.body.contains('You can not join the game because there are no questions');
+    /* status = response.body.contains('You can not join the game because there are no questions');
     var data = json.decode(response.body);
     dataQ = data['question_set'];
     dataGame= data['player']['game_id'];
@@ -59,7 +69,12 @@ class MultiPlayer {
     }
   }
   }*/
-}}
+  }
+}
+
+
+
+
 
 class GuesserManagerMP extends StatefulWidget {
   GuesserManagerMP({Key key, this.title}) : super(key: key);
@@ -74,7 +89,7 @@ class GuesserManagerMP extends StatefulWidget {
 class _GuesserPageState extends State<GuesserManagerMP> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
   LobbydatabaseHelper lobbyDataHelper = new LobbydatabaseHelper();
-  MultiPlayer MP = new MultiPlayer();
+  //MultiPlayer MP = new MultiPlayer();
 
   int timer = 10;
   double percentage;
@@ -110,13 +125,14 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   Future Startup() async {
     print('before!!!!!!!!!');
     print(dataQ);
-    if (dataQ == null){
+    if (dataQ == null) {
       print('nooooooooo');
-    }else{
-    shuffle();
-    print('after!!!!!!!!!');
-    print(dataQ);
-    showQuestion();}
+    } else {
+      shuffle();
+      print('after!!!!!!!!!');
+      print(dataQ);
+      showQuestion();
+    }
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
@@ -217,7 +233,8 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       if (answer == k.toLowerCase()) {
         score += (100 * (timer) ~/ 10);
         print(score);
-        prefs.setInt('guesserScore', score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        prefs.setInt('guesserScore',
+            score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
         print('correct');
         answered = true;
         colortoshow = right;
@@ -266,7 +283,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
         minWidth: 150.0,
         height: 45.0,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -276,197 +293,199 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     return Scaffold(
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              new Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        children: <Widget>[
-                          BackButton(),
-                          Spacer(),
-                          Text('Score:' + '$score'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(15.0),
-                      child: dataQ == null ? Container() : Text(
-                        // Shows the question to the guesser
-                        '$question',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontFamily: "Quando",
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          new Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    children: <Widget>[
+                      BackButton(),
+                      Spacer(),
+                      Text('Score:' + '$score'),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(15.0),
+                  child: dataQ == null
+                      ? Container()
+                      : Text(
+                          // Shows the question to the guesser
+                          '$question',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: "Quando",
+                          ),
                         ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                choiceButton('True'),
-                                choiceButton('Mostly true'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                choiceButton('Half true'),
-                                choiceButton('Mostly false'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                choiceButton('False'),
-                                choiceButton('Pants on Fire'),
-                              ],
-                            ),
+                ),
+                InkWell(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            choiceButton('True'),
+                            choiceButton('Mostly true'),
                           ],
                         ),
-                      ),
-                      onTap: () {},
-                    )
-                  ],
-                ),
-              ),
-              new Container(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 20.0,
-                      ),
-                      child: MaterialButton(
-                        onPressed: () {
-                          //TODO: show hint
-                        },
-                        child: Text(
-                          "Hint",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: "Alike",
-                            fontSize: 16.0,
-                          ),
-                          maxLines: 1,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            choiceButton('Half true'),
+                            choiceButton('Mostly false'),
+                          ],
                         ),
-                        color: Colors.indigoAccent,
-                        splashColor: Colors.indigo[700],
-                        highlightColor: Colors.indigo[700],
-                        minWidth: 200.0,
-                        height: 45.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              new Container(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Visibility(
-                            visible: _visible,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10.0,
-                                horizontal: 20.0,
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  //TODO: show source
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => sourcePage()),
-                                  );
-                                },
-                                child: Text(
-                                  "Source",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Alike",
-                                    fontSize: 16.0,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                                color: Colors.indigoAccent,
-                                splashColor: Colors.indigo[700],
-                                highlightColor: Colors.indigo[700],
-                                minWidth: 150.0,
-                                height: 45.0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                              ),
-                            )),
-                        Visibility(
-                            visible: _visible,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10.0,
-                                horizontal: 20.0,
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  nextquestion();
-                                },
-                                child: Text(
-                                  "Next question",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Alike",
-                                    fontSize: 16.0,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                                color: Colors.indigoAccent,
-                                splashColor: Colors.indigo[700],
-                                highlightColor: Colors.indigo[700],
-                                minWidth: 150.0,
-                                height: 45.0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                              ),
-                            ))
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            choiceButton('False'),
+                            choiceButton('Pants on Fire'),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              new Container(
-                child: Column(
-                  children: [
-                    Container(
-                        width: 250,
-                        child: LinearProgressIndicator(
-                            value: percentage,
-                            backgroundColor: Colors.grey,
-                            valueColor: new AlwaysStoppedAnimation<Color>(
-                              Colors.blue,
-                            ))),
-                    Container(
-                      child: Text(
-                        '$timer',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 48,
-                        ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ),
+          ),
+          new Container(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 20.0,
+                  ),
+                  child: MaterialButton(
+                    onPressed: () {
+                      //TODO: show hint
+                    },
+                    child: Text(
+                      "Hint",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Alike",
+                        fontSize: 16.0,
                       ),
-                    )
+                      maxLines: 1,
+                    ),
+                    color: Colors.indigoAccent,
+                    splashColor: Colors.indigo[700],
+                    highlightColor: Colors.indigo[700],
+                    minWidth: 200.0,
+                    height: 45.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                  ),
+                )
+              ],
+            ),
+          ),
+          new Container(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                        visible: _visible,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 20.0,
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              //TODO: show source
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => sourcePage()),
+                              );
+                            },
+                            child: Text(
+                              "Source",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Alike",
+                                fontSize: 16.0,
+                              ),
+                              maxLines: 1,
+                            ),
+                            color: Colors.indigoAccent,
+                            splashColor: Colors.indigo[700],
+                            highlightColor: Colors.indigo[700],
+                            minWidth: 150.0,
+                            height: 45.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                        )),
+                    Visibility(
+                        visible: _visible,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 20.0,
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              nextquestion();
+                            },
+                            child: Text(
+                              "Next question",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Alike",
+                                fontSize: 16.0,
+                              ),
+                              maxLines: 1,
+                            ),
+                            color: Colors.indigoAccent,
+                            splashColor: Colors.indigo[700],
+                            highlightColor: Colors.indigo[700],
+                            minWidth: 150.0,
+                            height: 45.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                        ))
                   ],
                 ),
-              )
-            ],
-          )),
+              ],
+            ),
+          ),
+          new Container(
+            child: Column(
+              children: [
+                Container(
+                    width: 250,
+                    child: LinearProgressIndicator(
+                        value: percentage,
+                        backgroundColor: Colors.grey,
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                          Colors.blue,
+                        ))),
+                Container(
+                  child: Text(
+                    '$timer',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 48,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      )),
     );
   }
 }
