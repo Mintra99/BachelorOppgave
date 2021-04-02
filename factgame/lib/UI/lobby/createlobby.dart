@@ -72,7 +72,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                 child: new TextField(
                   controller: numOfPlayrs,
                   decoration: InputDecoration(
-                    hintText: 'Number Player',
+                    hintText: 'Default number of players is 2',
                     icon: new Icon(Icons.add),
                   ),
                 ),
@@ -97,10 +97,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                 height: 50,
                 child: new RaisedButton(
 
-                  onPressed: () async{
-                    //databaseHelper.createGetData(Game Name)
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.getString('numPlayers');
+                  onPressed: () {
                     databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayrs.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(

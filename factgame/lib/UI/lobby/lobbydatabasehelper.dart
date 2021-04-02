@@ -24,6 +24,9 @@ class LobbydatabaseHelper {
   }
 
   createGame(String game_name,String numPlayers) async {
+    if (numPlayers.isEmpty){
+      numPlayers = '2';// setting default value if user forget to set number if players
+    }
     var number = int.parse(numPlayers);
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
