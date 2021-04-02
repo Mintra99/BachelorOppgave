@@ -17,6 +17,10 @@ int dataGame;
 class MultiPlayer {
   var noQuestions;
   var playerIn;
+  bool existingQ;
+  bool existingP;
+
+  var msg;
 
   joinGame(int game_id, String game_name) async {
     final prefs = await SharedPreferences.getInstance();
@@ -30,19 +34,7 @@ class MultiPlayer {
     });
     print('Response status : ${response.statusCode}');
     print('Response status : ${response.body} ');
-    print('response.body ::::::::' + response.body);
 
-/*
-    switch (response.body) {
-      case '"restult":"You can not join the game because there are no questions"':
-
-        break;
-      default:
-
-        break;
-    }
-
- */
     noQuestions = response.body.contains('restult');
     playerIn = response.body.contains('user already joined the game');
 
@@ -53,10 +45,17 @@ class MultiPlayer {
     print(noQuestions);
     print(playerIn);
     if (noQuestions) {
+      print("existingQ is false");
+      existingQ = false;
       print('game has no questions: $data');
     } else if (playerIn) {
+      print("existingP is true");
+      existingP = true;
       print('Player already joined the game: $data');
     } else {
+      existingP = false;
+      existingQ = true;
+      print("everything is fine");
       dataQ = data['question_set'];
       dataGame = data['player']['game_id'];
       print('game is ok and you join the game: ${data['message']}');
@@ -123,14 +122,14 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   };
 
   Future Startup() async {
-    print('before!!!!!!!!!');
-    print(dataQ);
+    //print('before!!!!!!!!!');
+    //print(dataQ);
     if (dataQ == null) {
       print('nooooooooo');
     } else {
       shuffle();
-      print('after!!!!!!!!!');
-      print(dataQ);
+      //print('after!!!!!!!!!');
+      //print(dataQ);
       showQuestion();
     }
   }
