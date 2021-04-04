@@ -34,9 +34,6 @@ class _SelectQuestionState extends State<SelectQuestion> {
   int gameId;
   int Id;
 
-  List<Question> list = [];
-
-
   @override
   void initState() {
     getQuestion();
@@ -58,7 +55,6 @@ class _SelectQuestionState extends State<SelectQuestion> {
     }
     print ("Question!!!!!!!!!!!");
     print(questions);
-    await addList();
   }
 
   _saveForm() async{
@@ -71,18 +67,6 @@ class _SelectQuestionState extends State<SelectQuestion> {
       });
     }
   }
-
-  addList() async {
-    for (int i = 0; i< questions.length; i++) {
-      list.add(new Question(display: questions[i].display, value: questions[i].value
-      ));
-    }
-    String jsonTags = jsonEncode(list);
-    print("JSON");
-    print(jsonTags);
-    print('avaevaerv');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,20 +102,11 @@ class _SelectQuestionState extends State<SelectQuestion> {
                   },
                   dataSource: [
                     // Todo insert question list inside dataSource
-
-                    for (var i = 0; i < list.length; i++){
-                      "display": list[i].display,
-                      "value": list[i].value,
-                    }
-
-                    /*
                     for (var i = 0; i < questions.length; i++)
                       {
                         "display": questions[i].display,
                         "value": questions[i].value,
                       },
-
-                     */
                   ],
                   textField: 'display',
                   valueField: 'value',
@@ -154,10 +129,6 @@ class _SelectQuestionState extends State<SelectQuestion> {
                   onPressed: _saveForm,
                 ),
               ),
-              /*Container(
-                padding: EdgeInsets.all(16),
-                child: Text(_myActivitiesResult),
-              )*/
             ],
           ),
         ),
