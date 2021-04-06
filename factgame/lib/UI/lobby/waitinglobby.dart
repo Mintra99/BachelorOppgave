@@ -57,9 +57,25 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     } else if (multiPlayer.existingP == true) {
       _alreadyIn();
     } else {
+      /*
+      if(player = guesser) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProposerManager()),
+        );
+      }
+
+       */
+      // The one above is for guesser, the one below is for proposer
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+        //MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+        MaterialPageRoute(builder: (context) => ProposerManager()),
       );
     }
   }

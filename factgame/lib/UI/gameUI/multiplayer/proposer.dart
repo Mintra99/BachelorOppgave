@@ -32,10 +32,18 @@ class _ProposerPageState extends State<ProposerManager> {
   int questionid;
   int score = 0;
 
+  String _selected;
+  List<Map> _myJson = [
+    {"id": '1', "name": "Affin Bank"},
+    {"id": '2', "name": "Ambank"},
+    {"id": '3', "name": "Bank Isalm"},
+    {"id": '4', "name": "Bank Rakyat"},
+  ];
+
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
-    await http.get('https://fakenews-app.com/api/game/question/');
+        await http.get('https://fakenews-app.com/api/game/question/');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
@@ -116,22 +124,21 @@ class _ProposerPageState extends State<ProposerManager> {
     starttimer();
   }
 
-  void checkanswer(String k) async{
+  void checkanswer(String k) async {
     databaseHelper.answerData(k, questionid);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answer == k.toLowerCase()) {
       score += 1;
-      prefs.setInt('guesserScore', score);// we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+      prefs.setInt('guesserScore',
+          score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
       print('correct');
-
     } else {
       print('wrong');
       //TODO: let proposer give a hint before guesser can guess again
     }
     setState(() {
-      // applying the changed color to the particular button that was selected
       canceltimer = true;
     });
     //adds delay so the user can see the answer
@@ -163,7 +170,7 @@ class _ProposerPageState extends State<ProposerManager> {
         minWidth: 200.0,
         height: 45.0,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     );
   }
@@ -172,49 +179,89 @@ class _ProposerPageState extends State<ProposerManager> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
+        child: Container(
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.grey),
+              borderRadius: BorderRadius.circular(10)),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              new Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        children: <Widget>[
-                          BackButton(),
-                          Spacer(),
-                          Text('Score:' + '$score'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(15.0),
-                      child: mapResponse == null
-                          ? Container()
-                          : Text(
-                        // Shows the question to the guesser
-                        '$question',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontFamily: "Quando",
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            // TODO: list of hints the proposer can give the guesser (bruk hintButton(String k)
-                            // Eks: hintButton(dette er et hint)
-                          ],
-                        ),
-                      ),
-                      onTap: () {},
-                    )
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: <Widget>[
+                    BackButton(),
+                    Spacer(),
+                    Text('Score:' + '$score'),
                   ],
                 ),
               ),
+              SizedBox(height: 50),
+              Container(
+                padding: EdgeInsets.all(15.0),
+                child: Text("Hello"),
+              ),
+              // TODO: Change the one above with the one below when questions are ready
+              /*Container(
+                padding: EdgeInsets.all(15.0),
+                child: mapResponse == null
+                    ? Container()
+                    : Text(
+                  // Shows the question to the guesser
+                  '$question',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontFamily: "Quando",
+                  ),
+                ),
+              ),
+               */
+              SizedBox(height: 150),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: DropdownButton<String>(
+                          isDense: true,
+                          hint: new Text("Select Bank"),
+                          value: _selected,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              _selected = newValue;
+                            });
+
+                            print(_selected);
+                          },
+                          items: _myJson.map((Map map) {
+                            return new DropdownMenuItem<String>(
+                              value: map["id"].toString(),
+                              // value: _mySelection,
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                      margin: EdgeInsets.only(left: 10),
+                                      child: Text(map["name"])),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.all(8),
+                child: RaisedButton(
+                  child: Text('Send hint'),
+                  onPressed: (){},
+                ),
+              ),
+              SizedBox(height: 150),
               new Container(
                 child: Column(
                   children: [
@@ -239,7 +286,122 @@ class _ProposerPageState extends State<ProposerManager> {
                 ),
               )
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
+
+/*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.grey),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Container(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: <Widget>[
+                        BackButton(),
+                        Spacer(),
+                        Text('Score:' + '$score'),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(15.0),
+                    child: mapResponse == null
+                        ? Container()
+                        : Text(
+                            // Shows the question to the guesser
+                            '$question',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: "Quando",
+                            ),
+                          ),
+                  ),
+                  Expanded(
+                      child: DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: DropdownButton<String>(
+                          isDense: true,
+                          hint: new Text("Select hint"),
+                          value: _selected,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              _selected = newValue;
+                            });
+                            print(_selected);
+                          },
+                          items: _myJson.map((Map map) {
+                            return new DropdownMenuItem<String>(
+                              value: map["id"].toString(),
+                              // value: _mySelection,
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                      margin: EdgeInsets.only(left: 10),
+                                      child: Text(map["name"])),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        )),
+                  ))
+                  /*InkWell(
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              // TODO: list of hints the proposer can give the guesser (bruk hintButton(String k)
+                              // Eks: hintButton(dette er et hint)
+                            ],
+                          ),
+                        ),
+                        onTap: () {},
+                      )
+
+                       */
+                ],
+              ),
+            ),
+            new Container(
+              child: Column(
+                children: [
+                  Container(
+                      width: 250,
+                      child: LinearProgressIndicator(
+                          value: percentage,
+                          backgroundColor: Colors.grey,
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                            Colors.blue,
+                          ))),
+                  Container(
+                    child: Text(
+                      '$timer',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 48,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      )),
+    );
+  }*/
 }
