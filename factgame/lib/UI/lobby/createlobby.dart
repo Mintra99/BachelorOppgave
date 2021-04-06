@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:factgame/UI/lobby/selectquestions.dart';
+import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../home.dart';
 import 'lobbydatabasehelper.dart';
+import 'package:http/http.dart' as http;
 
 
 class CreateLobby extends StatefulWidget{
@@ -17,30 +21,21 @@ class _CreateLobbyState extends State<CreateLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gamenameController =  new TextEditingController();
   final TextEditingController numOfPlayrs = new TextEditingController();
-  //List lobbyList = [];
-  //Map<String, List> lobby;
+  Map mapResponse;
+  int id;
 
-/*
-  void _makeLobby(BuildContext context, String lobbyName) async {
-    List<String> playerList = new List(2);
-    playerList.add("player");
-    lobby[lobbyName] = playerList;
-    lobbyList.add(lobby);
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OurAddBook(
-          onGroupCreation: true,
-          onError: false,
-          groupName: groupName,
-        ),
-      ),
-    );
-     */
+
+
+  Future fitchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http.get('https://fakenews-app.com/api/game/new_game/"');
+    if (response.statusCode == 200) {
+      setState(() {
+        mapResponse = json.decode(response.body);
+        id = prefs.getInt('currentGameId');
+      });
+    }
   }
-
- */
-
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +94,10 @@ class _CreateLobbyState extends State<CreateLobby> {
 
                   onPressed: () {
                     databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayrs.text.trim());
+                    databaseHelper.getData(id, _gamenameController.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
-                          builder: (BuildContext context) => new SelectQuestion(),
+                          builder: (BuildContext context) => new WaitingLobby(),
                         )
                     );
                   },

@@ -41,10 +41,13 @@ class LobbydatabaseHelper {
           "num_of_players": '$number',
         }).then((response) {
       mapResponse = json.decode(response.body);
+      print("creategame");
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
     });
     print(mapResponse);
+    prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
+    prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
     prefs.setInt('currentGameId', mapResponse['game']['id']);
   }
 

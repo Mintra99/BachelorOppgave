@@ -21,6 +21,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   MultiPlayer multiPlayer = new MultiPlayer();
   List mapQuestionResponse; //lobby name
   String navn;
+  int missingPlayers;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     var gamename = prefs.getString('gameNavn');
     var gameid = prefs.getInt('gameId');
     multiPlayer.joinGame(gameid, gamename);
+    missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
   }
 
   // this function return the name for the game ; Lobbyname
@@ -100,21 +102,6 @@ class _WaitingLobbyState extends State<WaitingLobby> {
         });
   }
 
-  /*
-  void assignRole() {
-     if player.role == "questioner"{
-        Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => ProposerManager()),
-           );}
-     if player.role == "respondent"{
-        Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GuesserManagerMP()),
-                );}
-  }
- */
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -135,26 +122,13 @@ class _WaitingLobbyState extends State<WaitingLobby> {
               ),
               Container(
                 height: 50,
+                child: new Text('Players missing: ' + '$missingPlayers'),
+              ),
+              Container(
+                height: 50,
                 child: new RaisedButton(
                   onPressed: () async {
-                    /*
-                    print("AAAAAAAAAAAAAAAAAAAAAAAAA");
-                    print(multiPlayer.existingQ);
-                    print("BBBBBBBBBBBBBBBBBBBBBBBBBB");
-                    print(multiPlayer.existingP);
-                    if (multiPlayer.existingQ == false) {
-                      _noQuestions();
-                    } else if (multiPlayer.existingP == true) {
-                      _alreadyIn();
-                    } else {
-                      //multiPlayer.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => GuesserManagerMP()),
-                      );
-                    }
 
-                     */
                     _onPressed();
                     //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
                   },
