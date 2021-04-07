@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:factgame/UI/gameUI/multiplayer/guesser.dart';
 import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,14 @@ class ProposerManager extends StatefulWidget {
 class _ProposerPageState extends State<ProposerManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
   LobbydatabaseHelper lobbydatabaseHelper = new LobbydatabaseHelper();
+  MultiPlayer MP = new MultiPlayer();
 
   int timer = 10;
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
   String stringResponse;
-  List mapResponse;
+  //List mapResponse;
   String question;
   String answer;
   int questionid;
@@ -43,6 +45,15 @@ class _ProposerPageState extends State<ProposerManager> {
   ];
 
   Future fitchData() async {
+    if (MP.dataQ == null) {
+      print('nooooooooo');
+    } else {
+      shuffle();
+      showQuestion();
+    }
+  }
+/*
+  Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response =
         await http.get('https://fakenews-app.com/api/game/question/');
@@ -55,37 +66,39 @@ class _ProposerPageState extends State<ProposerManager> {
     }
   }
 
+ */
+
   //TODO: make the questions available for both guesser and proposer so they get the same questions
   // Move the shuffle to lobbydatabasehelper maybe?
   void shuffle() {
     var random = new Random();
     // Go through all elements.
-    for (var i = mapResponse.length - 1; i > 0; i--) {
+    for (var i = MP.dataQ.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
 
-      var temp = mapResponse[i];
-      mapResponse[i] = mapResponse[n];
-      mapResponse[n] = temp;
+      var temp = MP.dataQ[i];
+      MP.dataQ[i] = MP.dataQ[n];
+      MP.dataQ[n] = temp;
     }
   }
 
   void showQuestion() {
-    if (mapResponse.length > 0) {
-      question = mapResponse[0]['question_text'].toString();
-      answer = mapResponse[0]['correct_answer'].toString();
+    if (MP.dataQ.length > 0) {
+      question = MP.dataQ[0]['question_text'].toString();
+      answer = MP.dataQ[0]['correct_answer'].toString();
       answer.toLowerCase();
       print(answer);
-      questionid = mapResponse[0]['id'].toInt();
+      questionid = MP.dataQ[0]['id'].toInt();
     } else {
-      mapResponse = null;
+      MP.dataQ = null;
       canceltimer = true;
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => GameFinishedManager()),
       );
     }
-    mapResponse.removeAt(0);
+    MP.dataQ.removeAt(0);
   }
 
   @override
@@ -199,14 +212,11 @@ class _ProposerPageState extends State<ProposerManager> {
                 ),
               ),
               SizedBox(height: 50),
+
+              // TODO: Change the one above with the one below when questions are ready
               Container(
                 padding: EdgeInsets.all(15.0),
-                child: Text("Hello"),
-              ),
-              // TODO: Change the one above with the one below when questions are ready
-              /*Container(
-                padding: EdgeInsets.all(15.0),
-                child: mapResponse == null
+                child: MP.dataQ == null
                     ? Container()
                     : Text(
                   // Shows the question to the guesser
@@ -217,7 +227,6 @@ class _ProposerPageState extends State<ProposerManager> {
                   ),
                 ),
               ),
-               */
               SizedBox(height: 150),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

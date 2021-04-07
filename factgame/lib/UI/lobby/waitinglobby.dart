@@ -34,6 +34,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gamename = prefs.getString('gameNavn');
     var gameid = prefs.getInt('gameId');
+    //var role = prefs.getString('role');
     multiPlayer.joinGame(gameid, gamename);
     print("players!!!!!!!");
     print(prefs.getInt('playerNum'));
@@ -51,6 +52,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   }
 
   _onPressed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     print("AAAAAAAAAAAAAAAAAAAAAAAAA");
     print(multiPlayer.existingQ);
     print("BBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -60,26 +62,30 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     } else if (multiPlayer.existingP == true) {
       _alreadyIn();
     } else {
-      /*
-      if(player = guesser) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => GuesserManagerMP()),
-        );
-      } else {
+      print("ROLE!!!!!!!!!!!!!!!!!!!");
+      print(prefs.getString('role'));
+      if(prefs.getString('role') == "proposer") {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProposerManager()),
         );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+        );
       }
 
-       */
+
       // The one above is for guesser, the one below is for proposer
+      /*
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => GuesserManagerMP()),
         //MaterialPageRoute(builder: (context) => ProposerManager()),
       );
+
+       */
     }
   }
 

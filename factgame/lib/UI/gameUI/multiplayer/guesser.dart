@@ -11,10 +11,11 @@ import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
-List dataQ; // list of data with both questions and answers
-int dataGame;
 
 class MultiPlayer {
+  List dataQ; // list of data with both questions and answers
+  int dataGame;
+
   var noQuestions;
   var playerIn;
   bool existingQ;
@@ -91,7 +92,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
   LobbydatabaseHelper lobbyDataHelper = new LobbydatabaseHelper();
 
-  //MultiPlayer MP = new MultiPlayer();
+  MultiPlayer MP = new MultiPlayer();
 
   int timer = 10;
   double percentage;
@@ -125,7 +126,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   };
 
   Future Startup() async {
-    if (dataQ == null) {
+    if (MP.dataQ == null) {
       print('nooooooooo');
     } else {
       shuffle();
@@ -137,29 +138,29 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   void shuffle() {
     var random = new Random();
     // Go through all elements.
-    for (var i = dataQ.length - 1; i > 0; i--) {
+    for (var i = MP.dataQ.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
-      var temp = dataQ[i];
-      dataQ[i] = dataQ[n];
-      dataQ[n] = temp;
+      var temp = MP.dataQ[i];
+      MP.dataQ[i] = MP.dataQ[n];
+      MP.dataQ[n] = temp;
     }
   }
 
   void showQuestion() {
-    if (counter <= dataQ.length) {
-      question = dataQ[0]['fields']['question_text'].toString();
-      answer = dataQ[0]['fields']['correct_answer'].toString();
+    if (counter <= MP.dataQ.length) {
+      question = MP.dataQ[0]['fields']['question_text'].toString();
+      answer = MP.dataQ[0]['fields']['correct_answer'].toString();
       answer.toLowerCase();
       print(answer);
       counter += 1;
       print('we print the id of question');
-      print(dataQ[0]['pk']);
-      questionid = dataQ[0]['pk'].toInt();
+      print(MP.dataQ[0]['pk']);
+      questionid = MP.dataQ[0]['pk'].toInt();
       print(questionid);
-      dataQ.removeAt(0);
+      MP.dataQ.removeAt(0);
     } else {
-      dataQ = null;
+      MP.dataQ = null;
       canceltimer = true;
       Navigator.push(
         context,
@@ -223,7 +224,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   }
 
   void checkanswer(String k) async {
-    lobbyDataHelper.answerMultiPlayer(k, questionid, dataGame);
+    lobbyDataHelper.answerMultiPlayer(k, questionid, MP.dataGame);
     k.toLowerCase();
     print(k.toLowerCase());
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -308,7 +309,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                 ),
                 Container(
                   padding: EdgeInsets.all(15.0),
-                  child: dataQ == null
+                  child: MP.dataQ == null
                       ? Container()
                       : Text(
                           // Shows the question to the guesser

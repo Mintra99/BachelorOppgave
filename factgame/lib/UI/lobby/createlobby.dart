@@ -20,7 +20,7 @@ class CreateLobby extends StatefulWidget {
 class _CreateLobbyState extends State<CreateLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   final TextEditingController _gamenameController = new TextEditingController();
-  final TextEditingController numOfPlayrs = new TextEditingController();
+  final TextEditingController numOfPlayers = new TextEditingController();
   Map mapResponse;
   int id;
 
@@ -78,6 +78,7 @@ class _CreateLobbyState extends State<CreateLobby> {
 
   setQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    databaseHelper.setRole("proposer");
     List list = [];
     for (var i = 0; i < 10; i++) { // adds 10 questions to the lobby
       list.add(questions[i].value);
@@ -114,7 +115,7 @@ class _CreateLobbyState extends State<CreateLobby> {
               Container(
                 height: 50,
                 child: new TextField(
-                  controller: numOfPlayrs,
+                  controller: numOfPlayers,
                   decoration: InputDecoration(
                     hintText: 'Default number of players is 2',
                     icon: new Icon(Icons.add),
@@ -143,7 +144,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                   onPressed: () {
                     setQuestions();
                     databaseHelper.createGame(_gamenameController.text.trim(),
-                        numOfPlayrs.text.trim());
+                        numOfPlayers.text.trim());
                     databaseHelper.getData(id, _gamenameController.text.trim());
                     Navigator.of(context).push(new MaterialPageRoute(
                       builder: (BuildContext context) => new WaitingLobby(),
