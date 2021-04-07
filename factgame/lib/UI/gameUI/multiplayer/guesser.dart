@@ -11,7 +11,7 @@ import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
-List dataQ;
+List dataQ; // list of data with both questions and answers
 int dataGame;
 
 class MultiPlayer {
@@ -73,6 +73,8 @@ class MultiPlayer {
   }
   }*/
   }
+
+//TODO: do we need to create a leavegame so that if a player press leave game, he gets removed from lobby???
 }
 
 class GuesserManagerMP extends StatefulWidget {
@@ -88,6 +90,7 @@ class GuesserManagerMP extends StatefulWidget {
 class _GuesserPageState extends State<GuesserManagerMP> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
   LobbydatabaseHelper lobbyDataHelper = new LobbydatabaseHelper();
+
   //MultiPlayer MP = new MultiPlayer();
 
   int timer = 10;
@@ -122,14 +125,10 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   };
 
   Future Startup() async {
-    //print('before!!!!!!!!!');
-    //print(dataQ);
     if (dataQ == null) {
       print('nooooooooo');
     } else {
       shuffle();
-      //print('after!!!!!!!!!');
-      //print(dataQ);
       showQuestion();
     }
   }
@@ -230,7 +229,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answered == false) {
       if (answer == k.toLowerCase()) {
-        score += (100 * (timer) ~/ 10);
+        score += 10 * (timer);
         print(score);
         prefs.setInt('guesserScore',
             score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
@@ -362,8 +361,49 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                     horizontal: 20.0,
                   ),
                   child: MaterialButton(
-                    onPressed: () {
+                    onPressed: () async {
                       //TODO: show hint
+                      print("hint!!!!!!!!!!!!!!!");
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      var showHint = prefs.getString('gameHint');
+                      if (showHint == null) {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: new Text('Hint'),
+                                content: new Text(
+                                    "Proposer have not given a hint yet, try to press "
+                                    "hint again later"),
+                                actions: <Widget>[
+                                  new FlatButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                      } else {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: new Text('Hint'),
+                                content: new Text(showHint.toString()),
+                                actions: <Widget>[
+                                  new FlatButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                      }
                     },
                     child: Text(
                       "Hint",

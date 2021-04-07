@@ -13,7 +13,13 @@ class LobbydatabaseHelper {
   String myName;
   var mapResponse;
   int currentGameId;
+  String myHint;
 
+  setHint(String hint) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    myHint = hint;
+    prefs.setString('gameHint', hint);
+  }
 
   getData(int id , String name) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -71,7 +77,6 @@ class LobbydatabaseHelper {
       print('Response status : ${response.body} ');
       var data = json.decode(response.body);
     });
-
   }
 
   addGameQuestions(List questions) async{

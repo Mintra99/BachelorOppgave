@@ -35,6 +35,9 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     var gamename = prefs.getString('gameNavn');
     var gameid = prefs.getInt('gameId');
     multiPlayer.joinGame(gameid, gamename);
+    print("players!!!!!!!");
+    print(prefs.getInt('playerNum'));
+    print(prefs.getInt("currentPlayer"));
     missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
   }
 
@@ -74,8 +77,8 @@ class _WaitingLobbyState extends State<WaitingLobby> {
       // The one above is for guesser, the one below is for proposer
       Navigator.push(
         context,
-        //MaterialPageRoute(builder: (context) => GuesserManagerMP()),
-        MaterialPageRoute(builder: (context) => ProposerManager()),
+        MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+        //MaterialPageRoute(builder: (context) => ProposerManager()),
       );
     }
   }
@@ -163,6 +166,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () {
+                    //TODO: remove player from the lobby
                     Navigator.of(context).push(new MaterialPageRoute(
                       builder: (BuildContext context) => new Home(),
                     ));

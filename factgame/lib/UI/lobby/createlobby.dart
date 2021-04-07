@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:factgame/UI/lobby/selectquestions.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
+import 'package:factgame/models/classes/question.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,32 +12,81 @@ import '../../home.dart';
 import 'lobbydatabasehelper.dart';
 import 'package:http/http.dart' as http;
 
-
-class CreateLobby extends StatefulWidget{
-
-
+class CreateLobby extends StatefulWidget {
   @override
   _CreateLobbyState createState() => _CreateLobbyState();
 }
 
 class _CreateLobbyState extends State<CreateLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
-  final TextEditingController _gamenameController =  new TextEditingController();
+  final TextEditingController _gamenameController = new TextEditingController();
   final TextEditingController numOfPlayrs = new TextEditingController();
   Map mapResponse;
   int id;
 
+  List questions = [];
 
+  @override
+  void initState() {
+    getQuestion();
+    super.initState();
+  }
+
+  Future getQuestion() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    var response = await http.get(
+      'https://fakenews-app.com/api/game/question/',
+      headers: {HttpHeaders.authorizationHeader: "Bearer $value"},
+    );
+    var jsonData = json.decode(response.body);
+    for (var u in jsonData) {
+      String display = (u["question_text"]);
+      Question singleQuestion = Question(display: display, value: u);
+      questions.add(singleQuestion);
+    }
+    print("Question!!!!!!!!!!!");
+    print(questions);
+    shuffle();
+  }
 
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get('https://fakenews-app.com/api/game/new_game/"');
+    var response =
+        await http.get('https://fakenews-app.com/api/game/new_game/"');
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
         id = prefs.getInt('currentGameId');
       });
     }
+  }
+
+  void shuffle() {
+    var random = new Random();
+    // Go through all elements.
+    for (var i = questions.length - 1; i > 0; i--) {
+      // Pick a pseudorandom number according to the list length
+      var n = random.nextInt(i + 1);
+
+      var temp = questions[i];
+      questions[i] = questions[n];
+      questions[n] = temp;
+    }
+  }
+
+  setQuestions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List list = [];
+    for (var i = 0; i < 10; i++) { // adds 10 questions to the lobby
+      list.add(questions[i].value);
+    }
+    setState(() {
+      print("DONE!!!!!!");
+      print(list);
+      databaseHelper.addGameQuestions(list);
+    });
   }
 
   @override
@@ -48,16 +100,13 @@ class _CreateLobbyState extends State<CreateLobby> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.arrow_back_ios),
-              onPressed: ()=>Navigator.of(context).push(
-                  new MaterialPageRoute(
-                    builder: (BuildContext context) => new Home(),
-                  )
-              ),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => new Home(),
+              )),
             )
           ],
         ),
-        body:
-        Container(
+        body: Container(
           child: ListView(
             padding: const EdgeInsets.only(
                 top: 250, left: 12.0, right: 12.0, bottom: 12.0),
@@ -91,15 +140,14 @@ class _CreateLobbyState extends State<CreateLobby> {
               Container(
                 height: 50,
                 child: new RaisedButton(
-
                   onPressed: () {
-                    databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayrs.text.trim());
+                    setQuestions();
+                    databaseHelper.createGame(_gamenameController.text.trim(),
+                        numOfPlayrs.text.trim());
                     databaseHelper.getData(id, _gamenameController.text.trim());
-                    Navigator.of(context).push(
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) => new WaitingLobby(),
-                        )
-                    );
+                    Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new WaitingLobby(),
+                    ));
                   },
                   color: Colors.blue,
                   child: new Text(
@@ -107,7 +155,9 @@ class _CreateLobbyState extends State<CreateLobby> {
                     style: new TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,),),
+                      fontSize: 20.0,
+                    ),
+                  ),
                 ),
               ),
             ],

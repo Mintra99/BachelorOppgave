@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,7 @@ class ProposerManager extends StatefulWidget {
 
 class _ProposerPageState extends State<ProposerManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
+  LobbydatabaseHelper lobbydatabaseHelper = new LobbydatabaseHelper();
 
   int timer = 10;
   double percentage;
@@ -54,6 +56,7 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
+  // Move the shuffle to lobbydatabasehelper maybe?
   void shuffle() {
     var random = new Random();
     // Go through all elements.
@@ -136,7 +139,6 @@ class _ProposerPageState extends State<ProposerManager> {
       print('correct');
     } else {
       print('wrong');
-      //TODO: let proposer give a hint before guesser can guess again
     }
     setState(() {
       canceltimer = true;
@@ -226,7 +228,7 @@ class _ProposerPageState extends State<ProposerManager> {
                         alignedDropdown: true,
                         child: DropdownButton<String>(
                           isDense: true,
-                          hint: new Text("Select Bank"),
+                          hint: new Text("Select Hint"),
                           value: _selected,
                           onChanged: (String newValue) {
                             setState(() {
@@ -258,7 +260,9 @@ class _ProposerPageState extends State<ProposerManager> {
                 padding: EdgeInsets.all(8),
                 child: RaisedButton(
                   child: Text('Send hint'),
-                  onPressed: (){},
+                  onPressed: (){
+                    lobbydatabaseHelper.setHint(_selected);
+                  },
                 ),
               ),
               SizedBox(height: 150),
@@ -291,117 +295,4 @@ class _ProposerPageState extends State<ProposerManager> {
       ),
     );
   }
-
-/*
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.grey),
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: <Widget>[
-                        BackButton(),
-                        Spacer(),
-                        Text('Score:' + '$score'),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(15.0),
-                    child: mapResponse == null
-                        ? Container()
-                        : Text(
-                            // Shows the question to the guesser
-                            '$question',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: "Quando",
-                            ),
-                          ),
-                  ),
-                  Expanded(
-                      child: DropdownButtonHideUnderline(
-                    child: ButtonTheme(
-                        alignedDropdown: true,
-                        child: DropdownButton<String>(
-                          isDense: true,
-                          hint: new Text("Select hint"),
-                          value: _selected,
-                          onChanged: (String newValue) {
-                            setState(() {
-                              _selected = newValue;
-                            });
-                            print(_selected);
-                          },
-                          items: _myJson.map((Map map) {
-                            return new DropdownMenuItem<String>(
-                              value: map["id"].toString(),
-                              // value: _mySelection,
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      margin: EdgeInsets.only(left: 10),
-                                      child: Text(map["name"])),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        )),
-                  ))
-                  /*InkWell(
-                        child: Container(
-                          child: Column(
-                            children: <Widget>[
-                              // TODO: list of hints the proposer can give the guesser (bruk hintButton(String k)
-                              // Eks: hintButton(dette er et hint)
-                            ],
-                          ),
-                        ),
-                        onTap: () {},
-                      )
-
-                       */
-                ],
-              ),
-            ),
-            new Container(
-              child: Column(
-                children: [
-                  Container(
-                      width: 250,
-                      child: LinearProgressIndicator(
-                          value: percentage,
-                          backgroundColor: Colors.grey,
-                          valueColor: new AlwaysStoppedAnimation<Color>(
-                            Colors.blue,
-                          ))),
-                  Container(
-                    child: Text(
-                      '$timer',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 48,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      )),
-    );
-  }*/
 }
