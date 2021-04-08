@@ -9,6 +9,7 @@ import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 
 class GuesserManager extends StatefulWidget {
   GuesserManager({Key key, this.title}) : super(key: key);
@@ -459,37 +460,31 @@ class sourcePage extends StatefulWidget {
 }
 
 class _sourcePageState extends State<sourcePage> {
-  List sources;
-
-
-  getSources() {
-    for (int i = 0; i < widget.listOfSource.length; i++) {
-      sources.add(widget.listOfSource[i]['link']);
-    }
-  }
-
+  List<Widget> textWidgetList = List<Widget>();
 
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < widget.listOfSource.length; i++){
+      String link = widget.listOfSource[i]['link'].toString();
+      print(link);
+      textWidgetList.add(
+        InkWell(
+          child: Text(link),
+          onTap: () => launch(link),
+        )
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Sources"),
         backgroundColor: darkGrayColor,
       ),
-      body: DecoratedBox(
-        child: Container(
+      body: Container(
           margin: EdgeInsets.all(10.0),
           child: ListView(
-            //TODO: add sources
-            children: [
-              //Text("Sources"),
-              //getSources(),
-              Text(widget.listOfSource.toString())
-            ],
-          ),
-        ),
-        decoration: BoxDecoration(color: Colors.white),
-      ),
+          children: textWidgetList,
+        )
+      )
     );
   }
 }

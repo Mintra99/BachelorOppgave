@@ -548,37 +548,31 @@ class sourcePage extends StatefulWidget {
 }
 
 class _sourcePageState extends State<sourcePage> {
-  List sources;
-
-
-  getSources() {
-    for (int i = 0; i < widget.listOfSource.length; i++) {
-      sources.add(widget.listOfSource[i]['link']);
-    }
-  }
-
+  List<Widget> textWidgetList = List<Widget>();
 
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < widget.listOfSource.length; i++){
+      String link = widget.listOfSource[i]['link'].toString();
+      print(link);
+      textWidgetList.add(
+          InkWell(
+            child: Text(link),
+            onTap: () => launch(link),
+          )
+      );
+    }
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Sources"),
-        backgroundColor: darkGrayColor,
-      ),
-      body: DecoratedBox(
-        child: Container(
-          margin: EdgeInsets.all(10.0),
-          child: ListView(
-            //TODO: add sources
-            children: [
-              //Text("Sources"),
-              //getSources(),
-              Text(widget.listOfSource.toString())
-            ],
-          ),
+        appBar: AppBar(
+          title: Text("Sources"),
+          backgroundColor: darkGrayColor,
         ),
-        decoration: BoxDecoration(color: Colors.white),
-      ),
+        body: Container(
+            margin: EdgeInsets.all(10.0),
+            child: ListView(
+              children: textWidgetList,
+            )
+        )
     );
   }
 }
