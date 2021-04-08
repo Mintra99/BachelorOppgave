@@ -40,6 +40,7 @@ class _GuesserPageState extends State<GuesserManager> {
   int questionid;
   int score = 0;
   List source;
+  List hint;
 
   // Used to hide/show source/next question
   bool _visible = false;
@@ -74,8 +75,8 @@ class _GuesserPageState extends State<GuesserManager> {
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
-        //print("Source!!!!!!!!!!!!!!");
-        //print(mapResponse[0]['sources']);
+        //print("hint!!!!!!!!!!!!!!");
+        //print(mapResponse[0]['doc']);
         shuffle();
         showQuestion();
       });
@@ -96,12 +97,29 @@ class _GuesserPageState extends State<GuesserManager> {
     }
   }
 
+  void shuffleHint() {
+    var random = new Random();
+    // Go through all elements.
+    for (var i = hint.length - 1; i > 0; i--) {
+      // Pick a pseudorandom number according to the list length
+      var n = random.nextInt(i + 1);
+
+      var temp = hint[i];
+      hint[i] = hint[n];
+      hint[n] = temp;
+    }
+  }
+
   void showQuestion() {
     if (counter <= cap) {
       //if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       source = mapResponse[0]['sources'];
+      hint = mapResponse[0]['doc'].split(". ");
+      print("hint!!!!!!!!!!!!!!");
+      print(hint);
+
       //databaseHelper.setSource(mapResponse[0]['source']);
       answer.toLowerCase();
       print(answer);
@@ -310,7 +328,24 @@ class _GuesserPageState extends State<GuesserManager> {
                     horizontal: 20.0,
                   ),
                   child: MaterialButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            shuffleHint();
+                        return AlertDialog(
+                          title: new Text('Hint'),
+                          content: new Text(hint[0]),
+                          actions: <Widget>[
+                            new FlatButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
+                        );
+                      });
                       //TODO: show hint
                     },
                     child: Text(
