@@ -103,6 +103,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   String answer;
   int questionid;
   int score = 0;
+  List source;
 
   // Used to limit amount of questions
   int cap = 10;
@@ -151,6 +152,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     if (counter <= MP.dataQ.length) {
       question = MP.dataQ[0]['fields']['question_text'].toString();
       answer = MP.dataQ[0]['fields']['correct_answer'].toString();
+      source = MP.dataQ[0]['fields']['sources'];
       answer.toLowerCase();
       print(answer);
       counter += 1;
@@ -443,11 +445,16 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                           child: MaterialButton(
                             onPressed: () {
                               //TODO: show source
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => sourcePage()),
-                              );
+                              {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => sourcePage(
+                                      listOfSource: source,
+                                    ),
+                                  ),
+                                );
+                              }
                             },
                             child: Text(
                               "Source",
@@ -530,7 +537,27 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   }
 }
 
-class sourcePage extends StatelessWidget {
+
+class sourcePage extends StatefulWidget {
+  final List listOfSource;
+
+  const sourcePage({Key key, this.listOfSource}) : super(key: key);
+
+  @override
+  _sourcePageState createState() => _sourcePageState();
+}
+
+class _sourcePageState extends State<sourcePage> {
+  List sources;
+
+
+  getSources() {
+    for (int i = 0; i < widget.listOfSource.length; i++) {
+      sources.add(widget.listOfSource[i]['link']);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -543,7 +570,11 @@ class sourcePage extends StatelessWidget {
           margin: EdgeInsets.all(10.0),
           child: ListView(
             //TODO: add sources
-            children: [Text("Sources")],
+            children: [
+              //Text("Sources"),
+              //getSources(),
+              Text(widget.listOfSource.toString())
+            ],
           ),
         ),
         decoration: BoxDecoration(color: Colors.white),

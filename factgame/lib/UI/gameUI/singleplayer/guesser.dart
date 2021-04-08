@@ -38,6 +38,7 @@ class _GuesserPageState extends State<GuesserManager> {
   String answer;
   int questionid;
   int score = 0;
+  List source;
 
   // Used to hide/show source/next question
   bool _visible = false;
@@ -72,6 +73,8 @@ class _GuesserPageState extends State<GuesserManager> {
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
+        //print("Source!!!!!!!!!!!!!!");
+        //print(mapResponse[0]['sources']);
         shuffle();
         showQuestion();
       });
@@ -97,6 +100,8 @@ class _GuesserPageState extends State<GuesserManager> {
       //if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
+      source = mapResponse[0]['sources'];
+      //databaseHelper.setSource(mapResponse[0]['source']);
       answer.toLowerCase();
       print(answer);
       counter += 1;
@@ -173,7 +178,8 @@ class _GuesserPageState extends State<GuesserManager> {
       if (answer == k.toLowerCase()) {
         score += (10 * (timer));
         print(score);
-        prefs.setInt('guesserScore', score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        prefs.setInt('guesserScore',
+            score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
         print('correct');
         answered = true;
         colortoshow = right;
@@ -343,11 +349,24 @@ class _GuesserPageState extends State<GuesserManager> {
                           child: MaterialButton(
                             onPressed: () {
                               //TODO: show source
+                              print("Source!!!!!!!!!!!2222");
+                              print(source);
+                              {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => sourcePage(
+                                      listOfSource: source,
+                                    ),
+                                  ),
+                                );
+                              }
+                              /*
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => sourcePage()),
-                              );
+                              );*/
                             },
                             child: Text(
                               "Source",
@@ -430,7 +449,26 @@ class _GuesserPageState extends State<GuesserManager> {
   }
 }
 
-class sourcePage extends StatelessWidget {
+class sourcePage extends StatefulWidget {
+  final List listOfSource;
+
+  const sourcePage({Key key, this.listOfSource}) : super(key: key);
+
+  @override
+  _sourcePageState createState() => _sourcePageState();
+}
+
+class _sourcePageState extends State<sourcePage> {
+  List sources;
+
+
+  getSources() {
+    for (int i = 0; i < widget.listOfSource.length; i++) {
+      sources.add(widget.listOfSource[i]['link']);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -443,7 +481,11 @@ class sourcePage extends StatelessWidget {
           margin: EdgeInsets.all(10.0),
           child: ListView(
             //TODO: add sources
-            children: [Text("Sources")],
+            children: [
+              //Text("Sources"),
+              //getSources(),
+              Text(widget.listOfSource.toString())
+            ],
           ),
         ),
         decoration: BoxDecoration(color: Colors.white),
