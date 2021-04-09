@@ -39,6 +39,8 @@ class _GuesserPageState extends State<GuesserManager> {
   String answer;
   int questionid;
   int score = 0;
+  int hintCounter = 0;
+
   List source;
   List hint;
 
@@ -116,7 +118,7 @@ class _GuesserPageState extends State<GuesserManager> {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       source = mapResponse[0]['sources'];
-      hint = mapResponse[0]['doc'].split(". ");
+      hint = mapResponse[0]['doc'].split("\" ");
       print("hint!!!!!!!!!!!!!!");
       print(hint);
 
@@ -172,6 +174,7 @@ class _GuesserPageState extends State<GuesserManager> {
     showQuestion();
     canceltimer = false;
     timer = 10;
+    hintCounter = 0;
     btncolor["True"] = Colors.indigoAccent;
     btncolor["Mostly true"] = Colors.indigoAccent;
     btncolor["Half true"] = Colors.indigoAccent;
@@ -195,7 +198,11 @@ class _GuesserPageState extends State<GuesserManager> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answered == false) {
       if (answer == k.toLowerCase()) {
-        score += (10 * (timer));
+        if ((100 * (timer))-(10*hintCounter)>0){
+          score += (100 * (timer))-(10*hintCounter);
+        } else{
+          score += 10;
+        }
         print(score);
         prefs.setInt('guesserScore',
             score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
@@ -333,6 +340,7 @@ class _GuesserPageState extends State<GuesserManager> {
                           context: context,
                           builder: (BuildContext context) {
                             shuffleHint();
+                            hintCounter += 1;
                         return AlertDialog(
                           title: new Text('Hint'),
                           content: new Text(hint[0]),
