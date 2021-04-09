@@ -25,9 +25,11 @@ class _CreateLobbyState extends State<CreateLobby> {
   int id;
 
   List questions = [];
+  List list = [];
 
   @override
   void initState() {
+    print("INITSTATE?");
     getQuestion();
     super.initState();
   }
@@ -51,18 +53,6 @@ class _CreateLobbyState extends State<CreateLobby> {
     shuffle();
   }
 
-  Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-        await http.get('https://fakenews-app.com/api/game/new_game/"');
-    if (response.statusCode == 200) {
-      setState(() {
-        mapResponse = json.decode(response.body);
-        id = prefs.getInt('currentGameId');
-      });
-    }
-  }
-
   void shuffle() {
     var random = new Random();
     // Go through all elements.
@@ -79,14 +69,35 @@ class _CreateLobbyState extends State<CreateLobby> {
   setQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     databaseHelper.setRole("proposer");
-    List list = [];
     for (var i = 0; i < 10; i++) { // adds 10 questions to the lobby
       list.add(questions[i].value);
     }
     setState(() {
       print("DONE!!!!!!");
       print(list);
-      databaseHelper.addGameQuestions(list);
+
+      //databaseHelper.addGameQuestions(list);
+
+      print("GAME_NAME!!!!!");
+      print(_gamenameController.text.trim());
+      databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
+
+/*
+      id = databaseHelper.currentGameId;
+      print("IDTHING");
+      print(id);
+
+
+ */
+      //databaseHelper.getData(id, _gamenameController.text.trim());
+
+      prefs.setString('gameName', _gamenameController.text.trim());
+
+      /*
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) =>  WaitingLobby(),
+      ));
+      */
     });
   }
 
@@ -142,13 +153,27 @@ class _CreateLobbyState extends State<CreateLobby> {
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () {
+                    databaseHelper.setPlayernum(int.parse(numOfPlayers.text));
+                    print("NUMOFPLAYERS!!!!");
+                    print(databaseHelper.getPlayerNum());
                     setQuestions();
-                    databaseHelper.createGame(_gamenameController.text.trim(),
-                        numOfPlayers.text.trim());
-                    databaseHelper.getData(id, _gamenameController.text.trim());
-                    Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => new WaitingLobby(),
+                    {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => WaitingLobby(
+                            listOfQuestions: list,
+                            role: "proposer",
+                          ),
+                        ),
+                      );
+                    }
+                    /*
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>  WaitingLobby(),
                     ));
+
+                     */
                   },
                   color: Colors.blue,
                   child: new Text(

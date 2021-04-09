@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
+import 'package:factgame/models/classes/multiplayerdbHelper.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
+/*
 class MultiPlayer {
   List dataQ; // list of data with both questions and answers
   int dataGame;
@@ -76,12 +77,16 @@ class MultiPlayer {
   }*/
   }
 
+
+
 //TODO: do we need to create a leavegame so that if a player press leave game, he gets removed from lobby???
 }
+ */
 
 class GuesserManagerMP extends StatefulWidget {
-  GuesserManagerMP({Key key, this.title}) : super(key: key);
   final String title;
+  final List listOfQuestions;
+  GuesserManagerMP({Key key, this.title, this.listOfQuestions}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -128,42 +133,54 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   };
 
   Future Startup() async {
+    if(widget.listOfQuestions == null){
+      print('noooooooo');
+    } else {
+      shuffle();
+      showQuestion();
+    }
+    /*
     if (MP.dataQ == null) {
       print('nooooooooo');
     } else {
       shuffle();
       showQuestion();
     }
+
+     */
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
+  // widget.listOfQuestions var MP.dataQ
   void shuffle() {
     var random = new Random();
     // Go through all elements.
-    for (var i = MP.dataQ.length - 1; i > 0; i--) {
+    for (var i = widget.listOfQuestions.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
-      var temp = MP.dataQ[i];
-      MP.dataQ[i] = MP.dataQ[n];
-      MP.dataQ[n] = temp;
+      var temp =widget.listOfQuestions[i];
+      widget.listOfQuestions[i] = widget.listOfQuestions[n];
+      widget.listOfQuestions[n] = temp;
     }
   }
 
   void showQuestion() {
-    if (counter <= MP.dataQ.length) {
-      question = MP.dataQ[0]['fields']['question_text'].toString();
-      answer = MP.dataQ[0]['fields']['correct_answer'].toString();
-      source = MP.dataQ[0]['fields']['sources'];
+    if (counter <= widget.listOfQuestions.length) {
+      print('LISTOFQUESTIONS');
+      print(widget.listOfQuestions);
+      question = widget.listOfQuestions[0]['question_text'].toString();
+      answer = widget.listOfQuestions[0]['correct_answer'].toString();
+      source = widget.listOfQuestions[0]['sources'];
       answer.toLowerCase();
       print(answer);
       counter += 1;
       print('we print the id of question');
-      print(MP.dataQ[0]['pk']);
-      questionid = MP.dataQ[0]['pk'].toInt();
+      print(widget.listOfQuestions[0]['id']);
+      questionid = widget.listOfQuestions[0]['id'].toInt();
       print(questionid);
-      MP.dataQ.removeAt(0);
+      widget.listOfQuestions.removeAt(0);
     } else {
-      MP.dataQ = null;
+      //widget.listOfQuestions = null;
       canceltimer = true;
       Navigator.push(
         context,
@@ -312,7 +329,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                 ),
                 Container(
                   padding: EdgeInsets.all(15.0),
-                  child: MP.dataQ == null
+                  child: widget.listOfQuestions == null
                       ? Container()
                       : Text(
                           // Shows the question to the guesser

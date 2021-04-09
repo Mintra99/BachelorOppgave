@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:factgame/UI/gameUI/multiplayer/guesser.dart';
 import 'package:factgame/UI/gameUI/multiplayer/proposer.dart';
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
+import 'package:factgame/models/classes/multiplayerdbHelper.dart';
 import 'package:factgame/models/classes/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,11 @@ import '../../home.dart';
 import 'lobbydatabasehelper.dart';
 
 class WaitingLobby extends StatefulWidget {
+  final List listOfQuestions;
+  final String role;
+
+  const WaitingLobby({Key key, this.listOfQuestions, this.role}) : super(key: key);
+
   @override
   _WaitingLobbyState createState() => _WaitingLobbyState();
 }
@@ -22,33 +29,60 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   List mapQuestionResponse; //lobby name
   String navn;
   int missingPlayers;
+  String gamename;
+  int gameid;
 
+  /*
   @override
   void initState() {
-    lobbyName();
-    startup();
+    //startup();
+    /*print("NUMBERS!!!!!!");
+    print(databaseHelper.getPlayerNum());
+    print(databaseHelper.getCurrentPlayer());
+    missingPlayers = databaseHelper.getPlayerNum() /*- databaseHelper.getCurrentPlayer()*/;
+     */
+    //lobbyName();
+
+    sleep(const Duration(seconds: 3));
+    print("INITSTATE!!!!!!?");
+    print(databaseHelper.getID());
+    print(databaseHelper.getName());
+    //multiPlayer.joinGame(databaseHelper.getID(), databaseHelper.getName());
+
     super.initState();
   }
 
-  startup() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var gamename = prefs.getString('gameNavn');
-    var gameid = prefs.getInt('gameId');
+   */
+/*
+  Future startup() async{
+    final prefs = await SharedPreferences.getInstance();
+    gamename = prefs.getString('gameName');
+    gameid = prefs.getInt('gameId');
+    missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
+    print("STARTUPTHING");
     //var role = prefs.getString('role');
+    print("GAMENAME!!!!?");
+    print(gamename);
+    print("GAMEID");
+    print(gameid);
     multiPlayer.joinGame(gameid, gamename);
   }
 
+ */
+/*
   // this function return the name for the game ; Lobbyname
-  lobbyName() async {
+  Future lobbyName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      navn = prefs.getString('gameNavn'); // we are get the gameName from local storage (we already this string in lobbydatabasehelper.dart file)
+      navn = prefs.getString('gameName');
       print("players!!!!!!!");
       print(prefs.getInt('playerNum'));
       print(prefs.getInt("currentPlayer"));
       missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
     });
   }
+
+ */
 
   _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -60,21 +94,38 @@ class _WaitingLobbyState extends State<WaitingLobby> {
       _noQuestions();
     } else if (multiPlayer.existingP == true) {
       _alreadyIn();
-    } else {
-      print("ROLE!!!!!!!!!!!!!!!!!!!");
-      print(prefs.getString('role'));
-      if(prefs.getString('role') == "proposer") {
+    } else  {
+/*
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ProposerManager(
+            listOfQuestions: widget.listOfQuestions,
+          ),
+        ),
+      );
+
+ */
+      if(widget.role == "proposer") {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProposerManager()),
+          MaterialPageRoute(
+            builder: (_) => ProposerManager(
+              listOfQuestions: widget.listOfQuestions,
+            ),
+          ),
         );
       } else {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GuesserManagerMP()),
+          MaterialPageRoute(
+            builder: (_) => GuesserManagerMP(
+              listOfQuestions: widget.listOfQuestions,
+            ),
+          ),
         );
       }
-
+    }
 
       // The one above is for guesser, the one below is for proposer
       /*
@@ -86,45 +137,6 @@ class _WaitingLobbyState extends State<WaitingLobby> {
 
        */
     }
-  }
-
-  void _noQuestions() async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text('Questions are not ready'),
-            content: new Text('Proposer have not added questions yet'),
-            actions: <Widget>[
-              new FlatButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        });
-  }
-
-  void _alreadyIn() async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text('Player already in'),
-            content: new Text('This player is already in game'),
-            actions: <Widget>[
-              new FlatButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,19 +154,19 @@ class _WaitingLobbyState extends State<WaitingLobby> {
             children: <Widget>[
               Container(
                 height: 50,
-                child: new Text('Lobby name: ' + '$navn'),
+                child: new Text('Lobby name: ' + databaseHelper.getName()),
               ),
-              Container(
+              /*Container(
                 height: 50,
                 child: new Text('Players missing: ' + '$missingPlayers'),
               ),
+
+               */
               Container(
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () async {
-
                     _onPressed();
-                    //databaseHelper.joinGame(prefs.getInt('gameId'), prefs.getString('gameNavn'));
                   },
                   color: Colors.blue,
                   child: new Text(
@@ -192,6 +204,43 @@ class _WaitingLobbyState extends State<WaitingLobby> {
         ),
       ),
     );
+  }
+  void _noQuestions() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Questions are not ready'),
+            content: new Text('Proposer have not added questions yet'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _alreadyIn() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text('Player already in'),
+            content: new Text('This player is already in game'),
+            actions: <Widget>[
+              new FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 }
 
