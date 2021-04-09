@@ -55,6 +55,7 @@ class _JoinLobbyState extends State<JoinLobby> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
+                            databaseHelper.setRole("guesser");
                             databaseHelper.getData(listOfGame[index]['pk'], listOfGame[index]['fields']['game_name']);
                             Navigator.of(context).push(new MaterialPageRoute(
                               builder: (BuildContext context) =>

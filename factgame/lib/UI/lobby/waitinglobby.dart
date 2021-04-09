@@ -36,18 +36,17 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     var gameid = prefs.getInt('gameId');
     //var role = prefs.getString('role');
     multiPlayer.joinGame(gameid, gamename);
-    print("players!!!!!!!");
-    print(prefs.getInt('playerNum'));
-    print(prefs.getInt("currentPlayer"));
-    missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
   }
 
   // this function return the name for the game ; Lobbyname
   lobbyName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      navn = prefs.getString(
-          'gameNavn'); // we are get the gameName from local storage (we already this string in lobbydatabasehelper.dart file)
+      navn = prefs.getString('gameNavn'); // we are get the gameName from local storage (we already this string in lobbydatabasehelper.dart file)
+      print("players!!!!!!!");
+      print(prefs.getInt('playerNum'));
+      print(prefs.getInt("currentPlayer"));
+      missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
     });
   }
 

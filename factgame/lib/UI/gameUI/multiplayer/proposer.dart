@@ -35,6 +35,7 @@ class _ProposerPageState extends State<ProposerManager> {
   String answer;
   int questionid;
   int score = 0;
+  List hint;
 
   String _selected;
   List<Map> _myJson = [
@@ -52,21 +53,6 @@ class _ProposerPageState extends State<ProposerManager> {
       showQuestion();
     }
   }
-/*
-  Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-        await http.get('https://fakenews-app.com/api/game/question/');
-    if (response.statusCode == 200) {
-      setState(() {
-        mapResponse = json.decode(response.body);
-        shuffle();
-        showQuestion();
-      });
-    }
-  }
-
- */
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
   // Move the shuffle to lobbydatabasehelper maybe?
@@ -87,6 +73,7 @@ class _ProposerPageState extends State<ProposerManager> {
     if (MP.dataQ.length > 0) {
       question = MP.dataQ[0]['question_text'].toString();
       answer = MP.dataQ[0]['correct_answer'].toString();
+      hint = MP.dataQ[0]['doc'].split("\" ");
       answer.toLowerCase();
       print(answer);
       questionid = MP.dataQ[0]['id'].toInt();
@@ -246,7 +233,8 @@ class _ProposerPageState extends State<ProposerManager> {
 
                             print(_selected);
                           },
-                          items: _myJson.map((Map map) {
+                          items: hint
+    /* _myJson.map((Map map) {
                             return new DropdownMenuItem<String>(
                               value: map["id"].toString(),
                               // value: _mySelection,
@@ -258,7 +246,7 @@ class _ProposerPageState extends State<ProposerManager> {
                                 ],
                               ),
                             );
-                          }).toList(),
+                          }).toList(),*/
                         ),
                       ),
                     ),
