@@ -147,7 +147,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                         numOfPlayers.text.trim());
                     databaseHelper.getData(id, _gamenameController.text.trim());
                     Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => new WaitingLobby(),
+                      builder: (BuildContext context) => new SelectQuestion(),
                     ));
                   },
                   color: Colors.blue,
