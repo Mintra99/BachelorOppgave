@@ -11,8 +11,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
 class ProposerManager extends StatefulWidget {
-  ProposerManager({Key key, this.title}) : super(key: key);
+
   final String title;
+  final List listOfQuestions;
+  ProposerManager({Key key, this.title, this.listOfQuestions}) : super(key: key);
+
 
   @override
   State<StatefulWidget> createState() {
@@ -46,7 +49,7 @@ class _ProposerPageState extends State<ProposerManager> {
   ];
 
   Future fitchData() async {
-    if (MP.dataQ == null) {
+    if (widget.listOfQuestions == null) {
       print('nooooooooo');
     } else {
       shuffle();
@@ -59,33 +62,33 @@ class _ProposerPageState extends State<ProposerManager> {
   void shuffle() {
     var random = new Random();
     // Go through all elements.
-    for (var i = MP.dataQ.length - 1; i > 0; i--) {
+    for (var i = widget.listOfQuestions.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
 
-      var temp = MP.dataQ[i];
-      MP.dataQ[i] = MP.dataQ[n];
-      MP.dataQ[n] = temp;
+      var temp = widget.listOfQuestions[i];
+      widget.listOfQuestions[i] = widget.listOfQuestions[n];
+      widget.listOfQuestions[n] = temp;
     }
   }
 
   void showQuestion() {
-    if (MP.dataQ.length > 0) {
-      question = MP.dataQ[0]['question_text'].toString();
-      answer = MP.dataQ[0]['correct_answer'].toString();
-      hint = MP.dataQ[0]['doc'].split("\" ");
+    if (widget.listOfQuestions.length > 0) {
+      question = widget.listOfQuestions[0]['question_text'].toString();
+      answer =widget.listOfQuestions[0]['correct_answer'].toString();
+      hint = widget.listOfQuestions[0]['doc'].split("\" ");
       answer.toLowerCase();
       print(answer);
-      questionid = MP.dataQ[0]['id'].toInt();
+      questionid =widget.listOfQuestions[0]['PK'].toInt();// Minn wrote PK and this is wrong
     } else {
-      MP.dataQ = null;
+      //MP.dataQ = null;
       canceltimer = true;
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => GameFinishedManager()),
       );
     }
-    MP.dataQ.removeAt(0);
+    widget.listOfQuestions.removeAt(0);
   }
 
   @override
@@ -203,7 +206,7 @@ class _ProposerPageState extends State<ProposerManager> {
               // TODO: Change the one above with the one below when questions are ready
               Container(
                 padding: EdgeInsets.all(15.0),
-                child: MP.dataQ == null
+                child: widget.listOfQuestions == null
                     ? Container()
                     : Text(
                   // Shows the question to the guesser
@@ -233,8 +236,8 @@ class _ProposerPageState extends State<ProposerManager> {
 
                             print(_selected);
                           },
-                          items: hint
-    /* _myJson.map((Map map) {
+                          items:
+                               _myJson.map((Map map) {
                             return new DropdownMenuItem<String>(
                               value: map["id"].toString(),
                               // value: _mySelection,
@@ -246,7 +249,7 @@ class _ProposerPageState extends State<ProposerManager> {
                                 ],
                               ),
                             );
-                          }).toList(),*/
+                          }).toList(),
                         ),
                       ),
                     ),
@@ -262,7 +265,7 @@ class _ProposerPageState extends State<ProposerManager> {
                   },
                 ),
               ),
-              SizedBox(height: 150),
+             // SizedBox(height: 150),
               new Container(
                 child: Column(
                   children: [

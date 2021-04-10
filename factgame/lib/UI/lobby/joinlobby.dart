@@ -1,3 +1,4 @@
+import 'package:factgame/UI/gameUI/multiplayer/guesser.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,11 @@ class JoinLobby extends StatefulWidget {
 
 class _JoinLobbyState extends State<JoinLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
+  MultiPlayer MP = new MultiPlayer();
   Map mapResponse;
   List listOfGame;
   int gamePk;
+  Map getLobbyQuestionList;
 
   // function api to bring the list of available game
   Future fitchData() async {
@@ -54,13 +57,19 @@ class _JoinLobbyState extends State<JoinLobby> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () {
-                            databaseHelper.setRole("guesser");
-                            databaseHelper.getData(listOfGame[index]['pk'], listOfGame[index]['fields']['game_name']);
-                            Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new WaitingLobby(),
-                            ));
+                          onTap: () async {
+
+                            await MP.joinGame(listOfGame[index]['pk'],
+                                listOfGame[index]['fields']['game_name']);
+
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => GuesserManagerMP(
+                                ),
+                              ),
+                            );
                           },
                           child: Container(
                             child: Column(

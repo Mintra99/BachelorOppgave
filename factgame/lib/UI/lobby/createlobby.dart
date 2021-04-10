@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:factgame/UI/gameUI/multiplayer/proposer.dart';
 import 'package:factgame/UI/lobby/selectquestions.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/classes/question.dart';
@@ -23,6 +24,7 @@ class _CreateLobbyState extends State<CreateLobby> {
   final TextEditingController numOfPlayers = new TextEditingController();
   Map mapResponse;
   int id;
+  List list = [];
 
   List questions = [];
 
@@ -51,17 +53,6 @@ class _CreateLobbyState extends State<CreateLobby> {
     shuffle();
   }
 
-  Future fitchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response =
-        await http.get('https://fakenews-app.com/api/game/new_game/"');
-    if (response.statusCode == 200) {
-      setState(() {
-        mapResponse = json.decode(response.body);
-        id = prefs.getInt('currentGameId');
-      });
-    }
-  }
 
   void shuffle() {
     var random = new Random();
@@ -78,15 +69,15 @@ class _CreateLobbyState extends State<CreateLobby> {
 
   setQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    databaseHelper.setRole("proposer");
-    List list = [];
+
     for (var i = 0; i < 10; i++) { // adds 10 questions to the lobby
       list.add(questions[i].value);
     }
-    setState(() {
+    setState(() async {
       print("DONE!!!!!!");
       print(list);
-      databaseHelper.addGameQuestions(list);
+      //databaseHelper.addGameQuestions(list);
+      await databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
     });
   }
 
@@ -142,13 +133,21 @@ class _CreateLobbyState extends State<CreateLobby> {
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () {
+                    databaseHelper.setPlayernum(int.parse(numOfPlayers.text));
+                    print("NUMOFPLAYERS!!!!");
+                    print(databaseHelper.getPlayerNum());
                     setQuestions();
-                    databaseHelper.createGame(_gamenameController.text.trim(),
-                        numOfPlayers.text.trim());
-                    databaseHelper.getData(id, _gamenameController.text.trim());
-                    Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => new SelectQuestion(),
-                    ));
+                    {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProposerManager(
+                            //listOfQuestions: list,
+                            //role: "proposer",
+                          ),
+                        ),
+                      );
+                    }
                   },
                   color: Colors.blue,
                   child: new Text(

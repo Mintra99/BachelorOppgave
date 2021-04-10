@@ -80,8 +80,10 @@ class MultiPlayer {
 }
 
 class GuesserManagerMP extends StatefulWidget {
-  GuesserManagerMP({Key key, this.title}) : super(key: key);
+
   final String title;
+  final List listOfQuestions;
+  GuesserManagerMP({Key key, this.title, this.listOfQuestions}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -105,6 +107,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   int questionid;
   int score = 0;
   List source;
+  List questions;
 
   // Used to limit amount of questions
   int cap = 10;
@@ -113,6 +116,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   // Used to hide/show source/next question
   bool _visible = false;
   bool answered = false;
+  bool isLoading = false;
 
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
@@ -127,41 +131,37 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     "Pants on Fire": Colors.indigoAccent,
   };
 
-  Future Startup() async {
-    if (MP.dataQ == null) {
-      print('nooooooooo');
+   Startup() async {
+     questions = widget.listOfQuestions;
+     setState(() {
+       isLoading = true;
+     });
+     if (questions == null){
+      print('no questions null');
     } else {
-      shuffle();
       showQuestion();
     }
+     setState(() {
+       bool isLoading = false;
+     });
   }
 
-  //TODO: make the questions available for both guesser and proposer so they get the same questions
-  void shuffle() {
-    var random = new Random();
-    // Go through all elements.
-    for (var i = MP.dataQ.length - 1; i > 0; i--) {
-      // Pick a pseudorandom number according to the list length
-      var n = random.nextInt(i + 1);
-      var temp = MP.dataQ[i];
-      MP.dataQ[i] = MP.dataQ[n];
-      MP.dataQ[n] = temp;
-    }
-  }
+
 
   void showQuestion() {
-    if (counter <= MP.dataQ.length) {
-      question = MP.dataQ[0]['fields']['question_text'].toString();
-      answer = MP.dataQ[0]['fields']['correct_answer'].toString();
-      source = MP.dataQ[0]['fields']['sources'];
+    if (counter <= questions.length) {
+      print('LISTOFQUESTIONS');
+      question = questions[0]['fields']['question_text'].toString();
+      answer = questions[0]['fields']['correct_answer'].toString();
+      source = questions[0]['sources'];
       answer.toLowerCase();
       print(answer);
       counter += 1;
       print('we print the id of question');
-      print(MP.dataQ[0]['pk']);
-      questionid = MP.dataQ[0]['pk'].toInt();
-      print(questionid);
-      MP.dataQ.removeAt(0);
+      print(questions[0]['pk']);
+      questionid = questions[0]['pk'].toInt();
+      print('current questionid is : $questionid');
+      questions.removeAt(0);
     } else {
       MP.dataQ = null;
       canceltimer = true;
@@ -312,7 +312,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                 ),
                 Container(
                   padding: EdgeInsets.all(15.0),
-                  child: MP.dataQ == null
+                  child: questions == null
                       ? Container()
                       : Text(
                           // Shows the question to the guesser

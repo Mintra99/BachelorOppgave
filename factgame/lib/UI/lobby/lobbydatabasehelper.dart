@@ -8,12 +8,28 @@ class LobbydatabaseHelper {
   String serverUrl = "https://fakenews-app.com/api";
   var token;
   int myId;
-  String myName;
+  static String myName;
   var mapResponse;
   int currentGameId;
   String myHint;
   String myRole;
+  int playerNum;
+  int currentPlayer;
+  List questionList;
 
+
+  getName () {
+    return myName;
+  }
+  getPlayerNum(){
+    return playerNum;
+  }
+  getCurrentPlayer(){
+    return currentPlayer;
+  }
+  getID(){
+    return myId;
+  }
   setRole(String role) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     myRole = role;
@@ -25,6 +41,9 @@ class LobbydatabaseHelper {
     myHint = hint;
     prefs.setString('gameHint', hint);
   }
+  setPlayernum(int index) {
+    playerNum = index;
+  }
 
   getData(int id, String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -34,7 +53,7 @@ class LobbydatabaseHelper {
     prefs.setString('gameNavn', name);
   }
 
-  createGame(String game_name, String numPlayers) async {
+  createGame(String game_name, String numPlayers,List list) async {
     if (numPlayers.isEmpty) {
       numPlayers =
           '2'; // setting default value if user forget to set number if players
@@ -56,8 +75,18 @@ class LobbydatabaseHelper {
       print('Response status : ${response.body} ');
     });
     print(mapResponse);
+    print("creategame MAPRESPONSE");
+    currentGameId = mapResponse['game']['id'];
+    print(currentGameId);
+
+    //sleep(const Duration(seconds: 2));
+    questionList = list;
+    getData(currentGameId, game_name);
+    addGameQuestions(list);
     prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
+    playerNum = mapResponse['game']['num_of_players'];
     prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
+    currentPlayer =  mapResponse['game']['current_players'];
     prefs.setInt('currentGameId', mapResponse['game']['id']);
   }
 
@@ -85,6 +114,9 @@ class LobbydatabaseHelper {
   addGameQuestions(List questions) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    //var gameId = currentGameId; // we use it in post method
+    //print("addGameQuestionsID");
+    //print(gameId);
     final key = 'access';
     final value = prefs.get(key) ?? 0;
     String myUrl = "$serverUrl/game/lobby_question/";
