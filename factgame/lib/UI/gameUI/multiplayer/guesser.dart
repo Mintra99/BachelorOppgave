@@ -13,80 +13,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/*
-class MultiPlayer {
-  List dataQ; // list of data with both questions and answers
-  int dataGame;
-
-  var noQuestions;
-  var playerIn;
-  bool existingQ;
-  bool existingP;
-
-  var msg;
-
-  joinGame(int game_id, String game_name) async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'access';
-    final value = prefs.get(key) ?? 0;
-    String myUrl = "https://fakenews-app.com/api/game/join_game/";
-    final response = await http.post(myUrl, headers: {
-      'Authorization': 'Bearer $value'
-    }, body: {
-      "game_id": '$game_id',
-    });
-    print('Response status : ${response.statusCode}');
-    print('Response status : ${response.body} ');
-
-    noQuestions = response.body.contains('restult');
-    playerIn = response.body.contains('user already joined the game');
-
-    var data = json.decode(response.body);
-    //dataQ = data['question_set'];
-    //dataGame= data['player']['game_id'];
-    print('222222222222222222222222222223333333333');
-    print(noQuestions);
-    print(playerIn);
-    if (noQuestions) {
-      print("existingQ is false");
-      existingQ = false;
-      print('game has no questions: $data');
-    } else if (playerIn) {
-      print("existingP is true");
-      existingP = true;
-      print('Player already joined the game: $data');
-    } else {
-      existingP = false;
-      existingQ = true;
-      print("everything is fine");
-      dataQ = data['question_set'];
-      dataGame = data['player']['game_id'];
-      print('game is ok and you join the game: ${data['message']}');
-    }
-    /* status = response.body.contains('You can not join the game because there are no questions');
-    var data = json.decode(response.body);
-    dataQ = data['question_set'];
-    dataGame= data['player']['game_id'];
-    print(status);
-    if(status){
-      print('game has no questions: $data');
-    }else{
-      print('game is ok: ${data['message']}');
-    }
-  }
-  }*/
-  }
-
-
-
-//TODO: do we need to create a leavegame so that if a player press leave game, he gets removed from lobby???
-}
- */
-
 class GuesserManagerMP extends StatefulWidget {
   final String title;
   final List listOfQuestions;
-  GuesserManagerMP({Key key, this.title, this.listOfQuestions}) : super(key: key);
+
+  GuesserManagerMP({Key key, this.title, this.listOfQuestions})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -111,6 +43,8 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   int score = 0;
   List source;
 
+  List questions;
+
   // Used to limit amount of questions
   int cap = 10;
   int counter = 1;
@@ -118,6 +52,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   // Used to hide/show source/next question
   bool _visible = false;
   bool answered = false;
+  bool isLoading = false;
 
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
@@ -132,13 +67,19 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     "Pants on Fire": Colors.indigoAccent,
   };
 
-  Future Startup() async {
-    if(widget.listOfQuestions == null){
+  Startup() async {
+    questions = widget.listOfQuestions;
+    setState(() {
+      isLoading = true;
+    });
+    if (questions == null) {
       print('noooooooo');
     } else {
-      shuffle();
       showQuestion();
     }
+    setState(() {
+      bool isLoading = false;
+    });
     /*
     if (MP.dataQ == null) {
       print('nooooooooo');
@@ -152,33 +93,22 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
   // widget.listOfQuestions var MP.dataQ
-  void shuffle() {
-    var random = new Random();
-    // Go through all elements.
-    for (var i = widget.listOfQuestions.length - 1; i > 0; i--) {
-      // Pick a pseudorandom number according to the list length
-      var n = random.nextInt(i + 1);
-      var temp =widget.listOfQuestions[i];
-      widget.listOfQuestions[i] = widget.listOfQuestions[n];
-      widget.listOfQuestions[n] = temp;
-    }
-  }
 
   void showQuestion() {
-    if (counter <= widget.listOfQuestions.length) {
+    if (counter <= questions.length) {
       print('LISTOFQUESTIONS');
-      print(widget.listOfQuestions);
-      question = widget.listOfQuestions[0]['question_text'].toString();
-      answer = widget.listOfQuestions[0]['correct_answer'].toString();
-      source = widget.listOfQuestions[0]['sources'];
+      print(questions);
+      question = questions[0]['fields']['question_text'].toString();
+      answer = questions[0]['fields']['correct_answer'].toString();
+      source = questions[0]['sources'];
       answer.toLowerCase();
       print(answer);
       counter += 1;
       print('we print the id of question');
-      print(widget.listOfQuestions[0]['id']);
-      questionid = widget.listOfQuestions[0]['id'].toInt();
+      print(questions[0]['pk']);
+      questionid = questions[0]['pk'].toInt();
       print(questionid);
-      widget.listOfQuestions.removeAt(0);
+      questions.removeAt(0);
     } else {
       //widget.listOfQuestions = null;
       canceltimer = true;
@@ -191,6 +121,10 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   @override
   void initState() {
+    print("widget.listOfQuestions!!!");
+    print(widget.listOfQuestions);
+    print("INITDATAQ");
+    print(MP.dataQ);
     Startup();
     starttimer();
     super.initState();
@@ -329,7 +263,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                 ),
                 Container(
                   padding: EdgeInsets.all(15.0),
-                  child: widget.listOfQuestions == null
+                  child: questions == null
                       ? Container()
                       : Text(
                           // Shows the question to the guesser
@@ -555,7 +489,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   }
 }
 
-
 class sourcePage extends StatefulWidget {
   final List listOfSource;
 
@@ -570,15 +503,13 @@ class _sourcePageState extends State<sourcePage> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < widget.listOfSource.length; i++){
+    for (int i = 0; i < widget.listOfSource.length; i++) {
       String link = widget.listOfSource[i]['link'].toString();
       print(link);
-      textWidgetList.add(
-          InkWell(
-            child: Text(link),
-            onTap: () => launch(link),
-          )
-      );
+      textWidgetList.add(InkWell(
+        child: Text(link),
+        onTap: () => launch(link),
+      ));
     }
     return Scaffold(
         appBar: AppBar(
@@ -589,8 +520,6 @@ class _sourcePageState extends State<sourcePage> {
             margin: EdgeInsets.all(10.0),
             child: ListView(
               children: textWidgetList,
-            )
-        )
-    );
+            )));
   }
 }

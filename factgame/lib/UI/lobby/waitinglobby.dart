@@ -17,7 +17,8 @@ class WaitingLobby extends StatefulWidget {
   final List listOfQuestions;
   final String role;
 
-  const WaitingLobby({Key key, this.listOfQuestions, this.role}) : super(key: key);
+  const WaitingLobby({Key key, this.listOfQuestions, this.role})
+      : super(key: key);
 
   @override
   _WaitingLobbyState createState() => _WaitingLobbyState();
@@ -27,86 +28,42 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   MultiPlayer multiPlayer = new MultiPlayer();
   List mapQuestionResponse; //lobby name
-  String navn;
+  String name;
   int missingPlayers;
   String gamename;
   int gameid;
 
-  /*
   @override
   void initState() {
-    //startup();
-    /*print("NUMBERS!!!!!!");
-    print(databaseHelper.getPlayerNum());
-    print(databaseHelper.getCurrentPlayer());
-    missingPlayers = databaseHelper.getPlayerNum() /*- databaseHelper.getCurrentPlayer()*/;
-     */
-    //lobbyName();
-
-    sleep(const Duration(seconds: 3));
-    print("INITSTATE!!!!!!?");
-    print(databaseHelper.getID());
-    print(databaseHelper.getName());
-    //multiPlayer.joinGame(databaseHelper.getID(), databaseHelper.getName());
-
+    name = databaseHelper.getName();
+    print("NAME");
+    print(name);
     super.initState();
   }
 
-   */
-/*
-  Future startup() async{
-    final prefs = await SharedPreferences.getInstance();
-    gamename = prefs.getString('gameName');
-    gameid = prefs.getInt('gameId');
-    missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
-    print("STARTUPTHING");
-    //var role = prefs.getString('role');
-    print("GAMENAME!!!!?");
-    print(gamename);
-    print("GAMEID");
-    print(gameid);
-    multiPlayer.joinGame(gameid, gamename);
-  }
-
- */
-/*
-  // this function return the name for the game ; Lobbyname
-  Future lobbyName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      navn = prefs.getString('gameName');
-      print("players!!!!!!!");
-      print(prefs.getInt('playerNum'));
-      print(prefs.getInt("currentPlayer"));
-      missingPlayers = prefs.getInt('playerNum') - prefs.getInt("currentPlayer");
-    });
-  }
-
- */
-
   _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("AAAAAAAAAAAAAAAAAAAAAAAAA");
-    print(multiPlayer.existingQ);
     print("BBBBBBBBBBBBBBBBBBBBBBBBBB");
+    print(multiPlayer.existingQ);
     print(multiPlayer.existingP);
     if (multiPlayer.existingQ == false) {
       _noQuestions();
     } else if (multiPlayer.existingP == true) {
       _alreadyIn();
-    } else  {
+    } else {
 /*
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => ProposerManager(
+          builder: (_) => GuesserManagerMP(
             listOfQuestions: widget.listOfQuestions,
           ),
         ),
       );
 
  */
-      if(widget.role == "proposer") {
+
+      if (widget.role == "proposer") {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -126,17 +83,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
         );
       }
     }
-
-      // The one above is for guesser, the one below is for proposer
-      /*
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => GuesserManagerMP()),
-        //MaterialPageRoute(builder: (context) => ProposerManager()),
-      );
-
-       */
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +101,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
             children: <Widget>[
               Container(
                 height: 50,
-                child: new Text('Lobby name: ' + databaseHelper.getName()),
+                child: new Text('Lobby name: ' + '$name'),
               ),
               /*Container(
                 height: 50,
@@ -205,6 +152,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
       ),
     );
   }
+
   void _noQuestions() async {
     await showDialog(
         context: context,
@@ -243,4 +191,3 @@ class _WaitingLobbyState extends State<WaitingLobby> {
         });
   }
 }
-

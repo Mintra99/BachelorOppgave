@@ -22,8 +22,14 @@ class MultiPlayer {
   bool existingP;
 
   var msg;
+  getDataQ(){
+    return dataQ;
+  }
+  setDataQ(List list){
+    dataQ = list;
+  }
 
-  void joinGame(int game_id, String game_name) async {
+  joinGame(int game_id, String game_name) async {
     print("JOINGAME");
     print(game_id);
     print(game_name);
@@ -46,7 +52,7 @@ class MultiPlayer {
     var data = json.decode(response.body);
 
     print("DATA!!!");
-    print(data['question_set']);
+    print(data);
     //dataQ = data['question_set'];
     //dataGame= data['player']['game_id'];
     print('222222222222222222222222222223333333333');
@@ -56,20 +62,23 @@ class MultiPlayer {
       print("existingQ is false");
       existingQ = false;
       print('game has no questions: $data');
+
     } else if (playerIn) {
       print("existingP is true");
       existingP = true;
-      dataQ = data['question_set'];
-      dataGame = game_id;
-      //dataGame = data['player']['game_id'];
       print('Player already joined the game: $data');
+
     } else {
       existingP = false;
       existingQ = true;
       print("everything is fine");
-      dataQ = data['question_set'];
+      setDataQ(data['question_set']);
+      //dataQ = data['question_set'];
+      print("DATAQ!!!!!");
+      print(getDataQ());
       dataGame = data['player']['game_id'];
       print('game is ok and you join the game: ${data['message']}');
+
     }
     /* status = response.body.contains('You can not join the game because there are no questions');
     var data = json.decode(response.body);

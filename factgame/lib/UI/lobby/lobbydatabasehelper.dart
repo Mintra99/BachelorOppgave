@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:factgame/UI/gameUI/answerModel.dart';
 import 'package:factgame/models/classes/multiplayerdbHelper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,29 +18,38 @@ class LobbydatabaseHelper {
   var mapResponse;
   int currentGameId;
   String myHint;
-  String myRole;
   int playerNum;
   int currentPlayer;
   List questionList;
+  final Map<String, List> LobbyQuestionList = {};
 
-
-  getName () {
+  getName() {
     return myName;
   }
-  getPlayerNum(){
+
+  getPlayerNum() {
     return playerNum;
   }
-  getCurrentPlayer(){
+
+  getCurrentPlayer() {
     return currentPlayer;
   }
-  getID(){
+
+  getID() {
     return myId;
   }
 
-  setRole(String role) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    myRole = role;
-    prefs.setString('role', role);
+  getLobbyQuestionList() {
+    return LobbyQuestionList;
+  }
+
+  setLobbyQuestionList(int gameId, List questionList) {
+    LobbyQuestionList[gameId.toString()] = questionList;
+  }
+
+  setName(String name) {
+    print("NAMESET!!!");
+    myName = name;
   }
 
   setHint(String hint) async {
@@ -52,6 +62,7 @@ class LobbydatabaseHelper {
     playerNum = index;
   }
 
+/*
   getData(int id, String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     myId = id;
@@ -62,6 +73,8 @@ class LobbydatabaseHelper {
     print(getID());
     MP.joinGame(getID(), getName());
   }
+
+ */
 
   createGame(String game_name, String numPlayers, List list) async {
     if (numPlayers.isEmpty) {
@@ -89,19 +102,22 @@ class LobbydatabaseHelper {
     currentGameId = mapResponse['game']['id'];
     print(currentGameId);
 
+    setLobbyQuestionList(currentGameId, list);
     //sleep(const Duration(seconds: 2));
     questionList = list;
-    getData(currentGameId, game_name);
+    setName(game_name);
+    //getData(currentGameId, game_name);
     addGameQuestions(list);
 
-
-
+/*
     //prefs.setString('lobbyName', mapResponse['game']['game_name']);
     prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
     playerNum = mapResponse['game']['num_of_players'];
     prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
     currentPlayer =  mapResponse['game']['current_players'];
     prefs.setInt('currentGameId', mapResponse['game']['id']);
+
+ */
   }
 
   void answerMultiPlayer(

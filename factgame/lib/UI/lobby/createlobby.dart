@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:factgame/UI/lobby/selectquestions.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/classes/question.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,11 +67,11 @@ class _CreateLobbyState extends State<CreateLobby> {
 
   setQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    databaseHelper.setRole("proposer");
-    for (var i = 0; i < 10; i++) { // adds 10 questions to the lobby
+    for (var i = 0; i < 10; i++) {
+      // adds 10 questions to the lobby
       list.add(questions[i].value);
     }
-    setState(() {
+    setState(() async {
       print("DONE!!!!!!");
       print(list);
 
@@ -80,24 +79,19 @@ class _CreateLobbyState extends State<CreateLobby> {
 
       print("GAME_NAME!!!!!");
       print(_gamenameController.text.trim());
-      databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
+      await databaseHelper.createGame(
+          _gamenameController.text.trim(), numOfPlayers.text.trim(), list);
 
 /*
-      id = databaseHelper.currentGameId;
+      id = databaseHelper.currentGameId;'
+
       print("IDTHING");
       print(id);
 
 
  */
-      //databaseHelper.getData(id, _gamenameController.text.trim());
 
       prefs.setString('gameName', _gamenameController.text.trim());
-
-      /*
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) =>  WaitingLobby(),
-      ));
-      */
     });
   }
 

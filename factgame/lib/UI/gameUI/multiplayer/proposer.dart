@@ -14,8 +14,9 @@ import 'package:factgame/UI/gameUI/endscreen.dart';
 class ProposerManager extends StatefulWidget {
   final String title;
   final List listOfQuestions;
-  ProposerManager({Key key, this.title, this.listOfQuestions}) : super(key: key);
 
+  ProposerManager({Key key, this.title, this.listOfQuestions})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,6 +34,7 @@ class _ProposerPageState extends State<ProposerManager> {
   bool canceltimer = false;
   String showtimer = "10";
   String stringResponse;
+
   //List mapResponse;
   String question;
   String answer;
@@ -75,11 +77,11 @@ class _ProposerPageState extends State<ProposerManager> {
   void showQuestion() {
     if (widget.listOfQuestions.length > 0) {
       question = widget.listOfQuestions[0]['question_text'].toString();
-      answer =widget.listOfQuestions[0]['correct_answer'].toString();
+      answer = widget.listOfQuestions[0]['correct_answer'].toString();
       hint = widget.listOfQuestions[0]['doc'].split("\" ");
       answer.toLowerCase();
       print(answer);
-      questionid =widget.listOfQuestions[0]['id'].toInt();
+      questionid = widget.listOfQuestions[0]['id'].toInt();
     } else {
       //MP.dataQ = null;
       canceltimer = true;
@@ -209,13 +211,13 @@ class _ProposerPageState extends State<ProposerManager> {
                 child: widget.listOfQuestions == null
                     ? Container()
                     : Text(
-                  // Shows the question to the guesser
-                  '$question',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontFamily: "Quando",
-                  ),
-                ),
+                        // Shows the question to the guesser
+                        '$question',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: "Quando",
+                        ),
+                      ),
               ),
               SizedBox(height: 150),
               Row(
@@ -237,11 +239,11 @@ class _ProposerPageState extends State<ProposerManager> {
                             print(_selected);
                           },
                           items:
-                          //hint
+                              //hint
 
-                          _myJson.map((Map map) {
-                            print("HINTZZZZ");
-                            print(hint);
+                              _myJson.map((Map map) {
+                            //print("HINTZZZZ");
+                            //print(hint);
                             return new DropdownMenuItem<String>(
                               value: map["id"].toString(),
                               // value: _mySelection,
@@ -264,12 +266,12 @@ class _ProposerPageState extends State<ProposerManager> {
                 padding: EdgeInsets.all(8),
                 child: RaisedButton(
                   child: Text('Send hint'),
-                  onPressed: (){
+                  onPressed: () {
                     lobbydatabaseHelper.setHint(_selected);
                   },
                 ),
               ),
-              SizedBox(height: 150),
+              //SizedBox(height: 150),
               new Container(
                 child: Column(
                   children: [
