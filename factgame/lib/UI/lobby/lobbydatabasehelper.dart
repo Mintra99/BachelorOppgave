@@ -105,7 +105,7 @@ class LobbydatabaseHelper {
     questionList = listOfClaims;
     setName(game_name);
     //getData(currentGameId, game_name);
-   // addGameQuestions(listOfClaims); because this function make insert to all questions, we need a new function to insert only one question.
+   addGameQuestions(listOfClaims); // because this function make insert to all questions, we need a new function to insert only one question.
 
     //prefs.setString('lobbyName', mapResponse['game']['game_name']);
    // prefs.setInt('playerNum', mapResponse['game']['num_of_players']);

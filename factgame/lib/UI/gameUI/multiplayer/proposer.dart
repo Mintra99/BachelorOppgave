@@ -54,14 +54,14 @@ class _ProposerPageState extends State<ProposerManager> {
     if (widget.listOfQuestions == null) {
       print('nooooooooo');
     } else {
-      shuffle();
+      //shuffle();
       showQuestion();
     }
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
   // Move the shuffle to lobbydatabasehelper maybe?
-  void shuffle() {
+  /*void shuffle() {
     var random = new Random();
     // Go through all elements.
     for (var i = widget.listOfQuestions.length - 1; i > 0; i--) {
@@ -72,7 +72,7 @@ class _ProposerPageState extends State<ProposerManager> {
       widget.listOfQuestions[i] = widget.listOfQuestions[n];
       widget.listOfQuestions[n] = temp;
     }
-  }
+  }*/
 
   void showQuestion() {
     if (widget.listOfQuestions.length > 0) {
@@ -83,7 +83,7 @@ class _ProposerPageState extends State<ProposerManager> {
       print(answer);
       questionid = widget.listOfQuestions[0]['id'].toInt();
       print('question id that we like it : $questionid');
-      lobbydatabaseHelper.addGameClaim(questionid);
+      //lobbydatabaseHelper.addGameClaim(questionid);
     } else {
       //MP.dataQ = null;
       canceltimer = true;

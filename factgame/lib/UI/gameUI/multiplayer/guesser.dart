@@ -95,7 +95,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   // widget.listOfQuestions var MP.dataQ
 
   void showQuestion() {
-    if (counter <= questions.length) {
+    if (counter <= cap) {
       print('LISTOFQUESTIONS');
       print(questions);
       question = questions[0]['fields']['question_text'].toString();

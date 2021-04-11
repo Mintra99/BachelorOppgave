@@ -49,7 +49,7 @@ class _CreateLobbyState extends State<CreateLobby> {
     }
     print("Question!!!!!!!!!!!");
     print(questions);
-    shuffle();
+    //shuffle();
   }
 
   void shuffle() {
