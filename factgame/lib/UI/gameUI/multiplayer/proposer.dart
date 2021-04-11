@@ -82,6 +82,8 @@ class _ProposerPageState extends State<ProposerManager> {
       answer.toLowerCase();
       print(answer);
       questionid = widget.listOfQuestions[0]['id'].toInt();
+      print('question id that we like it : $questionid');
+      lobbydatabaseHelper.addGameClaim(questionid);
     } else {
       //MP.dataQ = null;
       canceltimer = true;
@@ -267,6 +269,10 @@ class _ProposerPageState extends State<ProposerManager> {
                 child: RaisedButton(
                   child: Text('Send hint'),
                   onPressed: () {
+                    print('question id appear when u press send hint');
+                    print(questionid);
+                    //lobbydatabaseHelper.addGameClaim(questionid);
+                   // Todo update endpoint with question hint
                     lobbydatabaseHelper.setHint(_selected);
                   },
                 ),

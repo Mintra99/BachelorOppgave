@@ -76,7 +76,7 @@ class LobbydatabaseHelper {
 
  */
 
-  createGame(String game_name, String numPlayers, List list) async {
+  createGame(String game_name, String numPlayers, List listOfClaims) async {
     if (numPlayers.isEmpty) {
       numPlayers =
           '2'; // setting default value if user forget to set number if players
@@ -100,24 +100,19 @@ class LobbydatabaseHelper {
     print(mapResponse);
     print("creategame MAPRESPONSE");
     currentGameId = mapResponse['game']['id'];
-    print(currentGameId);
-
-    setLobbyQuestionList(currentGameId, list);
+    setLobbyQuestionList(currentGameId, listOfClaims);
     //sleep(const Duration(seconds: 2));
-    questionList = list;
+    questionList = listOfClaims;
     setName(game_name);
     //getData(currentGameId, game_name);
-    addGameQuestions(list);
+   // addGameQuestions(listOfClaims); because this function make insert to all questions, we need a new function to insert only one question.
 
-/*
     //prefs.setString('lobbyName', mapResponse['game']['game_name']);
-    prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
-    playerNum = mapResponse['game']['num_of_players'];
-    prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
-    currentPlayer =  mapResponse['game']['current_players'];
+   // prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
+    //playerNum = mapResponse['game']['num_of_players'];
+    //prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
+    //currentPlayer =  mapResponse['game']['current_players'];
     prefs.setInt('currentGameId', mapResponse['game']['id']);
-
- */
   }
 
   void answerMultiPlayer(
@@ -166,5 +161,30 @@ class LobbydatabaseHelper {
       });
     }
 // Todo we have to redirect user to
+  }
+
+  addGameClaim(int claim_id)async{
+    var doc_hint =  '{}';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    print('this is our game id : $gameId');
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    String myUrl = "$serverUrl/game/lobby_question/";
+    if (claim_id != null){
+      final response = await http.post(myUrl, headers: {
+        'Authorization': 'Bearer $value'
+      }, body: {
+        "game_id": "$gameId",
+        "question_id": "$claim_id",
+        "doc_hint": "$doc_hint",
+      }).then((response) {
+        print('succesful we send question id and game id');
+        print('Response status : ${response.statusCode}');
+        print('Response status : ${response.body} ');
+      });
+    }else{
+      print('you should select Claim');
+    }
   }
 }

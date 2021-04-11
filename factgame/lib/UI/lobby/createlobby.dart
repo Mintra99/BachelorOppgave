@@ -72,25 +72,8 @@ class _CreateLobbyState extends State<CreateLobby> {
       list.add(questions[i].value);
     }
     setState(() async {
-      print("DONE!!!!!!");
-      print(list);
-
-      //databaseHelper.addGameQuestions(list);
-
-      print("GAME_NAME!!!!!");
-      print(_gamenameController.text.trim());
-      await databaseHelper.createGame(
-          _gamenameController.text.trim(), numOfPlayers.text.trim(), list);
-
-/*
-      id = databaseHelper.currentGameId;'
-
-      print("IDTHING");
-      print(id);
-
-
- */
-
+      // now we are sending game_name , numofplayer and  ten questions to the game
+      await databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
       prefs.setString('gameName', _gamenameController.text.trim());
     });
   }
