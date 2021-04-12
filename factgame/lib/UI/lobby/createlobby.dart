@@ -71,9 +71,9 @@ class _CreateLobbyState extends State<CreateLobby> {
       // adds 10 questions to the lobby
       list.add(questions[i].value);
     }
-    setState(() async {
+    setState(() {
       // now we are sending game_name , numofplayer and  ten questions to the game
-      await databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
+      databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
       prefs.setString('gameName', _gamenameController.text.trim());
     });
   }

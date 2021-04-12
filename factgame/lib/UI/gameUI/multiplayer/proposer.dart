@@ -11,6 +11,13 @@ import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
 
+class Hint {
+  String id;
+  String hintText;
+
+  Hint(this.id, this.hintText);
+}
+
 class ProposerManager extends StatefulWidget {
   final String title;
   final List listOfQuestions;
@@ -54,31 +61,18 @@ class _ProposerPageState extends State<ProposerManager> {
     if (widget.listOfQuestions == null) {
       print('nooooooooo');
     } else {
-      //shuffle();
       showQuestion();
     }
   }
-
-  //TODO: make the questions available for both guesser and proposer so they get the same questions
-  // Move the shuffle to lobbydatabasehelper maybe?
-  /*void shuffle() {
-    var random = new Random();
-    // Go through all elements.
-    for (var i = widget.listOfQuestions.length - 1; i > 0; i--) {
-      // Pick a pseudorandom number according to the list length
-      var n = random.nextInt(i + 1);
-
-      var temp = widget.listOfQuestions[i];
-      widget.listOfQuestions[i] = widget.listOfQuestions[n];
-      widget.listOfQuestions[n] = temp;
-    }
-  }*/
 
   void showQuestion() {
     if (widget.listOfQuestions.length > 0) {
       question = widget.listOfQuestions[0]['question_text'].toString();
       answer = widget.listOfQuestions[0]['correct_answer'].toString();
       hint = widget.listOfQuestions[0]['doc'].split("\" ");
+      _selected = hint[0];
+      print("HINT!!!!!!");
+      print(hint);
       answer.toLowerCase();
       print(answer);
       questionid = widget.listOfQuestions[0]['id'].toInt();
@@ -97,6 +91,8 @@ class _ProposerPageState extends State<ProposerManager> {
 
   @override
   void initState() {
+    print("LISTOFHINT");
+    print(widget.listOfQuestions[0]['doc']);
     fitchData();
     starttimer();
     super.initState();
@@ -206,8 +202,6 @@ class _ProposerPageState extends State<ProposerManager> {
                 ),
               ),
               SizedBox(height: 50),
-
-              // TODO: Change the one above with the one below when questions are ready
               Container(
                 padding: EdgeInsets.all(15.0),
                 child: widget.listOfQuestions == null
@@ -229,31 +223,29 @@ class _ProposerPageState extends State<ProposerManager> {
                     child: DropdownButtonHideUnderline(
                       child: ButtonTheme(
                         alignedDropdown: true,
-                        child: DropdownButton<String>(
+                        child: DropdownButton<dynamic>(
                           isDense: true,
-                          hint: new Text("Select Hint"),
                           value: _selected,
-                          onChanged: (String newValue) {
+                          onChanged: (dynamic newValue) {
                             setState(() {
                               _selected = newValue;
                             });
-
                             print(_selected);
                           },
-                          items:
-                              //hint
-
-                              _myJson.map((Map map) {
-                            //print("HINTZZZZ");
-                            //print(hint);
-                            return new DropdownMenuItem<String>(
-                              value: map["id"].toString(),
-                              // value: _mySelection,
+                          items: hint
+                              .map<DropdownMenuItem<dynamic>>((dynamic value) {
+                            return new DropdownMenuItem<dynamic>(
+                              value: value,
                               child: Row(
-                                children: <Widget>[
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
                                   Container(
-                                      margin: EdgeInsets.only(left: 10),
-                                      child: Text(map["name"])),
+                                      width: 300,
+                                      child: Center(
+                                          child:
+                                          Text(value.toString()),
+                                      )
+                                  ),
                                 ],
                               ),
                             );
@@ -272,7 +264,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     print('question id appear when u press send hint');
                     print(questionid);
                     //lobbydatabaseHelper.addGameClaim(questionid);
-                   // Todo update endpoint with question hint
+                    // Todo update endpoint with question hint
                     lobbydatabaseHelper.setHint(_selected);
                   },
                 ),
