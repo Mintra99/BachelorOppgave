@@ -69,6 +69,11 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   Startup() async {
     questions = widget.listOfQuestions;
+    questions.sort((a, b) => a['pk'].compareTo(b['pk']));
+    print("QUESTIONLISTID");
+    for (int i = 0; i<questions.length; i++){
+      print(questions[i]['pk']);
+    }
     setState(() {
       isLoading = true;
     });
