@@ -15,11 +15,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MultiPlayer {
   List dataQ; // list of data with both questions and answers
   int dataGame;
-
+  var mapResponse;
   var noQuestions;
   var playerIn;
   bool existingQ;
   bool existingP;
+  List premierKey;
+  int pk;
 
   var msg;
   getDataQ(){
@@ -42,6 +44,9 @@ class MultiPlayer {
     }, body: {
       "game_id": '$game_id',
     });
+    mapResponse = json.decode(response.body);
+    premierKey = mapResponse['question_set'];
+    print('i hope this have pk : $premierKey');
     print("JOINGAMESTATUS");
     print('Response status : ${response.statusCode}');
     print('Response status : ${response.body} ');

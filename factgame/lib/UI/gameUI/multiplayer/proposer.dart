@@ -269,9 +269,11 @@ class _ProposerPageState extends State<ProposerManager> {
                 child: RaisedButton(
                   child: Text('Send hint'),
                   onPressed: () {
+                    var dochint = ' here wwe add heint';
                     print('question id appear when u press send hint');
                     print(questionid);
-                    //lobbydatabaseHelper.addGameClaim(questionid);
+                    // i neeed to add to parameters questionid and selected hint
+                    lobbydatabaseHelper.addGameClaim(questionid,dochint);
                    // Todo update endpoint with question hint
                     lobbydatabaseHelper.setHint(_selected);
                   },

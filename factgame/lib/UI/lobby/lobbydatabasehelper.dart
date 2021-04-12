@@ -93,6 +93,7 @@ class LobbydatabaseHelper {
       "num_of_players": '$number',
     }).then((response) {
       mapResponse = json.decode(response.body);
+
       print("creategame");
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
@@ -163,21 +164,20 @@ class LobbydatabaseHelper {
 // Todo we have to redirect user to
   }
 
-  addGameClaim(int claim_id)async{
-    var doc_hint =  '{}';
+  addGameClaim(int claimId, String docHint)async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
     print('this is our game id : $gameId');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/lobby_question/";
-    if (claim_id != null){
-      final response = await http.post(myUrl, headers: {
+    String myUrl = "$serverUrl/game/lobby_doc/$gameId/$claimId/";
+    if (claimId != null){
+      final response = await http.put(myUrl, headers: {
         'Authorization': 'Bearer $value'
       }, body: {
-        "game_id": "$gameId",
-        "question_id": "$claim_id",
-        "doc_hint": "$doc_hint",
+       // "game_id": "$gameId",
+       // "question_id": "$claimId",
+        "doc_hint": "$docHint",
       }).then((response) {
         print('succesful we send question id and game id');
         print('Response status : ${response.statusCode}');
