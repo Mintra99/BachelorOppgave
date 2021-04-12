@@ -60,11 +60,8 @@ class _JoinLobbyState extends State<JoinLobby> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () async {
-
                             await MP.joinGame(listOfGame[index]['pk'],
                                 listOfGame[index]['fields']['game_name']);
-
-
                             Navigator.push(
                               context,
                               MaterialPageRoute(

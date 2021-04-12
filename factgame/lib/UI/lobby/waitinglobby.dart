@@ -44,11 +44,11 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("BBBBBBBBBBBBBBBBBBBBBBBBBB");
-    print(multiPlayer.existingQ);
-    print(multiPlayer.existingP);
-    if (multiPlayer.existingQ == false) {
+    print(multiPlayer.getExQ());
+    print(multiPlayer.getExP());
+    if (multiPlayer.getExQ() == false) {
       _noQuestions();
-    } else if (multiPlayer.existingP == true) {
+    } else if (multiPlayer.getExP() == true) {
       _alreadyIn();
     } else {
 /*

@@ -21,10 +21,26 @@ class MultiPlayer {
   bool existingQ;
   bool existingP;
 
-  var msg;
+  getExQ(){
+    return existingQ;
+  }
+
+  getExP(){
+    return existingP;
+  }
+
   getDataQ(){
     return dataQ;
   }
+
+  setExQ(bool exq){
+    existingQ = exq;
+  }
+
+  setExP(bool exq){
+    existingP = exq;
+  }
+
   setDataQ(List list){
     dataQ = list;
   }
@@ -60,37 +76,24 @@ class MultiPlayer {
     print(playerIn);
     if (noQuestions) {
       print("existingQ is false");
-      existingQ = false;
+      setExQ(false);
       print('game has no questions: $data');
 
     } else if (playerIn) {
       print("existingP is true");
-      existingP = true;
+      setExP(true);
       print('Player already joined the game: $data');
 
     } else {
-      existingP = false;
-      existingQ = true;
+      setExP(false);
+      setExQ(true);
       print("everything is fine");
       setDataQ(data['question_set']);
-      //dataQ = data['question_set'];
       print("DATAQ!!!!!");
       print(getDataQ());
       dataGame = data['player']['game_id'];
       print('game is ok and you join the game: ${data['message']}');
 
     }
-    /* status = response.body.contains('You can not join the game because there are no questions');
-    var data = json.decode(response.body);
-    dataQ = data['question_set'];
-    dataGame= data['player']['game_id'];
-    print(status);
-    if(status){
-      print('game has no questions: $data');
-    }else{
-      print('game is ok: ${data['message']}');
-    }
-  }
-  }*/
   }
 }

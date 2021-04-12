@@ -137,7 +137,6 @@ class LobbydatabaseHelper {
   }
 
   addGameQuestions(List questions) async {
-    //sleep(const Duration(seconds: 3));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = currentGameId; // we use it in post method
     print("addGameQuestionsID");

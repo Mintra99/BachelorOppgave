@@ -49,7 +49,7 @@ class _CreateLobbyState extends State<CreateLobby> {
     }
     print("Question!!!!!!!!!!!");
     print(questions);
-    //shuffle();
+    await shuffle();
   }
 
   void shuffle() {
@@ -58,7 +58,6 @@ class _CreateLobbyState extends State<CreateLobby> {
     for (var i = questions.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
-
       var temp = questions[i];
       questions[i] = questions[n];
       questions[n] = temp;
@@ -70,6 +69,12 @@ class _CreateLobbyState extends State<CreateLobby> {
     for (var i = 0; i < 10; i++) {
       // adds 10 questions to the lobby
       list.add(questions[i].value);
+    }
+    list.sort((a, b) => a['id'].compareTo(b['id']));
+    print("LISTID");
+    for (var i = 0; i < 10; i++) {
+      // adds 10 questions to the lobby
+      print(list[i]['id']);
     }
     setState(() {
       // now we are sending game_name , numofplayer and  ten questions to the game
