@@ -97,6 +97,8 @@ class MultiPlayer {
       print("DATAQ!!!!!");
       print(getDataQ());
       dataGame = data['player']['game_id'];
+      print('function multiplayer helper Joingame $dataGame');
+      prefs.setInt('currentGameId', dataGame);
       print('game is ok and you join the game: ${data['message']}');
 
     }

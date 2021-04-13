@@ -110,9 +110,13 @@ class LobbydatabaseHelper {
       String answer_text, int questionid, int game_id) async {
     answer_text = answer_text.toLowerCase();
     final prefs = await SharedPreferences.getInstance();
+    if (game_id == null){
+       game_id = prefs.getInt('currentGameId');
+    }
+
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    print(game_id);
+    print('we are in multiplayer ansswer $game_id');
     String myUrl = "https://fakenews-app.com/api/game/answer_game/";
     http.post(myUrl, headers: {
       'Authorization': 'Bearer $value'
@@ -171,7 +175,7 @@ class LobbydatabaseHelper {
        // "question_id": "$claimId",
         "doc_hint": "$docHint",
       }).then((response) {
-        mapResponse = mapResponse = json.decode(response.body);
+        mapResponse = json.decode(response.body);
         print('succesful we send question id and game id');
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
@@ -181,4 +185,24 @@ class LobbydatabaseHelper {
       print('you should select Claim');
     }
   }
+  getHint(int claimId)async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    print('gethint game id  : $gameId');
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    String myUrl = "$serverUrl/game/get_hint/$gameId/$claimId/";
+    if (claimId != null){
+      final response = await http.get(myUrl, headers: {
+        'Authorization': 'Bearer $value'
+      }).then((response) {
+        print('hint the doc from claim');
+        print('Response status : ${response.statusCode}');
+        print('Response status : ${response.body} ');
+      });
+    }else{
+      print('you should select Claim');
+    }
+  }
+
 }

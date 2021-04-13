@@ -318,10 +318,13 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                   child: MaterialButton(
                     onPressed: () async {
                       //TODO: show hint
+                      lobbyDataHelper.getHint(questionid);
                       print("hint!!!!!!!!!!!!!!!");
                       SharedPreferences prefs = await SharedPreferences.getInstance();
+
                       //var showHint = prefs.getString('gameHint');
                       var showHint = questions[0]['fields']['doc_hint'];
+
                       if (showHint == null) {
                         await showDialog(
                             context: context,
