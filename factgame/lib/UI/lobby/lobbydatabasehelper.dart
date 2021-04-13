@@ -22,6 +22,12 @@ class LobbydatabaseHelper {
   int currentPlayer;
   List questionList;
 
+  Map guesserHint;
+
+
+  getGuesserHint(){
+    return guesserHint;
+  }
 
   getName() {
     return myName;
@@ -199,6 +205,7 @@ class LobbydatabaseHelper {
         print('hint the doc from claim');
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
+        guesserHint =  json.decode(response.body);
       });
     }else{
       print('you should select Claim');

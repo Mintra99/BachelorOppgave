@@ -82,9 +82,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     } else {
       showQuestion();
     }
-    setState(() {
-      bool isLoading = false;
-    });
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
@@ -241,8 +238,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   @override
   Widget build(BuildContext context) {
-    print("SHOWHINTMP");
-    print(questions[0]['fields']['doc_hint']);
     return Scaffold(
       body: Center(
           child: Column(
@@ -318,12 +313,18 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                   child: MaterialButton(
                     onPressed: () async {
                       //TODO: show hint
-                      lobbyDataHelper.getHint(questionid);
-                      print("hint!!!!!!!!!!!!!!!");
+                      Map showHint;
+                      await lobbyDataHelper.getHint(questionid);
+                      setState(() {
+                        print("hint!!!!!!!!!!!!!!!");
+                        showHint = lobbyDataHelper.getGuesserHint();
+                        //showHint.substring(12, showHint.length - 2);
+                        print(showHint['doc_hint']);
+                      });
                       SharedPreferences prefs = await SharedPreferences.getInstance();
 
                       //var showHint = prefs.getString('gameHint');
-                      var showHint = questions[0]['fields']['doc_hint'];
+
 
                       if (showHint == null) {
                         await showDialog(
@@ -350,7 +351,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: new Text('Hint'),
-                                content: new Text(showHint.toString()),
+                                content: new Text(showHint['doc_hint'].toString()),
                                 actions: <Widget>[
                                   new FlatButton(
                                     child: Text("OK"),
