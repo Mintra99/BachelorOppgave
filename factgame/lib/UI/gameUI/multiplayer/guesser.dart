@@ -324,8 +324,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                     onPressed: () async {
                       //TODO: show hint
                       print("hint!!!!!!!!!!!!!!!");
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       var showHint = prefs.getString('gameHint');
                       if (showHint == null) {
                         await showDialog(

@@ -21,6 +21,7 @@ class LobbydatabaseHelper {
   int playerNum;
   int currentPlayer;
   List questionList;
+
   final Map<String, List> LobbyQuestionList = {};
 
   getName() {
@@ -93,7 +94,6 @@ class LobbydatabaseHelper {
       "num_of_players": '$number',
     }).then((response) {
       mapResponse = json.decode(response.body);
-
       print("creategame");
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
@@ -155,10 +155,13 @@ class LobbydatabaseHelper {
         "game_id": "$gameId",
         "question_id": "$question_id",
       }).then((response) {
+        mapResponse = json.decode(response.body);
         print("addGameQuestions!!!!!!!!!!!!!!");
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
       });
+
+      print('this comming from game question $mapResponse');
     }
 // Todo we have to redirect user to
   }
@@ -178,10 +181,12 @@ class LobbydatabaseHelper {
        // "question_id": "$claimId",
         "doc_hint": "$docHint",
       }).then((response) {
+        mapResponse = mapResponse = json.decode(response.body);
         print('succesful we send question id and game id');
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
       });
+      print('try to bring hint : $mapResponse');
     }else{
       print('you should select Claim');
     }
