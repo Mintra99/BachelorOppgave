@@ -56,6 +56,7 @@ class _GuesserPageState extends State<GuesserManager> {
   int counter = 1;
 
   // Colors for choicebuttons
+  bool _isButtonDisabled;
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
   Color wrong = Colors.red;
@@ -117,6 +118,7 @@ class _GuesserPageState extends State<GuesserManager> {
 
   void showQuestion() {
     if (counter <= cap) {
+      _isButtonDisabled = false;
       //if (mapResponse.length > 0) {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
@@ -229,6 +231,7 @@ class _GuesserPageState extends State<GuesserManager> {
     }
     setState(() {
       // applying the changed color to the particular button that was selected
+      _isButtonDisabled = true;
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
@@ -243,7 +246,7 @@ class _GuesserPageState extends State<GuesserManager> {
       ),
       child: MaterialButton(
         onPressed: () {
-          checkanswer(k);
+          _isButtonDisabled ? null :  checkanswer(k);
         },
         child: Text(
           k.toString(),
@@ -298,6 +301,23 @@ class _GuesserPageState extends State<GuesserManager> {
                           ),
                         ),
                 ),
+                Visibility(
+                    visible: _visible,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 20.0,
+                      ),
+                        child: Text(
+                          "Answer: $answer",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: "Quando",
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ),
                 InkWell(
                   child: Container(
                     child: Column(
@@ -359,7 +379,6 @@ class _GuesserPageState extends State<GuesserManager> {
                           ],
                         );
                       });
-                      //TODO: show hint
                     },
                     child: Text(
                       "Hint",
@@ -410,12 +429,6 @@ class _GuesserPageState extends State<GuesserManager> {
                                   ),
                                 );
                               }
-                              /*
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => sourcePage()),
-                              );*/
                             },
                             child: Text(
                               "Source",

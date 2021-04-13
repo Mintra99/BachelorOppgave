@@ -54,6 +54,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   bool answered = false;
   bool isLoading = false;
 
+  bool _isButtonDisabled;
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
   Color wrong = Colors.red;
@@ -89,6 +90,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   void showQuestion() {
     if (counter <= cap) {
+      _isButtonDisabled = false;
       print('LISTOFQUESTIONS');
       print(questions);
       question = questions[0]['fields']['question_text'].toString();
@@ -201,6 +203,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     }
     setState(() {
       // applying the changed color to the particular button that was selected
+      _isButtonDisabled = true;
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
@@ -214,7 +217,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       ),
       child: MaterialButton(
         onPressed: () {
-          checkanswer(k);
+          _isButtonDisabled ? null :  checkanswer(k);
         },
         child: Text(
           k.toString(),
@@ -268,6 +271,23 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                             fontFamily: "Quando",
                           ),
                         ),
+                ),
+                Visibility(
+                  visible: _visible,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 20.0,
+                    ),
+                    child: Text(
+                      "Answer: $answer",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: "Quando",
+                      ),
+                      maxLines: 1,
+                    ),
+                  ),
                 ),
                 InkWell(
                   child: Container(
@@ -326,7 +346,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                       //var showHint = prefs.getString('gameHint');
 
 
-                      if (showHint == null) {
+                      if (showHint['doc_hint'] == null) {
                         await showDialog(
                             context: context,
                             builder: (BuildContext context) {
