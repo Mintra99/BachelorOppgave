@@ -22,7 +22,6 @@ class LobbydatabaseHelper {
   int currentPlayer;
   List questionList;
 
-  final Map<String, List> LobbyQuestionList = {};
 
   getName() {
     return myName;
@@ -40,13 +39,6 @@ class LobbydatabaseHelper {
     return myId;
   }
 
-  getLobbyQuestionList() {
-    return LobbyQuestionList;
-  }
-
-  setLobbyQuestionList(int gameId, List questionList) {
-    LobbyQuestionList[gameId.toString()] = questionList;
-  }
 
   setName(String name) {
     print("NAMESET!!!");
@@ -101,8 +93,6 @@ class LobbydatabaseHelper {
     print(mapResponse);
     print("creategame MAPRESPONSE");
     currentGameId = mapResponse['game']['id'];
-    setLobbyQuestionList(currentGameId, listOfClaims);
-    //sleep(const Duration(seconds: 2));
     questionList = listOfClaims;
     setName(game_name);
     //getData(currentGameId, game_name);

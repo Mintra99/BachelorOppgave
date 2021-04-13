@@ -134,11 +134,11 @@ class _CreateLobbyState extends State<CreateLobby> {
               Container(
                 height: 50,
                 child: new RaisedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     databaseHelper.setPlayernum(int.parse(numOfPlayers.text));
                     print("NUMOFPLAYERS!!!!");
                     print(databaseHelper.getPlayerNum());
-                    setQuestions();
+                    await setQuestions();
                     {
                       Navigator.push(
                         context,

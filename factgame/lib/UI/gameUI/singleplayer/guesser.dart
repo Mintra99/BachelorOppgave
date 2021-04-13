@@ -24,6 +24,7 @@ class GuesserManager extends StatefulWidget {
 class _GuesserPageState extends State<GuesserManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
 
+  RegExp re = new RegExp(r"(\w|\s|,|')+[。.?!]*\s*");
   // Used to create timer
   int timer = 10;
   double percentage;
@@ -43,6 +44,8 @@ class _GuesserPageState extends State<GuesserManager> {
 
   List source;
   List hint;
+  String test;
+  List splitHint = [];
 
   // Used to hide/show source/next question
   bool _visible = false;
@@ -77,7 +80,7 @@ class _GuesserPageState extends State<GuesserManager> {
     if (response.statusCode == 200) {
       setState(() {
         mapResponse = json.decode(response.body);
-        //print("hint!!!!!!!!!!!!!!");
+        //print("testtttt");
         //print(mapResponse[0]['doc']);
         shuffle();
         showQuestion();
@@ -102,13 +105,13 @@ class _GuesserPageState extends State<GuesserManager> {
   void shuffleHint() {
     var random = new Random();
     // Go through all elements.
-    for (var i = hint.length - 1; i > 0; i--) {
+    for (var i = splitHint.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
 
-      var temp = hint[i];
-      hint[i] = hint[n];
-      hint[n] = temp;
+      var temp = splitHint[i];
+      splitHint[i] = splitHint[n];
+      splitHint[n] = temp;
     }
   }
 
@@ -118,11 +121,13 @@ class _GuesserPageState extends State<GuesserManager> {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       source = mapResponse[0]['sources'];
-      hint = mapResponse[0]['doc'].split("\" ");
-      print("hint!!!!!!!!!!!!!!");
-      print(hint);
-
-      //databaseHelper.setSource(mapResponse[0]['source']);
+      //hint = mapResponse[0]['doc'].split("\" ");
+      test = mapResponse[0]['doc'].toString();
+      Iterable matches = re.allMatches(test);
+      for (Match m in matches) {
+        String match = m.group(0);
+        splitHint.add(match);
+      }
       answer.toLowerCase();
       print(answer);
       counter += 1;
@@ -343,7 +348,7 @@ class _GuesserPageState extends State<GuesserManager> {
                             hintCounter += 1;
                         return AlertDialog(
                           title: new Text('Hint'),
-                          content: new Text(hint[0]),
+                          content: new Text(splitHint[0]),
                           actions: <Widget>[
                             new FlatButton(
                               child: Text("OK"),

@@ -47,15 +47,12 @@ class _ProposerPageState extends State<ProposerManager> {
   String answer;
   int questionid;
   int score = 0;
-  List hint;
+  String hint;
+  List splitHint = [];
 
   String _selected;
-  List<Map> _myJson = [
-    {"id": '1', "name": "Affin Bank"},
-    {"id": '2', "name": "Ambank"},
-    {"id": '3', "name": "Bank Isalm"},
-    {"id": '4', "name": "Bank Rakyat"},
-  ];
+
+  RegExp re = new RegExp(r"(\w|\s|,|')+[。.?!]*\s*");
 
   Future fitchData() async {
     if (widget.listOfQuestions == null) {
@@ -64,19 +61,38 @@ class _ProposerPageState extends State<ProposerManager> {
       showQuestion();
     }
   }
+/*
+  void _loadData() async {
+    if (widget.listOfQuestions.isNotEmpty) {
+      setState(() {
+        this.splitHint.add(splitHint.map<DropdownMenuItem<dynamic>>((dynamic value) => new DropdownMenuItem(
+              child: new Text(splitHint.toString()),
+              value: splitHint.toString(),
+            )));
+      });
+    }
+  }
+
+ */
 
   void showQuestion() {
     if (widget.listOfQuestions.length > 0) {
       question = widget.listOfQuestions[0]['question_text'].toString();
       answer = widget.listOfQuestions[0]['correct_answer'].toString();
-      hint = widget.listOfQuestions[0]['doc'].split("\" ");
-      _selected = hint[0];
+      hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
+      Iterable matches = re.allMatches(hint);
+      for (Match m in matches) {
+        String match = m.group(0);
+        splitHint.add(match);
+      }
+      _selected = splitHint[0];
       print("HINT!!!!!!");
-      print(hint);
+      print(splitHint);
       answer.toLowerCase();
       print(answer);
       questionid = widget.listOfQuestions[0]['id'].toInt();
       print('question id that we like it : $questionid');
+      //_loadData();
       //lobbydatabaseHelper.addGameClaim(questionid);
     } else {
       //MP.dataQ = null;
@@ -124,6 +140,7 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void nextquestion() {
+    splitHint.clear();
     showQuestion();
     canceltimer = false;
     timer = 10;
@@ -223,7 +240,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     child: DropdownButtonHideUnderline(
                       child: ButtonTheme(
                         alignedDropdown: true,
-                        child: DropdownButton<dynamic>(
+                        child: new DropdownButton<dynamic>(
                           isDense: true,
                           value: _selected,
                           onChanged: (dynamic newValue) {
@@ -232,7 +249,8 @@ class _ProposerPageState extends State<ProposerManager> {
                             });
                             print(_selected);
                           },
-                          items: hint
+                          items:
+                          splitHint
                               .map<DropdownMenuItem<dynamic>>((dynamic value) {
                             return new DropdownMenuItem<dynamic>(
                               value: value,
@@ -259,7 +277,8 @@ class _ProposerPageState extends State<ProposerManager> {
                 child: RaisedButton(
                   child: Text('Send hint'),
                   onPressed: () {
-                    var dochint = ' here wwe add heint';
+                    //var dochint = ' here wwe add heint';
+                    var dochint = _selected.toString();
                     print('question id appear when u press send hint');
                     print(questionid);
                     // i neeed to add to parameters questionid and selected hint

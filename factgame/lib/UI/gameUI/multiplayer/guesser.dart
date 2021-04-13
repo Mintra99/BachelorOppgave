@@ -85,15 +85,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     setState(() {
       bool isLoading = false;
     });
-    /*
-    if (MP.dataQ == null) {
-      print('nooooooooo');
-    } else {
-      shuffle();
-      showQuestion();
-    }
-
-     */
   }
 
   //TODO: make the questions available for both guesser and proposer so they get the same questions
@@ -105,7 +96,9 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       print(questions);
       question = questions[0]['fields']['question_text'].toString();
       answer = questions[0]['fields']['correct_answer'].toString();
-      source = questions[0]['sources'];
+      source = questions[0]['fields']['sources'];
+      print("SOURCE!!!!");
+      print(source);
       answer.toLowerCase();
       print(answer);
       counter += 1;
@@ -248,6 +241,8 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   @override
   Widget build(BuildContext context) {
+    print("SHOWHINTMP");
+    print(questions[0]['fields']['doc_hint']);
     return Scaffold(
       body: Center(
           child: Column(
@@ -325,7 +320,8 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                       //TODO: show hint
                       print("hint!!!!!!!!!!!!!!!");
                       SharedPreferences prefs = await SharedPreferences.getInstance();
-                      var showHint = prefs.getString('gameHint');
+                      //var showHint = prefs.getString('gameHint');
+                      var showHint = questions[0]['fields']['doc_hint'];
                       if (showHint == null) {
                         await showDialog(
                             context: context,
