@@ -16,8 +16,11 @@ import 'lobbydatabasehelper.dart';
 class WaitingLobby extends StatefulWidget {
   final List listOfQuestions;
   final String role;
+  final String lobbyname;
+  final bool existingP;
+  final bool existingQ;
 
-  const WaitingLobby({Key key, this.listOfQuestions, this.role})
+  const WaitingLobby({Key key, this.listOfQuestions, this.role, this.lobbyname, this.existingP, this.existingQ})
       : super(key: key);
 
   @override
@@ -36,6 +39,9 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   @override
   void initState() {
     name = databaseHelper.getName();
+    if (widget.lobbyname != null) {
+      name = widget.lobbyname;
+    };
     print("NAME");
     print(name);
     super.initState();
@@ -44,25 +50,13 @@ class _WaitingLobbyState extends State<WaitingLobby> {
   _onPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("BBBBBBBBBBBBBBBBBBBBBBBBBB");
-    print(multiPlayer.getExQ());
-    print(multiPlayer.getExP());
-    if (multiPlayer.getExQ() == false) {
+    print(widget.existingQ);
+    print(widget.existingP);
+    if (widget.existingQ == false) {
       _noQuestions();
-    } else if (multiPlayer.getExP() == true) {
+    } else if (widget.existingP == true) {
       _alreadyIn();
     } else {
-/*
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => GuesserManagerMP(
-            listOfQuestions: widget.listOfQuestions,
-          ),
-        ),
-      );
-
- */
-
       if (widget.role == "proposer") {
         Navigator.push(
           context,

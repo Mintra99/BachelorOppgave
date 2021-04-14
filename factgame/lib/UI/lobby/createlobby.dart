@@ -146,16 +146,11 @@ class _CreateLobbyState extends State<CreateLobby> {
                           builder: (_) => WaitingLobby(
                             listOfQuestions: list,
                             role: "proposer",
+                            lobbyname: _gamenameController.text.trim(),
                           ),
                         ),
                       );
                     }
-                    /*
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>  WaitingLobby(),
-                    ));
-
-                     */
                   },
                   color: Colors.blue,
                   child: new Text(

@@ -33,6 +33,9 @@ class _GameFinished extends State<GameFinishedManager> {
     if (response.statusCode == err) {
       setState(() {
         finalScore = prefs.getInt('guesserScore');// we are get the score from local storage (we already this integer in guesser.dart file)
+        if (finalScore == null) {
+          finalScore = 0;
+        }
         print(finalScore);
       });
     }

@@ -67,6 +67,9 @@ class _JoinLobbyState extends State<JoinLobby> {
                               MaterialPageRoute(
                                 builder: (_) => WaitingLobby(
                                   listOfQuestions: MP.getDataQ(),
+                                  lobbyname:  listOfGame[index]['fields']['game_name'].toString(),
+                                  existingP: MP.getExP(),
+                                  existingQ: MP.getExQ(),
                                 ),
                               ),
                             );
