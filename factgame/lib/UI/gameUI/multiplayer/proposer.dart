@@ -61,19 +61,6 @@ class _ProposerPageState extends State<ProposerManager> {
       showQuestion();
     }
   }
-/*
-  void _loadData() async {
-    if (widget.listOfQuestions.isNotEmpty) {
-      setState(() {
-        this.splitHint.add(splitHint.map<DropdownMenuItem<dynamic>>((dynamic value) => new DropdownMenuItem(
-              child: new Text(splitHint.toString()),
-              value: splitHint.toString(),
-            )));
-      });
-    }
-  }
-
- */
 
   void showQuestion() {
     if (widget.listOfQuestions.length > 0) {
@@ -82,8 +69,31 @@ class _ProposerPageState extends State<ProposerManager> {
       hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
       Iterable matches = re.allMatches(hint);
       for (Match m in matches) {
-        String match = m.group(0);
-        splitHint.add(match);
+        if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
+          String match = m.group(0);
+          splitHint.add(splitHint[splitHint.length - 1] + match);
+          splitHint.removeAt(splitHint.length - 2);
+        } else if(m.group(0)[0].toUpperCase() == m.group(0)[0] && m.group(0)[m.group(0).length-1] != "."){
+          if(splitHint.length < 0){
+            String match = m.group(0);
+            splitHint.add(splitHint[splitHint.length - 1] + match);
+            splitHint.removeAt(splitHint.length - 2);
+          } else {
+            String match = m.group(0);
+            splitHint.add(match);
+          }
+        } else if (m.group(0)[0] == ' ') {
+          String match = m.group(0);
+          splitHint.add(splitHint[splitHint.length - 1] + match);
+          splitHint.removeAt(splitHint.length - 2);
+        } else if(m.group(0)[0] == RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')){
+          String match = m.group(0);
+          splitHint.add(splitHint[splitHint.length - 1] + match);
+          splitHint.removeAt(splitHint.length - 2);
+        } else {
+          String match = m.group(0);
+          splitHint.add(match);
+        }
       }
       _selected = splitHint[0];
       print("HINT!!!!!!");

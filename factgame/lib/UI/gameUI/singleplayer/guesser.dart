@@ -25,6 +25,7 @@ class _GuesserPageState extends State<GuesserManager> {
   DatabaseHelper databaseHelper = new DatabaseHelper();
 
   RegExp re = new RegExp(r"(\w|\s|,|')+[。.?!]*\s*");
+
   // Used to create timer
   int timer = 10;
   double percentage;
@@ -127,8 +128,42 @@ class _GuesserPageState extends State<GuesserManager> {
       test = mapResponse[0]['doc'].toString();
       Iterable matches = re.allMatches(test);
       for (Match m in matches) {
-        String match = m.group(0);
-        splitHint.add(match);
+        if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
+          String match = m.group(0);
+          //print("EXTENDINGHINT!");
+          //print(splitHint[splitHint.length - 1] + match);
+          splitHint.add(splitHint[splitHint.length - 1] + match);
+          splitHint.removeAt(splitHint.length - 2);
+        } else if(m.group(0)[0].toUpperCase() == m.group(0)[0] && m.group(0)[m.group(0).length-1] != "."){
+          if(splitHint.length < 0){
+            String match = m.group(0);
+            //print("EXTENDINGHINT!");
+            //print(splitHint[splitHint.length - 1] + match);
+            splitHint.add(splitHint[splitHint.length - 1] + match);
+            splitHint.removeAt(splitHint.length - 2);
+          } else {
+            String match = m.group(0);
+            //print("EXTENDINGHINT!");
+            //print(match);
+            splitHint.add(match);
+          }
+        } else if (m.group(0)[0] == ' ') {
+          String match = m.group(0);
+          //print("EXTENDINGHINT!");
+          //print(splitHint[splitHint.length - 1] + match);
+          splitHint.add(splitHint[splitHint.length - 1] + match);
+          splitHint.removeAt(splitHint.length - 2);
+        } else if(m.group(0)[0] == RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')){
+          String match = m.group(0);
+          //print("EXTENDINGHINT!");
+          //print(splitHint[splitHint.length - 1] + match);
+          splitHint.add(splitHint[splitHint.length - 1] + match);
+          splitHint.removeAt(splitHint.length - 2);
+        } else {
+          //print(m.group(0));
+          String match = m.group(0);
+          splitHint.add(match);
+        }
       }
       answer.toLowerCase();
       print(answer);
@@ -205,9 +240,9 @@ class _GuesserPageState extends State<GuesserManager> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answered == false) {
       if (answer == k.toLowerCase()) {
-        if ((100 * (timer))-(10*hintCounter)>0){
-          score += (100 * (timer))-(10*hintCounter);
-        } else{
+        if ((100 * (timer)) - (10 * hintCounter) > 0) {
+          score += (100 * (timer)) - (10 * hintCounter);
+        } else {
           score += 10;
         }
         print(score);
@@ -246,7 +281,7 @@ class _GuesserPageState extends State<GuesserManager> {
       ),
       child: MaterialButton(
         onPressed: () {
-          _isButtonDisabled ? null :  checkanswer(k);
+          _isButtonDisabled ? null : checkanswer(k);
         },
         child: Text(
           k.toString(),
@@ -302,22 +337,22 @@ class _GuesserPageState extends State<GuesserManager> {
                         ),
                 ),
                 Visibility(
-                    visible: _visible,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 20.0,
-                      ),
-                        child: Text(
-                          "Answer: $answer",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: "Quando",
-                          ),
-                          maxLines: 1,
-                        ),
-                      ),
+                  visible: _visible,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 20.0,
                     ),
+                    child: Text(
+                      "Answer: $answer",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: "Quando",
+                      ),
+                      maxLines: 1,
+                    ),
+                  ),
+                ),
                 InkWell(
                   child: Container(
                     child: Column(
@@ -360,25 +395,25 @@ class _GuesserPageState extends State<GuesserManager> {
                     horizontal: 20.0,
                   ),
                   child: MaterialButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       await showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             shuffleHint();
                             hintCounter += 1;
-                        return AlertDialog(
-                          title: new Text('Hint'),
-                          content: new Text(splitHint[0]),
-                          actions: <Widget>[
-                            new FlatButton(
-                              child: Text("OK"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            )
-                          ],
-                        );
-                      });
+                            return AlertDialog(
+                              title: new Text('Hint'),
+                              content: new Text(splitHint[0]),
+                              actions: <Widget>[
+                                new FlatButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              ],
+                            );
+                          });
                     },
                     child: Text(
                       "Hint",
@@ -525,27 +560,23 @@ class _sourcePageState extends State<sourcePage> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < widget.listOfSource.length; i++){
+    for (int i = 0; i < widget.listOfSource.length; i++) {
       String link = widget.listOfSource[i]['link'].toString();
       print(link);
-      textWidgetList.add(
-        InkWell(
-          child: Text(link),
-          onTap: () => launch(link),
-        )
-      );
+      textWidgetList.add(InkWell(
+        child: Text(link),
+        onTap: () => launch(link),
+      ));
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Sources"),
-        backgroundColor: darkGrayColor,
-      ),
-      body: Container(
-          margin: EdgeInsets.all(10.0),
-          child: ListView(
-          children: textWidgetList,
-        )
-      )
-    );
+        appBar: AppBar(
+          title: Text("Sources"),
+          backgroundColor: darkGrayColor,
+        ),
+        body: Container(
+            margin: EdgeInsets.all(10.0),
+            child: ListView(
+              children: textWidgetList,
+            )));
   }
 }
