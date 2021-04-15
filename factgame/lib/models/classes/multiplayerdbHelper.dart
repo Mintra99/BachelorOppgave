@@ -22,6 +22,11 @@ class MultiPlayer {
   bool existingP;
   List premierKey;
   int pk;
+  int playerID;
+
+  getPlayerID(){
+    return playerID;
+  }
 
   getExQ(){
     return existingQ;
@@ -72,8 +77,12 @@ class MultiPlayer {
 
     var data = json.decode(response.body);
 
+    playerID = data['player']['id'];
+
     print("DATA!!!");
     print(data);
+    print("PLAYERID!!!!");
+    print(playerID);
     //dataQ = data['question_set'];
     //dataGame= data['player']['game_id'];
     print('222222222222222222222222222223333333333');
@@ -88,7 +97,6 @@ class MultiPlayer {
       print("existingP is true");
       setExP(true);
       print('Player already joined the game: $data');
-
     } else {
       setExP(false);
       setExQ(true);

@@ -154,6 +154,7 @@ class _ProposerPageState extends State<ProposerManager> {
     showQuestion();
     canceltimer = false;
     timer = 10;
+    lobbydatabaseHelper.getScore("proposer");
     starttimer();
   }
 

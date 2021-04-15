@@ -23,6 +23,7 @@ class LobbydatabaseHelper {
   List questionList;
 
   Map guesserHint;
+  int proposerScore;
 
 
   getGuesserHint() {
@@ -213,7 +214,7 @@ class LobbydatabaseHelper {
     }
   }
 
-  updateScore(int score, String userStatus) async {
+  updateScore(int score, String userStatus, int userID) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
     print('this is our game id : $gameId');
@@ -252,7 +253,7 @@ class LobbydatabaseHelper {
         print('get the score from gusser');
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
-        guesserHint = json.decode(response.body);
+        proposerScore = json.decode(response.body);
       });
     } else {
       print('you should select Claim');
