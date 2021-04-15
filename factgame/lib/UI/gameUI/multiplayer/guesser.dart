@@ -185,6 +185,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
         print(score);
         prefs.setInt('guesserScore',
             score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
+        lobbyDataHelper.updateScore(score, "respondent");
         print('correct');
         answered = true;
         colortoshow = right;

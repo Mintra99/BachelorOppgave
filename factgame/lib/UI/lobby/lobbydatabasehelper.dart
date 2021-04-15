@@ -25,7 +25,7 @@ class LobbydatabaseHelper {
   Map guesserHint;
 
 
-  getGuesserHint(){
+  getGuesserHint() {
     return guesserHint;
   }
 
@@ -44,7 +44,6 @@ class LobbydatabaseHelper {
   getID() {
     return myId;
   }
-
 
   setName(String name) {
     print("NAMESET!!!");
@@ -78,7 +77,7 @@ class LobbydatabaseHelper {
   createGame(String game_name, String numPlayers, List listOfClaims) async {
     if (numPlayers.isEmpty) {
       numPlayers =
-          '2'; // setting default value if user forget to set number if players
+      '2'; // setting default value if user forget to set number if players
     }
     var number = int.parse(numPlayers);
     final prefs = await SharedPreferences.getInstance();
@@ -102,22 +101,23 @@ class LobbydatabaseHelper {
     questionList = listOfClaims;
     setName(game_name);
     //getData(currentGameId, game_name);
-   addGameQuestions(listOfClaims); // because this function make insert to all questions, we need a new function to insert only one question.
+    addGameQuestions(
+        listOfClaims); // because this function make insert to all questions, we need a new function to insert only one question.
 
     //prefs.setString('lobbyName', mapResponse['game']['game_name']);
-   // prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
+    // prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
     //playerNum = mapResponse['game']['num_of_players'];
     //prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
     //currentPlayer =  mapResponse['game']['current_players'];
     prefs.setInt('currentGameId', mapResponse['game']['id']);
   }
 
-  void answerMultiPlayer(
-      String answer_text, int questionid, int game_id) async {
+  void answerMultiPlayer(String answer_text, int questionid,
+      int game_id) async {
     answer_text = answer_text.toLowerCase();
     final prefs = await SharedPreferences.getInstance();
-    if (game_id == null){
-       game_id = prefs.getInt('currentGameId');
+    if (game_id == null) {
+      game_id = prefs.getInt('currentGameId');
     }
 
     final key = 'access';
@@ -166,19 +166,19 @@ class LobbydatabaseHelper {
 // Todo we have to redirect user to
   }
 
-  addGameClaim(int claimId, String docHint)async{
+  addGameClaim(int claimId, String docHint) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
     print('this is our game id : $gameId');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
     String myUrl = "$serverUrl/game/lobby_doc/$gameId/$claimId/";
-    if (claimId != null){
+    if (claimId != null) {
       final response = await http.put(myUrl, headers: {
         'Authorization': 'Bearer $value'
       }, body: {
-       // "game_id": "$gameId",
-       // "question_id": "$claimId",
+        // "game_id": "$gameId",
+        // "question_id": "$claimId",
         "doc_hint": "$docHint",
       }).then((response) {
         mapResponse = json.decode(response.body);
@@ -187,38 +187,40 @@ class LobbydatabaseHelper {
         print('Response status : ${response.body} ');
       });
       print('try to bring hint : $mapResponse');
-    }else{
+    } else {
       print('you should select Claim');
     }
   }
-  getHint(int claimId)async{
+
+  getHint(int claimId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
     print('gethint game id  : $gameId');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
     String myUrl = "$serverUrl/game/get_hint/$gameId/$claimId/";
-    if (claimId != null){
+    if (claimId != null) {
       final response = await http.get(myUrl, headers: {
         'Authorization': 'Bearer $value'
       }).then((response) {
         print('hint the doc from claim');
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
-        guesserHint =  json.decode(response.body);
+        guesserHint = json.decode(response.body);
       });
-    }else{
+    } else {
       print('you should select Claim');
     }
   }
-  updateScore(int score, String userStatus)async{
+
+  updateScore(int score, String userStatus) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
     print('this is our game id : $gameId');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/lobby_doc/$gameId/$userStatus/";
-    if (userStatus != null){
+    String myUrl = "$serverUrl/game/lobby_score/$gameId/$userStatus/";
+    if (userStatus != null) {
       final response = await http.put(myUrl, headers: {
         'Authorization': 'Bearer $value'
       }, body: {
@@ -231,8 +233,9 @@ class LobbydatabaseHelper {
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
       });
-      print('try to bring hint : $mapResponse');
-    }else{
-      print('you should select Claim');
+      print('try to bring Updatascore : $mapResponse');
+    } else {
+      print('This is update score');
     }
+  }
 }

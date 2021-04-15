@@ -109,6 +109,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                 height: 50,
                 child: new TextField(
                   controller: numOfPlayers,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'Default number of players is 2',
                     icon: new Icon(Icons.add),
