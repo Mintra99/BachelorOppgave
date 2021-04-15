@@ -211,5 +211,28 @@ class LobbydatabaseHelper {
       print('you should select Claim');
     }
   }
-
+  updateScore(int score, String userStatus)async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    print('this is our game id : $gameId');
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    String myUrl = "$serverUrl/game/lobby_doc/$gameId/$userStatus/";
+    if (userStatus != null){
+      final response = await http.put(myUrl, headers: {
+        'Authorization': 'Bearer $value'
+      }, body: {
+        // "game_id": "$gameId",
+        // "question_id": "$claimId",
+        "score": "$score",
+      }).then((response) {
+        mapResponse = json.decode(response.body);
+        print('succesful we send question id and game id');
+        print('Response status : ${response.statusCode}');
+        print('Response status : ${response.body} ');
+      });
+      print('try to bring hint : $mapResponse');
+    }else{
+      print('you should select Claim');
+    }
 }
