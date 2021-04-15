@@ -238,4 +238,24 @@ class LobbydatabaseHelper {
       print('This is update score');
     }
   }
+  getScore(String userStatus) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    print('gethint game id  : $gameId');
+    final key = 'access';
+    final value = prefs.get(key) ?? 0;
+    String myUrl = "$serverUrl/game/get_hint/$gameId/$userStatus/";
+    if (userStatus != null) {
+      final response = await http.get(myUrl, headers: {
+        'Authorization': 'Bearer $value'
+      }).then((response) {
+        print('get the score from gusser');
+        print('Response status : ${response.statusCode}');
+        print('Response status : ${response.body} ');
+        guesserHint = json.decode(response.body);
+      });
+    } else {
+      print('you should select Claim');
+    }
+  }
 }
