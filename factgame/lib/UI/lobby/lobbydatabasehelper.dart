@@ -244,7 +244,7 @@ class LobbydatabaseHelper {
     print('gethint game id  : $gameId');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/get_hint/$gameId/$userStatus/";
+    String myUrl = "$serverUrl/game/get_score/$gameId/$userStatus/";
     if (userStatus != null) {
       final response = await http.get(myUrl, headers: {
         'Authorization': 'Bearer $value'
