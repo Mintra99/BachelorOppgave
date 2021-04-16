@@ -16,8 +16,9 @@ import 'package:url_launcher/url_launcher.dart';
 class GuesserManagerMP extends StatefulWidget {
   final String title;
   final List listOfQuestions;
+  final int playerID;
 
-  GuesserManagerMP({Key key, this.title, this.listOfQuestions})
+  GuesserManagerMP({Key key, this.title, this.listOfQuestions, this.playerID})
       : super(key: key);
 
   @override
@@ -111,7 +112,9 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       canceltimer = true;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GameFinishedManager()),
+        MaterialPageRoute(builder: (context) => GameFinishedManager(
+          finalscore: score,
+        )),
       );
     }
   }
@@ -185,7 +188,8 @@ class _GuesserPageState extends State<GuesserManagerMP> {
         print(score);
         prefs.setInt('guesserScore',
             score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
-        lobbyDataHelper.updateScore(score, "respondent", MP.getPlayerID());
+        print("widget Player ID: " + widget.playerID.toString());
+        lobbyDataHelper.updateScore(score, "respondent", widget.playerID);
         print('correct');
         answered = true;
         colortoshow = right;

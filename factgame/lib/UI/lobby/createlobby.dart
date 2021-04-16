@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/classes/question.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,8 +19,11 @@ class CreateLobby extends StatefulWidget {
 
 class _CreateLobbyState extends State<CreateLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
+  DatabaseHelper dbH = new DatabaseHelper();
   final TextEditingController _gamenameController = new TextEditingController();
   final TextEditingController numOfPlayers = new TextEditingController();
+
+
   Map mapResponse;
   int id;
 
@@ -136,6 +140,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                 height: 50,
                 child: new RaisedButton(
                   onPressed: () async {
+                    //SharedPreferences prefs = await SharedPreferences.getInstance();
                     databaseHelper.setPlayernum(int.parse(numOfPlayers.text));
                     print("NUMOFPLAYERS!!!!");
                     print(databaseHelper.getPlayerNum());
@@ -147,6 +152,8 @@ class _CreateLobbyState extends State<CreateLobby> {
                           builder: (_) => WaitingLobby(
                             listOfQuestions: list,
                             role: "proposer",
+                            //playerID: prefs.getInt('userID'),
+                            playerID: databaseHelper.getID(),
                             lobbyname: _gamenameController.text.trim(),
                           ),
                         ),

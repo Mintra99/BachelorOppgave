@@ -7,6 +7,11 @@ import 'package:http/http.dart' as http;
 import '../../home.dart';
 
 class GameFinishedManager extends StatefulWidget {
+  final int finalscore;
+
+  GameFinishedManager({Key key, this.finalscore})
+      : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _GameFinished();
@@ -15,7 +20,6 @@ class GameFinishedManager extends StatefulWidget {
 
 class _GameFinished extends State<GameFinishedManager> {
   int finalScore;
-  int score;
 
 
   @override
@@ -32,7 +36,7 @@ class _GameFinished extends State<GameFinishedManager> {
     int err = response.statusCode;
     if (response.statusCode == err) {
       setState(() {
-        finalScore = prefs.getInt('guesserScore');// we are get the score from local storage (we already this integer in guesser.dart file)
+        finalScore = widget.finalscore;//prefs.getInt('guesserScore');// we are get the score from local storage (we already this integer in guesser.dart file)
         if (finalScore == null) {
           finalScore = 0;
         }

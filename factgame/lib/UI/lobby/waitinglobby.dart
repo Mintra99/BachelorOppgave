@@ -19,8 +19,9 @@ class WaitingLobby extends StatefulWidget {
   final String lobbyname;
   final bool existingP;
   final bool existingQ;
+  final int playerID;
 
-  const WaitingLobby({Key key, this.listOfQuestions, this.role, this.lobbyname, this.existingP, this.existingQ})
+  const WaitingLobby({Key key, this.listOfQuestions, this.role, this.lobbyname, this.existingP, this.existingQ, this.playerID})
       : super(key: key);
 
   @override
@@ -72,6 +73,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
           MaterialPageRoute(
             builder: (_) => GuesserManagerMP(
               listOfQuestions: widget.listOfQuestions,
+                playerID: widget.playerID,
             ),
           ),
         );

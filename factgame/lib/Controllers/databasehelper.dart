@@ -9,7 +9,13 @@ class DatabaseHelper{
   var errorMessage ;
   var Message;
 
+  int userID;
+
   var token ;
+
+  getUserID(){
+    return userID;
+  }
 
 
   void answerData(String answer_text, int questionid) async{
@@ -36,6 +42,7 @@ class DatabaseHelper{
   }
 
   loginData(String username , String password) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String myUrl = "$serverUrl/login/?format=json";
     final response = await  http.post(myUrl,
@@ -46,6 +53,10 @@ class DatabaseHelper{
     errorMessage = response.body.contains('No active account');
 
     var data = json.decode(response.body);
+    print("logindata: $data");
+    userID = data['id'];
+    print("userID: $userID");
+    prefs.setInt('userID', userID);
     if(errorMessage){
       print('No active account $data');
     }else{

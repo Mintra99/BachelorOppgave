@@ -99,6 +99,8 @@ class LobbydatabaseHelper {
     print(mapResponse);
     print("creategame MAPRESPONSE");
     currentGameId = mapResponse['game']['id'];
+    prefs.setInt('playerID', mapResponse['player_game']);
+
     questionList = listOfClaims;
     setName(game_name);
     //getData(currentGameId, game_name);
@@ -132,6 +134,7 @@ class LobbydatabaseHelper {
       "questionid": "$questionid",
       "game_id": "$game_id",
     }).then((response) {
+      print("answerdata mapresponse");
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
       var data = json.decode(response.body);
@@ -217,10 +220,12 @@ class LobbydatabaseHelper {
   updateScore(int score, String userStatus, int userID) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    print("updateScore");
     print('this is our game id : $gameId');
+    print('this is our userID: $userID');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/lobby_score/$gameId/$userStatus/";
+    String myUrl = "$serverUrl/game/lobby_score/$gameId/$userStatus/$userID/";
     if (userStatus != null) {
       final response = await http.put(myUrl, headers: {
         'Authorization': 'Bearer $value'
@@ -229,6 +234,7 @@ class LobbydatabaseHelper {
         // "question_id": "$claimId",
         "score": "$score",
       }).then((response) {
+        print('response.body update: ' + response.body);
         mapResponse = json.decode(response.body);
         print('succesful we send question id and game id');
         print('Response status : ${response.statusCode}');
@@ -239,13 +245,15 @@ class LobbydatabaseHelper {
       print('This is update score');
     }
   }
-  getScore(String userStatus) async {
+  getScore(String userStatus, int userID) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var gameId = prefs.getInt('currentGameId'); // we use it in post method
+    print("getScore");
     print('gethint game id  : $gameId');
+    print('this is our userID: $userID');
     final key = 'access';
     final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/get_score/$gameId/$userStatus/";
+    String myUrl = "$serverUrl/game/get_score/$gameId/$userStatus/$userID/";
     if (userStatus != null) {
       final response = await http.get(myUrl, headers: {
         'Authorization': 'Bearer $value'
@@ -253,7 +261,9 @@ class LobbydatabaseHelper {
         print('get the score from gusser');
         print('Response status : ${response.statusCode}');
         print('Response status : ${response.body} ');
-        proposerScore = json.decode(response.body);
+        Map mapResponse = json.decode(response.body);
+        proposerScore = mapResponse['score'];
+        prefs.setInt('proposerScore', proposerScore);
       });
     } else {
       print('you should select Claim');

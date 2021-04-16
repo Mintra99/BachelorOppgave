@@ -1,9 +1,11 @@
+import 'package:factgame/Controllers/databasehelper.dart';
 import 'package:factgame/UI/lobby/waitinglobby.dart';
 import 'package:factgame/models/classes/multiplayerdbHelper.dart';
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 //import '../../home.dart';
@@ -18,6 +20,7 @@ class JoinLobby extends StatefulWidget {
 class _JoinLobbyState extends State<JoinLobby> {
   LobbydatabaseHelper databaseHelper = new LobbydatabaseHelper();
   MultiPlayer MP = new MultiPlayer();
+  DatabaseHelper dbH = new DatabaseHelper();
   Map mapResponse;
   List listOfGame;
   int gamePk;
@@ -60,6 +63,7 @@ class _JoinLobbyState extends State<JoinLobby> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () async {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
                             await MP.joinGame(listOfGame[index]['pk'],
                                 listOfGame[index]['fields']['game_name']);
                             Navigator.push(
@@ -70,6 +74,8 @@ class _JoinLobbyState extends State<JoinLobby> {
                                   lobbyname:  listOfGame[index]['fields']['game_name'].toString(),
                                   existingP: MP.getExP(),
                                   existingQ: MP.getExQ(),
+                                  playerID: MP.getPlayerID(),
+                                  //playerID: prefs.getInt('userID'),
                                 ),
                               ),
                             );

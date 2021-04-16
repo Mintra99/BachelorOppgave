@@ -175,7 +175,9 @@ class _GuesserPageState extends State<GuesserManager> {
       canceltimer = true;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GameFinishedManager()),
+        MaterialPageRoute(builder: (context) => GameFinishedManager(
+          finalscore: score,
+        )),
       );
     }
   }

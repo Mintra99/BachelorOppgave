@@ -52,9 +52,12 @@ class _ProposerPageState extends State<ProposerManager> {
 
   String _selected;
 
+  int playerID;
   RegExp re = new RegExp(r"(\w|\s|,|')+[。.?!]*\s*");
 
   Future fitchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    playerID = prefs.getInt('playerID') + 1;
     if (widget.listOfQuestions == null) {
       print('nooooooooo');
     } else {
@@ -62,7 +65,8 @@ class _ProposerPageState extends State<ProposerManager> {
     }
   }
 
-  void showQuestion() {
+  Future<void> showQuestion() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (widget.listOfQuestions.length > 0) {
       question = widget.listOfQuestions[0]['question_text'].toString();
       answer = widget.listOfQuestions[0]['correct_answer'].toString();
@@ -106,10 +110,15 @@ class _ProposerPageState extends State<ProposerManager> {
       //lobbydatabaseHelper.addGameClaim(questionid);
     } else {
       //MP.dataQ = null;
+      lobbydatabaseHelper.updateScore(score, "respondent", prefs.get('playerID'));
       canceltimer = true;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GameFinishedManager()),
+        MaterialPageRoute(
+          builder: (_) => GameFinishedManager(
+            finalscore: score,
+          ),
+        ),
       );
     }
     widget.listOfQuestions.removeAt(0);
@@ -149,12 +158,13 @@ class _ProposerPageState extends State<ProposerManager> {
     });
   }
 
-  void nextquestion() {
+  void nextquestion() async{
     splitHint.clear();
+    await lobbydatabaseHelper.getScore("respondent", playerID);
+    score = lobbydatabaseHelper.proposerScore;//prefs.getInt('proposerScore');
     showQuestion();
     canceltimer = false;
     timer = 10;
-    lobbydatabaseHelper.getScore("proposer");
     starttimer();
   }
 
