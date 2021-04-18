@@ -27,7 +27,7 @@ class _GuesserPageState extends State<GuesserManager> {
   RegExp re = new RegExp(r"(\w|\s|,|')+[。.?!]*\s*");
 
   // Used to create timer
-  int timer = 10;
+  int timer = 45;
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
@@ -124,43 +124,33 @@ class _GuesserPageState extends State<GuesserManager> {
       question = mapResponse[0]['question_text'].toString();
       answer = mapResponse[0]['correct_answer'].toString();
       source = mapResponse[0]['sources'];
-      //hint = mapResponse[0]['doc'].split("\" ");
       test = mapResponse[0]['doc'].toString();
       Iterable matches = re.allMatches(test);
       for (Match m in matches) {
         if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
           String match = m.group(0);
-          //print("EXTENDINGHINT!");
-          //print(splitHint[splitHint.length - 1] + match);
           splitHint.add(splitHint[splitHint.length - 1] + match);
           splitHint.removeAt(splitHint.length - 2);
-        } else if(m.group(0)[0].toUpperCase() == m.group(0)[0] && m.group(0)[m.group(0).length-1] != "."){
-          if(splitHint.length < 0){
+        } else if (m.group(0)[0].toUpperCase() == m.group(0)[0] &&
+            m.group(0)[m.group(0).length - 1] != ".") {
+          if (splitHint.length < 0) {
             String match = m.group(0);
-            //print("EXTENDINGHINT!");
-            //print(splitHint[splitHint.length - 1] + match);
             splitHint.add(splitHint[splitHint.length - 1] + match);
             splitHint.removeAt(splitHint.length - 2);
           } else {
             String match = m.group(0);
-            //print("EXTENDINGHINT!");
-            //print(match);
             splitHint.add(match);
           }
         } else if (m.group(0)[0] == ' ') {
           String match = m.group(0);
-          //print("EXTENDINGHINT!");
-          //print(splitHint[splitHint.length - 1] + match);
           splitHint.add(splitHint[splitHint.length - 1] + match);
           splitHint.removeAt(splitHint.length - 2);
-        } else if(m.group(0)[0] == RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')){
+        } else if (m.group(0)[0] ==
+            RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')) {
           String match = m.group(0);
-          //print("EXTENDINGHINT!");
-          //print(splitHint[splitHint.length - 1] + match);
           splitHint.add(splitHint[splitHint.length - 1] + match);
           splitHint.removeAt(splitHint.length - 2);
         } else {
-          //print(m.group(0));
           String match = m.group(0);
           splitHint.add(match);
         }
@@ -175,9 +165,10 @@ class _GuesserPageState extends State<GuesserManager> {
       canceltimer = true;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GameFinishedManager(
-          finalscore: score,
-        )),
+        MaterialPageRoute(
+            builder: (context) => GameFinishedManager(
+                  finalscore: score,
+                )),
       );
     }
   }
@@ -217,8 +208,7 @@ class _GuesserPageState extends State<GuesserManager> {
   void nextquestion() {
     showQuestion();
     canceltimer = false;
-    timer = 10;
-    hintCounter = 0;
+    timer = 45;
     btncolor["True"] = Colors.indigoAccent;
     btncolor["Mostly true"] = Colors.indigoAccent;
     btncolor["Half true"] = Colors.indigoAccent;
@@ -242,11 +232,7 @@ class _GuesserPageState extends State<GuesserManager> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (answered == false) {
       if (answer == k.toLowerCase()) {
-        if ((100 * (timer)) - (10 * hintCounter) > 0) {
-          score += (100 * (timer)) - (10 * hintCounter);
-        } else {
-          score += 10;
-        }
+        score += 10 * (timer);
         print(score);
         prefs.setInt('guesserScore',
             score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
@@ -272,6 +258,7 @@ class _GuesserPageState extends State<GuesserManager> {
       btncolor[k] = colortoshow;
       canceltimer = true;
     });
+
     databaseHelper.answerData(k, questionid);
   }
 

@@ -21,8 +21,9 @@ class Hint {
 class ProposerManager extends StatefulWidget {
   final String title;
   final List listOfQuestions;
+  final int playerNum;
 
-  ProposerManager({Key key, this.title, this.listOfQuestions})
+  ProposerManager({Key key, this.title, this.listOfQuestions, this.playerNum})
       : super(key: key);
 
   @override
@@ -36,7 +37,7 @@ class _ProposerPageState extends State<ProposerManager> {
   LobbydatabaseHelper lobbydatabaseHelper = new LobbydatabaseHelper();
   MultiPlayer MP = new MultiPlayer();
 
-  int timer = 10;
+  int timer = 45;
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
@@ -50,6 +51,9 @@ class _ProposerPageState extends State<ProposerManager> {
   String hint;
   List splitHint = [];
 
+  List playerIDList = [];
+  List scoreList = [];
+
   String _selected;
 
   int playerID;
@@ -58,6 +62,11 @@ class _ProposerPageState extends State<ProposerManager> {
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     playerID = prefs.getInt('playerID') + 1;
+    for(int i = 1; i < widget.playerNum; i++){
+      print("PLAYERID");
+      playerIDList.add(prefs.getInt('playerID') + i);
+      print(playerIDList);
+    }
     if (widget.listOfQuestions == null) {
       print('nooooooooo');
     } else {
@@ -160,11 +169,22 @@ class _ProposerPageState extends State<ProposerManager> {
 
   void nextquestion() async{
     splitHint.clear();
-    await lobbydatabaseHelper.getScore("respondent", playerID);
-    score = lobbydatabaseHelper.proposerScore;//prefs.getInt('proposerScore');
+    for (int i = 0; i < playerIDList.length; i++){
+      await lobbydatabaseHelper.getScore("respondent", playerIDList[i]);
+      if (lobbydatabaseHelper.proposerScore != null){
+        scoreList.add(lobbydatabaseHelper.proposerScore);
+      }
+    }
+    score = scoreList.fold(0, (previous, current) => previous + current);
+    print(scoreList.length);
+    score = (score ~/ scoreList.length);
+    print("SUM SCORE");
+    print(score);
+    //await lobbydatabaseHelper.getScore("respondent", playerID);
+    //score = lobbydatabaseHelper.proposerScore;//prefs.getInt('proposerScore');
     showQuestion();
     canceltimer = false;
-    timer = 10;
+    timer = 45;
     starttimer();
   }
 

@@ -20,8 +20,9 @@ class WaitingLobby extends StatefulWidget {
   final bool existingP;
   final bool existingQ;
   final int playerID;
+  final int playerNum;
 
-  const WaitingLobby({Key key, this.listOfQuestions, this.role, this.lobbyname, this.existingP, this.existingQ, this.playerID})
+  const WaitingLobby({Key key, this.listOfQuestions, this.role, this.lobbyname, this.existingP, this.existingQ, this.playerID, this.playerNum})
       : super(key: key);
 
   @override
@@ -64,6 +65,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
           MaterialPageRoute(
             builder: (_) => ProposerManager(
               listOfQuestions: widget.listOfQuestions,
+              playerNum: widget.playerNum,
             ),
           ),
         );

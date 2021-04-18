@@ -96,7 +96,7 @@ class LobbydatabaseHelper {
       print('Response status : ${response.statusCode}');
       print('Response status : ${response.body} ');
     });
-    print(mapResponse);
+    print(mapResponse['game']['current_players']);
     print("creategame MAPRESPONSE");
     currentGameId = mapResponse['game']['id'];
     prefs.setInt('playerID', mapResponse['player_game']);
@@ -258,12 +258,17 @@ class LobbydatabaseHelper {
       final response = await http.get(myUrl, headers: {
         'Authorization': 'Bearer $value'
       }).then((response) {
-        print('get the score from gusser');
-        print('Response status : ${response.statusCode}');
-        print('Response status : ${response.body} ');
-        Map mapResponse = json.decode(response.body);
-        proposerScore = mapResponse['score'];
-        prefs.setInt('proposerScore', proposerScore);
+        if(response.statusCode == 500 ){
+          print("ERROR");
+          proposerScore = null;
+        } else {
+          print('get the score from gusser');
+          print('Response status : ${response.statusCode}');
+          print('Response status : ${response.body} ');
+          Map mapResponse = json.decode(response.body);
+          proposerScore = mapResponse['score'];
+          prefs.setInt('proposerScore', proposerScore);
+        }
       });
     } else {
       print('you should select Claim');

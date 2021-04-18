@@ -155,6 +155,7 @@ class _CreateLobbyState extends State<CreateLobby> {
                             //playerID: prefs.getInt('userID'),
                             playerID: databaseHelper.getID(),
                             lobbyname: _gamenameController.text.trim(),
+                            playerNum: databaseHelper.getPlayerNum(),
                           ),
                         ),
                       );

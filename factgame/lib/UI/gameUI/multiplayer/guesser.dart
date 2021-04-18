@@ -33,7 +33,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
 
   MultiPlayer MP = new MultiPlayer();
 
-  int timer = 10;
+  int timer = 45;
   double percentage;
   bool canceltimer = false;
   String showtimer = "10";
@@ -159,7 +159,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
   void nextquestion() {
     showQuestion();
     canceltimer = false;
-    timer = 10;
+    timer = 45;
     btncolor["True"] = Colors.indigoAccent;
     btncolor["Mostly true"] = Colors.indigoAccent;
     btncolor["Half true"] = Colors.indigoAccent;
