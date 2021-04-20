@@ -14,3 +14,10 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+### HOW TO RUN APP (Android)
+- download android studios here --> https://developer.android.com/studio
+- clone this repository
+- run this repository on android studios
+- Go into Build>app>outputs>flutter-apk and open the file called "app-release.apk" with your phone (you can do that by sending the file to yourself on messenger or ask Minh/Karam to send it to you on facebook
+- download the file on you phone and you are ready to go 
