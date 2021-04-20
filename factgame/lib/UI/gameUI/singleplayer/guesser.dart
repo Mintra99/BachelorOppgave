@@ -65,7 +65,7 @@ class _GuesserPageState extends State<GuesserManager> {
   Map<String, Color> btncolor = {
     "True": Colors.indigoAccent,
     "Mostly true": Colors.indigoAccent,
-    "Half true": Colors.indigoAccent,
+    "Barely true": Colors.indigoAccent,
     "Mostly false": Colors.indigoAccent,
     "False": Colors.indigoAccent,
     "Pants on Fire": Colors.indigoAccent,
@@ -211,7 +211,7 @@ class _GuesserPageState extends State<GuesserManager> {
     timer = 45;
     btncolor["True"] = Colors.indigoAccent;
     btncolor["Mostly true"] = Colors.indigoAccent;
-    btncolor["Half true"] = Colors.indigoAccent;
+    btncolor["Barely true"] = Colors.indigoAccent;
     btncolor["Mostly false"] = Colors.indigoAccent;
     btncolor["False"] = Colors.indigoAccent;
     btncolor["Pants on Fire"] = Colors.indigoAccent;
@@ -356,7 +356,7 @@ class _GuesserPageState extends State<GuesserManager> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            choiceButton('Half true'),
+                            choiceButton('Barely true'),
                             choiceButton('Mostly false'),
                           ],
                         ),
