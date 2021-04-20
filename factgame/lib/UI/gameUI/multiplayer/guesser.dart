@@ -143,7 +143,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       setState(() {
         if (timer < 1) {
           t.cancel();
-          //nextquestion();
+          Timer(Duration(seconds: 2), nextquestion);
           _toggle();
         } else if (canceltimer == true) {
           t.cancel();
@@ -210,8 +210,9 @@ class _GuesserPageState extends State<GuesserManagerMP> {
       // applying the changed color to the particular button that was selected
       _isButtonDisabled = true;
       btncolor[k] = colortoshow;
-      canceltimer = true;
+      //canceltimer = true;
     });
+    //Timer(Duration(seconds: 2), nextquestion);
   }
 
   Widget choiceButton(String k) {
@@ -455,7 +456,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                                 borderRadius: BorderRadius.circular(20.0)),
                           ),
                         )),
-                    Visibility(
+                    /*Visibility(
                         visible: _visible,
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -464,7 +465,6 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                           ),
                           child: MaterialButton(
                             onPressed: () {
-                              nextquestion();
                             },
                             child: Text(
                               "Next question",
@@ -483,7 +483,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0)),
                           ),
-                        ))
+                        ))*/
                   ],
                 ),
               ],
