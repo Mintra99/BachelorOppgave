@@ -22,10 +22,6 @@ environment:
 
 
 dependencies:
-  # Heroku
-  shelf: any
-  shelf_static: any
-
   flutter:
     sdk: flutter
 
