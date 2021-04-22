@@ -19,7 +19,7 @@ class LogIn extends StatefulWidget{
   LogInState createState() => LogInState();
 }
 class LogInState extends State<LogIn> {
-  read() async {
+  /*read() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';
     final value = prefs.get(key ) ?? 0;
@@ -32,9 +32,11 @@ class LogInState extends State<LogIn> {
     }
   }
 
+   */
+
   @override
   initState(){
-    read();
+    //read();
   }
   DatabaseHelper databaseHelper = new DatabaseHelper();
   TextEditingController _usernameController = TextEditingController();

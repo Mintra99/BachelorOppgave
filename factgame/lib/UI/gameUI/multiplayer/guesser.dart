@@ -219,7 +219,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10.0,
-        horizontal: 20.0,
+        horizontal: 10.0,
       ),
       child: MaterialButton(
         onPressed: () {
@@ -237,7 +237,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
         color: btncolor[k],
         splashColor: Colors.indigo[700],
         highlightColor: Colors.indigo[700],
-        minWidth: 150.0,
+        minWidth: 140.0,
         height: 45.0,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),

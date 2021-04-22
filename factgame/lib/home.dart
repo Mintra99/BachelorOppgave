@@ -23,7 +23,7 @@ class HomeState extends State<Home>{
       //debugShowCheckedModeBanner: false,
       body: SafeArea(
         child: DefaultTabController(
-          length: 4,
+          length: 2,
           child: new Scaffold(
             body: TabBarView(
               children: [
@@ -54,7 +54,7 @@ class HomeState extends State<Home>{
                         child: HowToPlayManager()
                       ),
                     ])),
-                new Container(
+                /*new Container(
                     color: darkGrayColor,
                     child: Column(children: [
                       Container(
@@ -79,7 +79,6 @@ class HomeState extends State<Home>{
                       )
                     ])),
                 new Container(
-
                     color: darkGrayColor,
                     child: Column(children: [
                       Container(
@@ -101,6 +100,8 @@ class HomeState extends State<Home>{
                       ),
                     ])),
 
+                 */
+
                 new Container(
                     color: darkGrayColor,
                     child: Column(children: [
@@ -117,6 +118,10 @@ class HomeState extends State<Home>{
                             color: Colors.white,
                             border: Border.all(color: Colors.black, width: 1)),
                       ),
+                      Container(
+                        padding: EdgeInsets.only(top: 50.0),
+                        child: Logout(),
+                      ),
                     ])),
               ],
             ),
@@ -125,12 +130,14 @@ class HomeState extends State<Home>{
                 Tab(
                   icon: new Icon(Icons.videogame_asset),
                 ),
-                Tab(
+                /*Tab(
                   icon: new Icon(Icons.leaderboard),
                 ),
                 Tab(
                   icon: new Icon(Icons.person),
                 ),
+
+                 */
                 Tab(
                   icon: new Icon(Icons.settings),
                 )
