@@ -80,6 +80,7 @@ class LobbydatabaseHelper {
       numPlayers =
       '2'; // setting default value if user forget to set number if players
     }
+    print("numOfPlayers: " + numPlayers);
     var number = int.parse(numPlayers);
     final prefs = await SharedPreferences.getInstance();
     final key = 'access';

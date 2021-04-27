@@ -122,33 +122,6 @@ class _ProposerPageState extends State<ProposerManager> {
           }
         }
       }
-      /*for (Match m in matches) {
-        if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
-          String match = m.group(0);
-          splitHint.add(splitHint[splitHint.length - 1] + match);
-          splitHint.removeAt(splitHint.length - 2);
-        } else if(m.group(0)[0].toUpperCase() == m.group(0)[0] && m.group(0)[m.group(0).length-1] != "."){
-          if(splitHint.length < 0){
-            String match = m.group(0);
-            splitHint.add(splitHint[splitHint.length - 1] + match);
-            splitHint.removeAt(splitHint.length - 2);
-          } else {
-            String match = m.group(0);
-            splitHint.add(match);
-          }
-        } else if (m.group(0)[0] == ' ') {
-          String match = m.group(0);
-          splitHint.add(splitHint[splitHint.length - 1] + match);
-          splitHint.removeAt(splitHint.length - 2);
-        } else if(m.group(0)[0] == RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')){
-          String match = m.group(0);
-          splitHint.add(splitHint[splitHint.length - 1] + match);
-          splitHint.removeAt(splitHint.length - 2);
-        } else {
-          String match = m.group(0);
-          splitHint.add(match);
-        }
-      }*/
       _selected = splitHint[0];
       print("HINT!!!!!!");
       print(splitHint);
@@ -158,6 +131,7 @@ class _ProposerPageState extends State<ProposerManager> {
       print('question id that we like it : $questionid');
       //_loadData();
       //lobbydatabaseHelper.addGameClaim(questionid);
+      widget.listOfQuestions.removeAt(0);
     } else {
       //MP.dataQ = null;
       lobbydatabaseHelper.updateScore(
@@ -172,7 +146,6 @@ class _ProposerPageState extends State<ProposerManager> {
         ),
       );
     }
-    widget.listOfQuestions.removeAt(0);
   }
 
   @override
@@ -294,18 +267,125 @@ class _ProposerPageState extends State<ProposerManager> {
           decoration: BoxDecoration(
               border: Border.all(width: 1, color: Colors.grey),
               borderRadius: BorderRadius.circular(10)),
-          child: Column(
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: <Widget>[
-                    BackButton(),
-                    Spacer(),
-                    Text('Score:' + '$score'),
-                  ],
+              Positioned(
+                top: 10,
+                left: 10,
+                child: BackButton(),
+              ),
+              Positioned(
+                top: 25,
+                right: 10,
+                child: Text('Score:' + '$score'),
+              ),
+              Positioned(
+                top: 100,
+                child: Container(
+                  height: 200,
+                  width: 400,
+                  padding: EdgeInsets.all(15.0),
+                  child: widget.listOfQuestions == null
+                      ? Container()
+                      : Text(
+                          // Shows the question to the guesser
+                          '$question',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: "Quando",
+                          ),
+                        ),
                 ),
               ),
+              Positioned(
+                top: 350,
+                //right: 50,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 390,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: new DropdownButton<dynamic>(
+                              isDense: true,
+                              value: _selected,
+                              onChanged: (dynamic newValue) {
+                                setState(() {
+                                  _selected = newValue;
+                                });
+                                print(_selected);
+                              },
+                              items: splitHint.map<DropdownMenuItem<dynamic>>(
+                                  (dynamic value) {
+                                return new DropdownMenuItem<dynamic>(
+                                    value: value,
+                                    child: Card(
+                                      child: Container(
+                                        width: 300,
+                                        child: Center(
+                                          child: Text(value.toString()),
+                                        ),
+                                      ),
+                                    ));
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 400,
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: RaisedButton(
+                    child: Text('Send hint'),
+                    onPressed: () {
+                      //var dochint = ' here wwe add heint';
+                      var dochint = _selected.toString();
+                      print('question id appear when u press send hint');
+                      print(questionid);
+                      // i neeed to add to parameters questionid and selected hint
+                      lobbydatabaseHelper.addGameClaim(questionid, dochint);
+                      //lobbydatabaseHelper.addGameClaim(questionid);
+                      lobbydatabaseHelper.setHint(_selected);
+                    },
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 500,
+                  child: new Container(
+                child: Column(
+                  children: [
+                    Container(
+                        width: 250,
+                        child: LinearProgressIndicator(
+                            value: percentage,
+                            backgroundColor: Colors.grey,
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                              Colors.blue,
+                            ))),
+                    Container(
+                      child: Text(
+                        '$timer',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 48,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+              /*
               SizedBox(height: 50),
               Container(
                 padding: EdgeInsets.all(15.0),
@@ -349,29 +429,6 @@ class _ProposerPageState extends State<ProposerManager> {
                                     ),
                                   ),
                                 )
-
-
-
-                                /*new SizedBox(
-                                    width: 300,
-                                    child: new Text(value.toString()))*/
-
-                                /*Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Expanded(
-                                      child: SizedBox(
-                                    height: 100,
-                                    child: Container(
-                                        width: 300,
-                                        child: Center(
-                                          child: Text(value.toString()),
-                                        )),
-                                  )),
-                                  //Spacer(),
-                                ],
-                              ),*/
-
                                 );
                           }).toList(),
                         ),
@@ -392,7 +449,6 @@ class _ProposerPageState extends State<ProposerManager> {
                     // i neeed to add to parameters questionid and selected hint
                     lobbydatabaseHelper.addGameClaim(questionid, dochint);
                     //lobbydatabaseHelper.addGameClaim(questionid);
-                    // Todo update endpoint with question hint
                     lobbydatabaseHelper.setHint(_selected);
                   },
                 ),
@@ -420,7 +476,7 @@ class _ProposerPageState extends State<ProposerManager> {
                     )
                   ],
                 ),
-              )
+              )*/
             ],
           ),
         ),

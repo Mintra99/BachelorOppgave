@@ -23,7 +23,6 @@ class _CreateLobbyState extends State<CreateLobby> {
   final TextEditingController _gamenameController = new TextEditingController();
   final TextEditingController numOfPlayers = new TextEditingController();
 
-
   Map mapResponse;
   int id;
 
@@ -82,7 +81,8 @@ class _CreateLobbyState extends State<CreateLobby> {
     }
     setState(() {
       // now we are sending game_name , numofplayer and  ten questions to the game
-      databaseHelper.createGame(_gamenameController.text.trim(), numOfPlayers.text.trim(), list);
+      databaseHelper.createGame(
+          _gamenameController.text.trim(), numOfPlayers.text.trim(), list);
       prefs.setString('gameName', _gamenameController.text.trim());
     });
   }
@@ -141,9 +141,15 @@ class _CreateLobbyState extends State<CreateLobby> {
                 child: new RaisedButton(
                   onPressed: () async {
                     //SharedPreferences prefs = await SharedPreferences.getInstance();
-                    databaseHelper.setPlayernum(int.parse(numOfPlayers.text));
-                    print("NUMOFPLAYERS!!!!");
-                    print(databaseHelper.getPlayerNum());
+                    print("BOOBA");
+                    print(numOfPlayers.text.isEmpty);
+                    if (numOfPlayers.text.isNotEmpty) {
+                      databaseHelper.setPlayernum(int.parse(numOfPlayers.text));
+                      print("NUMOFPLAYERS!!!!");
+                      print(databaseHelper.getPlayerNum());
+                    } else {
+                      databaseHelper.setPlayernum(2);
+                    }
                     await setQuestions();
                     {
                       Navigator.push(
