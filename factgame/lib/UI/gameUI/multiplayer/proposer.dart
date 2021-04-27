@@ -62,7 +62,7 @@ class _ProposerPageState extends State<ProposerManager> {
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     playerID = prefs.getInt('playerID') + 1;
-    for(int i = 1; i < widget.playerNum; i++){
+    for (int i = 1; i < widget.playerNum; i++) {
       print("PLAYERID");
       playerIDList.add(prefs.getInt('playerID') + i);
       print(playerIDList);
@@ -82,6 +82,47 @@ class _ProposerPageState extends State<ProposerManager> {
       hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
       Iterable matches = re.allMatches(hint);
       for (Match m in matches) {
+        if (m.group(0).split(" ").length <= 7) {
+          continue;
+        } else {
+          //checks if the first word starts with uppercase
+          if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
+            String match = m.group(0);
+            if (splitHint.length > 0) {
+              splitHint.add(splitHint[splitHint.length - 1] + match);
+              splitHint.removeAt(splitHint.length - 2);
+            }
+          }
+          //checks if first word starts with uppercase and last word does not end with .
+          if (m.group(0)[0].toUpperCase() == m.group(0)[0] &&
+              m.group(0)[m.group(0).length - 1] != ".") {
+            if (splitHint.length > 0) {
+              String match = m.group(0);
+              splitHint.add(splitHint[splitHint.length - 1] + match);
+              splitHint.removeAt(splitHint.length - 2);
+            } else {
+              String match = m.group(0);
+              splitHint.add(match);
+            }
+          }
+          // checks if sentence starts with space
+          if (m.group(0)[0] == ' ') {
+            String match = m.group(0);
+            splitHint.add(splitHint[splitHint.length - 1] + match);
+            splitHint.removeAt(splitHint.length - 2);
+          }
+          //checks if sentence starts with number
+          if (m.group(0)[0] == RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')) {
+            String match = m.group(0);
+            splitHint.add(splitHint[splitHint.length - 1] + match);
+            splitHint.removeAt(splitHint.length - 2);
+          } else {
+            String match = m.group(0);
+            splitHint.add(match);
+          }
+        }
+      }
+      /*for (Match m in matches) {
         if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
           String match = m.group(0);
           splitHint.add(splitHint[splitHint.length - 1] + match);
@@ -107,7 +148,7 @@ class _ProposerPageState extends State<ProposerManager> {
           String match = m.group(0);
           splitHint.add(match);
         }
-      }
+      }*/
       _selected = splitHint[0];
       print("HINT!!!!!!");
       print(splitHint);
@@ -119,7 +160,8 @@ class _ProposerPageState extends State<ProposerManager> {
       //lobbydatabaseHelper.addGameClaim(questionid);
     } else {
       //MP.dataQ = null;
-      lobbydatabaseHelper.updateScore(score, "respondent", prefs.get('playerID'));
+      lobbydatabaseHelper.updateScore(
+          score, "respondent", prefs.get('playerID'));
       canceltimer = true;
       Navigator.push(
         context,
@@ -167,19 +209,24 @@ class _ProposerPageState extends State<ProposerManager> {
     });
   }
 
-  void nextquestion() async{
+  void nextquestion() async {
     splitHint.clear();
-    for (int i = 0; i < playerIDList.length; i++){
+    for (int i = 0; i < playerIDList.length; i++) {
       await lobbydatabaseHelper.getScore("respondent", playerIDList[i]);
-      if (lobbydatabaseHelper.proposerScore != null){
+      if (lobbydatabaseHelper.proposerScore != null) {
         scoreList.add(lobbydatabaseHelper.proposerScore);
       }
     }
     score = scoreList.fold(0, (previous, current) => previous + current);
     print(scoreList.length);
-    score = (score ~/ scoreList.length);
-    print("SUM SCORE");
-    print(score);
+    if (scoreList.length > 0) {
+      score = (score ~/ scoreList.length);
+      print("SUM SCORE");
+      print(score);
+    } else {
+      print("No players answered");
+    }
+
     //await lobbydatabaseHelper.getScore("respondent", playerID);
     //score = lobbydatabaseHelper.proposerScore;//prefs.getInt('proposerScore');
     showQuestion();
@@ -290,22 +337,42 @@ class _ProposerPageState extends State<ProposerManager> {
                             });
                             print(_selected);
                           },
-                          items:
-                          splitHint
+                          items: splitHint
                               .map<DropdownMenuItem<dynamic>>((dynamic value) {
                             return new DropdownMenuItem<dynamic>(
-                              value: value,
-                              child: Row(
+                                value: value,
+                                child: Card(
+                                  child: Container(
+                                    width: 300,
+                                    child: Center(
+                                      child: Text(value.toString()),
+                                    ),
+                                  ),
+                                )
+
+
+
+                                /*new SizedBox(
+                                    width: 300,
+                                    child: new Text(value.toString()))*/
+
+                                /*Row(
                                 mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                      width: 300,
-                                      child: Center(
-                                        child: Text(value.toString()),
-                                      )),
+                                children: <Widget>[
+                                  Expanded(
+                                      child: SizedBox(
+                                    height: 100,
+                                    child: Container(
+                                        width: 300,
+                                        child: Center(
+                                          child: Text(value.toString()),
+                                        )),
+                                  )),
+                                  //Spacer(),
                                 ],
-                              ),
-                            );
+                              ),*/
+
+                                );
                           }).toList(),
                         ),
                       ),

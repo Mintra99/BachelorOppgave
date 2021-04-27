@@ -126,14 +126,47 @@ class _GuesserPageState extends State<GuesserManager> {
       source = mapResponse[0]['sources'];
       test = mapResponse[0]['doc'].toString();
       Iterable matches = re.allMatches(test);
-      for (Match m in matches) {
-        if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
+      /*for (Match m in matches){
+        if (m.group(0)[0].toUpperCase() == m.group(0)[0] && m.group(0)[m.group(0).length-1] == "."){
           String match = m.group(0);
-          splitHint.add(splitHint[splitHint.length - 1] + match);
-          splitHint.removeAt(splitHint.length - 2);
-        } else if (m.group(0)[0].toUpperCase() == m.group(0)[0] &&
-            m.group(0)[m.group(0).length - 1] != ".") {
-          if (splitHint.length < 0) {
+          print("MATCH: " + match);
+          splitHint.add(match);
+        }
+      }*/
+
+      for (Match m in matches) {
+        print("MATCH: "+ m.group(0));
+        print("MATCHLENGTH: " + m.group(0).split(" ").length.toString());
+        if (m.group(0).split(" ").length <= 7 ){
+          continue;
+        } else {
+          //checks if the first word starts with uppercase
+          if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
+            String match = m.group(0);
+            splitHint.add(splitHint[splitHint.length - 1] + match);
+            splitHint.removeAt(splitHint.length - 2);
+          }
+          //checks if first word starts with uppercase and last word does not end with .
+          if (m.group(0)[0].toUpperCase() == m.group(0)[0] &&
+              m.group(0)[m.group(0).length - 1] != ".") {
+            if (splitHint.length > 0) {
+              String match = m.group(0);
+              splitHint.add(splitHint[splitHint.length - 1] + match);
+              splitHint.removeAt(splitHint.length - 2);
+            } else {
+              String match = m.group(0);
+              splitHint.add(match);
+            }
+          }
+          // checks if sentence starts with space
+          if (m.group(0)[0] == ' ') {
+            String match = m.group(0);
+            splitHint.add(splitHint[splitHint.length - 1] + match);
+            splitHint.removeAt(splitHint.length - 2);
+          }
+          //checks if sentence starts with number
+          if (m.group(0)[0] ==
+              RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')) {
             String match = m.group(0);
             splitHint.add(splitHint[splitHint.length - 1] + match);
             splitHint.removeAt(splitHint.length - 2);
@@ -141,18 +174,6 @@ class _GuesserPageState extends State<GuesserManager> {
             String match = m.group(0);
             splitHint.add(match);
           }
-        } else if (m.group(0)[0] == ' ') {
-          String match = m.group(0);
-          splitHint.add(splitHint[splitHint.length - 1] + match);
-          splitHint.removeAt(splitHint.length - 2);
-        } else if (m.group(0)[0] ==
-            RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')) {
-          String match = m.group(0);
-          splitHint.add(splitHint[splitHint.length - 1] + match);
-          splitHint.removeAt(splitHint.length - 2);
-        } else {
-          String match = m.group(0);
-          splitHint.add(match);
         }
       }
       answer.toLowerCase();
