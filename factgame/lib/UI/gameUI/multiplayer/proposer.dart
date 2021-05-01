@@ -79,8 +79,10 @@ class _ProposerPageState extends State<ProposerManager> {
     if (widget.listOfQuestions.length > 0) {
       question = widget.listOfQuestions[0]['question_text'].toString();
       answer = widget.listOfQuestions[0]['correct_answer'].toString();
-      hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
-      Iterable matches = re.allMatches(hint);
+      //hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
+      splitHint = widget.listOfQuestions[0]['doc'];
+
+      /*Iterable matches = re.allMatches(hint);
       for (Match m in matches) {
         if (m.group(0).split(" ").length <= 7) {
           continue;
@@ -122,6 +124,8 @@ class _ProposerPageState extends State<ProposerManager> {
           }
         }
       }
+
+       */
       _selected = splitHint[0];
       print("HINT!!!!!!");
       print(splitHint);

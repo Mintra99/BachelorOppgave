@@ -41,10 +41,8 @@ class _GuesserPageState extends State<GuesserManager> {
   String answer;
   int questionid;
   int score = 0;
-  int hintCounter = 0;
 
   List source;
-  List hint;
   String test;
   List splitHint = [];
 
@@ -104,19 +102,6 @@ class _GuesserPageState extends State<GuesserManager> {
     }
   }
 
-  void shuffleHint() {
-    var random = new Random();
-    // Go through all elements.
-    for (var i = splitHint.length - 1; i > 0; i--) {
-      // Pick a pseudorandom number according to the list length
-      var n = random.nextInt(i + 1);
-
-      var temp = splitHint[i];
-      splitHint[i] = splitHint[n];
-      splitHint[n] = temp;
-    }
-  }
-
   void showQuestion() {
     if (counter <= cap) {
       _isButtonDisabled = false;
@@ -125,57 +110,8 @@ class _GuesserPageState extends State<GuesserManager> {
       answer = mapResponse[0]['correct_answer'].toString();
       source = mapResponse[0]['sources'];
       test = mapResponse[0]['doc'].toString();
-      Iterable matches = re.allMatches(test);
-      /*for (Match m in matches){
-        if (m.group(0)[0].toUpperCase() == m.group(0)[0] && m.group(0)[m.group(0).length-1] == "."){
-          String match = m.group(0);
-          print("MATCH: " + match);
-          splitHint.add(match);
-        }
-      }*/
+      splitHint = mapResponse[0]['doc'];
 
-      for (Match m in matches) {
-        print("MATCH: "+ m.group(0));
-        print("MATCHLENGTH: " + m.group(0).split(" ").length.toString());
-        if (m.group(0).split(" ").length <= 7 ){
-          continue;
-        } else {
-          //checks if the first word starts with uppercase
-          if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
-            String match = m.group(0);
-            splitHint.add(splitHint[splitHint.length - 1] + match);
-            splitHint.removeAt(splitHint.length - 2);
-          }
-          //checks if first word starts with uppercase and last word does not end with .
-          if (m.group(0)[0].toUpperCase() == m.group(0)[0] &&
-              m.group(0)[m.group(0).length - 1] != ".") {
-            if (splitHint.length > 0) {
-              String match = m.group(0);
-              splitHint.add(splitHint[splitHint.length - 1] + match);
-              splitHint.removeAt(splitHint.length - 2);
-            } else {
-              String match = m.group(0);
-              splitHint.add(match);
-            }
-          }
-          // checks if sentence starts with space
-          if (m.group(0)[0] == ' ') {
-            String match = m.group(0);
-            splitHint.add(splitHint[splitHint.length - 1] + match);
-            splitHint.removeAt(splitHint.length - 2);
-          }
-          //checks if sentence starts with number
-          if (m.group(0)[0] ==
-              RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')) {
-            String match = m.group(0);
-            splitHint.add(splitHint[splitHint.length - 1] + match);
-            splitHint.removeAt(splitHint.length - 2);
-          } else {
-            String match = m.group(0);
-            splitHint.add(match);
-          }
-        }
-      }
       answer.toLowerCase();
       print(answer);
       counter += 1;
@@ -409,8 +345,6 @@ class _GuesserPageState extends State<GuesserManager> {
                       await showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            shuffleHint();
-                            hintCounter += 1;
                             return AlertDialog(
                               title: new Text('Hint'),
                               content: new Text(splitHint[0]),
