@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:factgame/Controllers/databasehelper.dart';
@@ -16,28 +18,78 @@ class CreateNewAccountState extends State<CreateNewAccount> {
   final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
-  final TextEditingController _confirmPassController = new TextEditingController();
+  final TextEditingController _confirmPassController =
+      new TextEditingController();
 
   _onPressed() {
     setState(() {
       if (_emailController.text.trim().toLowerCase().isNotEmpty &&
           _passwordController.text.trim().isNotEmpty &&
           _usernameController.text.trim().isNotEmpty) {
-        databaseHelper
-            .registerData(
-                _usernameController.text.trim(),
-                _emailController.text.trim().toLowerCase(),
-                _passwordController.text.trim())
-            .whenComplete(() {
-          if (databaseHelper.Message != null) {
-            _showDialog();
-            msgStatus = 'You Have Account';
-          } else {
-            msgStatus = 'error';
-          }
-        });
+        try {
+          databaseHelper
+              .registerData(
+                  _usernameController.text.trim(),
+                  _emailController.text.trim().toLowerCase(),
+                  _passwordController.text.trim())
+              .whenComplete(() {
+            if (databaseHelper.Message != null) {
+              _showDialog(
+                  'Log in now',
+                  'You can login now',
+                  () => Navigator.pushReplacementNamed(context, '/Login'),
+                  'Login');
+              msgStatus = 'You Have Account';
+            } else {
+              msgStatus = 'error';
+              log(msgStatus);
+              _showDialog('Error occured!',
+                  'username or email address is already in use please try something different or login instead',
+                  () {
+                Navigator.of(context).pop();
+              }, 'OK');
+            }
+          });
+        } catch (error) {
+          _showDialog('Error', error.message.toString(), () {
+            Navigator.of(context).pop();
+          }, 'OK');
+        }
       }
     });
+  }
+
+  void _showDialog(
+      String title, String subtitle, Function fct, String fctTextName) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                Container(
+                  height: 25,
+                  width: 25,
+                  child: Image.network(
+                      'https://image.flaticon.com/icons/png/128/752/752755.png'),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                new Text(title),
+              ],
+            ),
+            content: new Text(subtitle),
+            actions: <Widget>[
+              RaisedButton(
+                child: new Text(
+                  fctTextName,
+                ),
+                onPressed: fct,
+              ),
+            ],
+          );
+        });
   }
 
   checkForm() {
@@ -46,17 +98,14 @@ class CreateNewAccountState extends State<CreateNewAccount> {
     setState(() {
       if (EmailValidator.validate(_emailController.text.trim()) != true) {
         _emailError();
-      }
-      else if (_usernameController.text.trim().isEmpty) {
+      } else if (_usernameController.text.trim().isEmpty) {
         _emptyUsername();
-      }
-      else if (_passwordController.text.trim().length < 8){
+      } else if (_passwordController.text.trim().length < 8) {
         _tooShortPw();
-      }
-      else if (_passwordController.text.trim() != _confirmPassController.text.trim()) {
+      } else if (_passwordController.text.trim() !=
+          _confirmPassController.text.trim()) {
         _notMatching();
-      }
-       else {
+      } else {
         _onPressed();
       }
     });
@@ -231,7 +280,8 @@ class CreateNewAccountState extends State<CreateNewAccount> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: new Text('Email field is wrong'),
-            content: new Text('Check if your email is correct/email is required'),
+            content:
+                new Text('Check if your email is correct/email is required'),
             actions: <Widget>[
               new FlatButton(
                 child: Text("OK"),
@@ -296,28 +346,6 @@ class CreateNewAccountState extends State<CreateNewAccount> {
                   Navigator.pop(context);
                 },
               )
-            ],
-          );
-        });
-  }
-
-  void _showDialog() async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text('Success'),
-            content: new Text('You Have Account'),
-            actions: <Widget>[
-              new RaisedButton(
-                child: new Text(
-                  'LogIn',
-                ),
-                onPressed: () {
-                  // Navigator.of(context).pop();
-                  Navigator.pushReplacementNamed(context, '/Login');
-                },
-              ),
             ],
           );
         });

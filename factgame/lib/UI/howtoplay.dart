@@ -1,5 +1,6 @@
 import 'package:factgame/models/global.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class HowToPlayManager extends StatefulWidget {
   @override
@@ -13,29 +14,65 @@ class _HowToPlay extends State<HowToPlayManager> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-            margin: EdgeInsets.all(10.0),
-            child: Center(
-              child: ButtonTheme(
-                minWidth: 300.0,
-                height: 75.0,
-                child: RaisedButton(
-                  shape: globalButtonBorder,
-                  color: Colors.grey,
-                  //padding: EdgeInsets.fromLTRB(125, 10, 125, 10),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HowToPlayPage()),
-                    );
-                  },
-                  child: Text(
-                    'How to play',
-                    style: globalTextStyle,
+        SizedBox(height: 25,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Material(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+            color: Colors.purple.shade100,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HowToPlayPage()),
+                );
+              },
+              splashColor: Colors.purple.shade200,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: Container(
+                width: 150,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purple.shade800, width: 1.5),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+                child: FittedBox(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, top: 10, bottom: 10, right: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'How to play',
+                            style: TextStyle(
+                              fontFamily: "Alike",
+                              fontSize: 16.0,
+                            ),
+                            maxLines: 1,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Entypo.help_with_circle,
+                            size: 16,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ))
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -66,8 +103,8 @@ class HowToPlayPage extends StatelessWidget {
                           )),
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          //border: Border.all(color: Colors.black, width: 1)
+                        color: Colors.white,
+                        //border: Border.all(color: Colors.black, width: 1)
                       ),
                     ),
                     Container(
@@ -75,12 +112,10 @@ class HowToPlayPage extends StatelessWidget {
                       margin: EdgeInsets.all(20.0),
                       alignment: Alignment.center,
                       child: Text(
-                        'The proposers job is to select a sentence form the sorce which they thingk are important for providing of disproving the claim.\n'
-                            'The faster the guesser succeeds in guessing the correct label of the claim higher the score they both get.'
-                      ,style: globalTextStyle),
+                          'The proposers job is to select a sentence form the sorce which they thingk are important for providing of disproving the claim.\n'
+                          'The faster the guesser succeeds in guessing the correct label of the claim higher the score they both get.',
+                          style: globalTextStyle),
                     )
-
-
                   ])),
               new Container(
                   color: darkGrayColor,
@@ -95,8 +130,8 @@ class HowToPlayPage extends StatelessWidget {
                           )),
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          //border: Border.all(color: Colors.black, width: 1)
+                        color: Colors.white,
+                        //border: Border.all(color: Colors.black, width: 1)
                       ),
                     ),
                     Container(
@@ -105,27 +140,22 @@ class HowToPlayPage extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                           'The guesser has to guess if the claim is true or false based on the evidence chosen by the proposer.\n'
-                              'The faster the guesser succeeds in guessing the correct label of the claim higher the score they both get.'
-                      , style: globalTextStyle),
+                          'The faster the guesser succeeds in guessing the correct label of the claim higher the score they both get.',
+                          style: globalTextStyle),
                     )
-
                   ])),
             ],
           ),
           bottomNavigationBar: new TabBar(
             tabs: [
-              Tab(
-                  icon: new Icon(Icons.help_outline)
-              ),
-              Tab(
-                  icon: new Icon(Icons.priority_high)
-              )
+              Tab(icon: new Icon(Icons.help_outline)),
+              Tab(icon: new Icon(Icons.priority_high))
             ],
             labelColor: Colors.blue,
             unselectedLabelColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
             indicatorPadding: EdgeInsets.all(5.0),
-            indicatorColor: Colors.red,
+            indicatorColor: Colors.purple,
           ),
           backgroundColor: Colors.black,
         ),

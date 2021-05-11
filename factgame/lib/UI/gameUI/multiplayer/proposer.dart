@@ -5,11 +5,14 @@ import 'package:factgame/UI/lobby/lobbydatabasehelper.dart';
 import 'package:factgame/models/classes/multiplayerdbHelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:factgame/Controllers/databasehelper.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:factgame/UI/gameUI/endscreen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Hint {
   String id;
@@ -58,6 +61,7 @@ class _ProposerPageState extends State<ProposerManager> {
 
   int playerID;
   RegExp re = new RegExp(r"(\w|\s|,|')+[。.?!]*\s*");
+  int _questionNumber = 1;
 
   Future fitchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -187,6 +191,9 @@ class _ProposerPageState extends State<ProposerManager> {
   }
 
   void nextquestion() async {
+    setState(() {
+      _questionNumber++;
+    });
     splitHint.clear();
     for (int i = 0; i < playerIDList.length; i++) {
       await lobbydatabaseHelper.getScore("respondent", playerIDList[i]);
@@ -265,131 +272,380 @@ class _ProposerPageState extends State<ProposerManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.grey),
-              borderRadius: BorderRadius.circular(10)),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: 10,
-                left: 10,
-                child: BackButton(),
-              ),
-              Positioned(
-                top: 25,
-                right: 10,
-                child: Text('Score:' + '$score'),
-              ),
-              Positioned(
-                top: 100,
-                child: Container(
-                  height: 200,
-                  width: 400,
-                  padding: EdgeInsets.all(15.0),
-                  child: widget.listOfQuestions == null
-                      ? Container()
-                      : Text(
-                          // Shows the question to the guesser
-                          '$question',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: "Quando",
+      backgroundColor: Colors.blue,
+      body: Container(
+        // padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.grey),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Row(
+                children: [
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.canPop(context)
+                            ? Navigator.pop(context)
+                            : null;
+                      },
+                      splashColor: Colors.blue.shade200,
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1.5),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
                           ),
                         ),
+                        child: Icon(
+                          Icons.chevron_left_outlined,
+                          color: Colors.indigo.shade800,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  Column(
+                    children: [
+                      Text(
+                        'Score:' + ' $score',
+                        style: TextStyle(
+                            color: Theme.of(context).textSelectionColor,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 18, bottom: 20),
+              child: Text(
+                // Shows the question to the guesser
+                'Question $_questionNumber /10',
+                style: TextStyle(
+                  // color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 25.0,
+                  fontFamily: "Quando",
                 ),
               ),
-              Positioned(
-                top: 350,
-                //right: 50,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 390,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: DropdownButtonHideUnderline(
-                          child: ButtonTheme(
-                            alignedDropdown: true,
-                            child: new DropdownButton<dynamic>(
-                              isDense: true,
-                              value: _selected,
-                              onChanged: (dynamic newValue) {
-                                setState(() {
-                                  _selected = newValue;
-                                });
-                                print(_selected);
-                              },
-                              items: splitHint.map<DropdownMenuItem<dynamic>>(
-                                  (dynamic value) {
-                                return new DropdownMenuItem<dynamic>(
-                                    value: value,
-                                    child: Card(
-                                      child: Container(
-                                        width: 300,
-                                        child: Center(
-                                          child: Text(value.toString()),
-                                        ),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade50,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(15.0),
+                        child: widget.listOfQuestions == null
+                            ? Container()
+                            : Text(
+                                // Shows the question to the guesser
+                                question == null
+                                    ? 'Getting question'
+                                    : '$question',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "Quando",
+                                ),
+                              ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: TextButton(
+                            onPressed: () async {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Row(
+                                        children: [
+                                          Image.network(
+                                            'https://image.flaticon.com/icons/png/128/1253/1253702.png',
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text('Choose hint'),
+                                        ],
                                       ),
-                                    ));
-                              }).toList(),
+                                      content: Container(
+                                        // height: 500,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: ListView.builder(
+                                            itemCount: splitHint.length,
+                                            itemBuilder:
+                                                (BuildContext ctx, int index) {
+                                              List colors = [
+                                                Colors.pink.shade800,
+                                                Colors.indigo.shade600,
+                                                Colors.blue.shade600,
+                                                Colors.pink.shade600,
+                                                Colors.orange.shade600,
+                                                Colors.cyan.shade600,
+                                                Colors.brown.shade600,
+                                              ];
+                                              colors.shuffle();
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8),
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _selected =
+                                                            splitHint[index];
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      '${index + 1}- ${splitHint[index]}',
+                                                      style: TextStyle(
+                                                        color: colors[0],
+                                                        fontSize: 18.0,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: "Quando",
+                                                      ),
+                                                    )),
+                                              );
+                                            }),
+                                      ),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text("Cancel"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Shimmer.fromColors(
+                              enabled: true,
+                              baseColor: Colors.deepOrange[600],
+                              period: Duration(seconds: 10),
+                              highlightColor: Colors.red[900],
+                              child: Row(
+                                children: [
+                                  Text(
+                                    // Shows the question to the guesser
+                                    'Change hint',
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 22.0,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Quando",
+                                    ),
+                                  ),
+                                  Icon(Feather.chevron_down)
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 22),
+                        child: Text(
+                          _selected == null ? '' : _selected,
+                          style: TextStyle(
+                            color: Theme.of(context).accentColor,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Quando",
+                          ),
+                        ),
+                      ),
+                      // DropdownButtonHideUnderline(
+                      //   child: ButtonTheme(
+                      //     alignedDropdown: true,
+                      //     child: new DropdownButton<dynamic>(
+                      //       isDense: true,
+                      //       value: _selected,
+                      //       onChanged: (dynamic newValue) {
+                      //         setState(() {
+                      //           _selected = newValue;
+                      //         });
+                      //         print(_selected);
+                      //       },
+                      //       items: splitHint
+                      //           .map<DropdownMenuItem<dynamic>>((dynamic value) {
+                      //         return new DropdownMenuItem<dynamic>(
+                      //             value: value,
+                      //             child: Card(
+                      //               child: Container(
+                      //                 width: 300,
+                      //                 child: Text(value.toString()),
+                      //               ),
+                      //             ));
+                      //       }).toList(),
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Material(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(12.0),
+                            ),
+                            color: Colors.deepOrange.shade200,
+                            child: InkWell(
+                              onTap: () {
+                                //var dochint = ' here wwe add heint';
+                                var dochint = _selected.toString();
+                                print(
+                                    'question id appear when u press send hint');
+                                print(questionid);
+                                // i neeed to add to parameters questionid and selected hint
+                                lobbydatabaseHelper.addGameClaim(
+                                    questionid, dochint);
+                                //lobbydatabaseHelper.addGameClaim(questionid);
+                                lobbydatabaseHelper.setHint(_selected);
+                              },
+                              splashColor: Colors.blue.shade200,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12.0)),
+                              child: Container(
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.orange[800], width: 1.5),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(12.0),
+                                  ),
+                                ),
+                                child: FittedBox(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Shimmer.fromColors(
+                                        enabled: true,
+                                        baseColor: Colors.deepOrange[600],
+                                        period: Duration(seconds: 10),
+                                        highlightColor: Colors.red[900],
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              "Send hint",
+                                              style: TextStyle(
+                                                  // color: Colors.white,
+                                                  fontFamily: "Alike",
+                                                  fontSize: 22.0,
+                                                  fontWeight: FontWeight.w600),
+                                              maxLines: 1,
+                                            ),
+                                            Icon(
+                                              Icons.live_help,
+                                              size: 22,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Container(
+                        child: CircularPercentIndicator(
+                          radius: 110,
+                          lineWidth: 9.0,
+                          percent: timer.toDouble() / 45,
+                          center: Text(
+                            '$timer',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: timer < 11 ? Colors.red : Colors.green,
+                            ),
+                          ),
+                          progressColor: timer < 10 ? Colors.red : Colors.green,
+                        ),
+                      ), SizedBox(
+                        height: 50,
+                      ),
+                      // Container(
+                      //     child: LinearPercentIndicator(
+                      //   //width: 100.0,
+                      //   lineHeight: 8.0,
+                      //   percent: timer.toDouble() / 45,
+                      //   progressColor: timer < 10 ? Colors.red : Colors.green,
+                      // )),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Align(
+                      //   alignment: Alignment.center,
+                      //   child: Text(
+                      //     '$timer',
+                      //     style: TextStyle(
+                      //       fontSize: 35,
+                      //       color: timer < 11 ? Colors.red : Colors.green,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
               ),
-              Positioned(
-                top: 400,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  child: RaisedButton(
-                    child: Text('Send hint'),
-                    onPressed: () {
-                      //var dochint = ' here wwe add heint';
-                      var dochint = _selected.toString();
-                      print('question id appear when u press send hint');
-                      print(questionid);
-                      // i neeed to add to parameters questionid and selected hint
-                      lobbydatabaseHelper.addGameClaim(questionid, dochint);
-                      //lobbydatabaseHelper.addGameClaim(questionid);
-                      lobbydatabaseHelper.setHint(_selected);
-                    },
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 500,
-                  child: new Container(
-                child: Column(
-                  children: [
-                    Container(
-                        width: 250,
-                        child: LinearProgressIndicator(
-                            value: percentage,
-                            backgroundColor: Colors.grey,
-                            valueColor: new AlwaysStoppedAnimation<Color>(
-                              Colors.blue,
-                            ))),
-                    Container(
-                      child: Text(
-                        '$timer',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 48,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ))
-              /*
+            ),
+
+            /*
               SizedBox(height: 50),
               Container(
                 padding: EdgeInsets.all(15.0),
@@ -481,8 +737,7 @@ class _ProposerPageState extends State<ProposerManager> {
                   ],
                 ),
               )*/
-            ],
-          ),
+          ],
         ),
       ),
     );
