@@ -70,7 +70,8 @@ class _GuesserPageState extends State<GuesserManager> {
     "True": Colors.transparent,
     "Mostly true": Colors.transparent,
     "Barely true": Colors.transparent,
-    "Mostly false": Colors.transparent,
+    "Half true": Colors.transparent,
+    //"Mostly false": Colors.transparent,
     "False": Colors.transparent,
     "Pants on Fire": Colors.transparent,
   };
@@ -189,7 +190,7 @@ class _GuesserPageState extends State<GuesserManager> {
     btncolor["Mostly true"] = Colors.transparent;
     btncolor["Barely true"] = Colors.transparent;
     btncolor["Half true"] = Colors.transparent;
-    btncolor["Mostly false"] = Colors.transparent;
+    //btncolor["Mostly false"] = Colors.transparent;
     btncolor["False"] = Colors.transparent;
     btncolor["Pants on Fire"] = Colors.transparent;
     _visible = false;
@@ -513,7 +514,7 @@ class _GuesserPageState extends State<GuesserManager> {
                                     choiceButton('Mostly true'),
                                     choiceButton('Barely true'),
                                     choiceButton('Half true'),
-                                    choiceButton('Mostly false'),
+                                    //choiceButton('Mostly false'),
                                     choiceButton('False'),
                                     choiceButton('Pants on Fire'),
                                     // Row(

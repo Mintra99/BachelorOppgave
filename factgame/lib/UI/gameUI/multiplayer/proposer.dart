@@ -152,7 +152,7 @@ class _ProposerPageState extends State<ProposerManager> {
     });
     splitHint.clear();
     scoreList.clear();
-    for (int i = 0; i < playerIDList.length; i++) {
+    for (int i = 0; i < playerIDList.length+10; i++) {
       await lobbydatabaseHelper.getScore("respondent", playerIDList[i]);
       if (lobbydatabaseHelper.proposerScore != null) {
         scoreList.add(lobbydatabaseHelper.proposerScore);
