@@ -575,43 +575,43 @@ class _ProposerPageState extends State<ProposerManager> {
                       SizedBox(
                         height: 50,
                       ),
-                      Container(
-                        child: CircularPercentIndicator(
-                          radius: 110,
-                          lineWidth: 9.0,
-                          percent: timer.toDouble() / 45,
-                          center: Text(
-                            '$timer',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: timer < 11 ? Colors.red : Colors.green,
-                            ),
-                          ),
-                          progressColor: timer < 10 ? Colors.red : Colors.green,
-                        ),
-                      ), SizedBox(
-                        height: 50,
-                      ),
-                      // Container(
-                      //     child: LinearPercentIndicator(
-                      //   //width: 100.0,
-                      //   lineHeight: 8.0,
-                      //   percent: timer.toDouble() / 45,
-                      //   progressColor: timer < 10 ? Colors.red : Colors.green,
-                      // )),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // Align(
-                      //   alignment: Alignment.center,
-                      //   child: Text(
-                      //     '$timer',
-                      //     style: TextStyle(
-                      //       fontSize: 35,
-                      //       color: timer < 11 ? Colors.red : Colors.green,
-                      //     ),
-                      //   ),
-                      // ),
+                     // Container(
+                       // child: CircularPercentIndicator(
+                         // radius: 110,
+                         // lineWidth: 9.0,
+                         // percent: timer.toDouble() / 45,
+                         // center: Text(
+                          //  '$timer',
+                           // style: TextStyle(
+                            //  fontSize: 16,
+                             // color: timer < 11 ? Colors.red : Colors.green,
+                            //),
+                          //),
+                         // progressColor: timer < 10 ? Colors.red : Colors.green,
+                        //),
+                      //), SizedBox(
+                     //   height: 50,
+                     // ),
+                       Container(
+                          child: LinearPercentIndicator(
+                         //width: 100.0,
+                         lineHeight: 8.0,
+                         percent: timer.toDouble() / 45,
+                         progressColor: timer < 10 ? Colors.red : Colors.green,
+                       )),
+                       SizedBox(
+                         height: 10,
+                       ),
+                       Align(
+                         alignment: Alignment.center,
+                         child: Text(
+                           '$timer',
+                          style: TextStyle(
+                             fontSize: 35,
+                             color: timer < 11 ? Colors.red : Colors.green,
+                           ),
+                         ),
+                       ),
                     ],
                   ),
                 ),
