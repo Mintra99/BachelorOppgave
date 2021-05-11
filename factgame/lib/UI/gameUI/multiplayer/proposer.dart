@@ -86,50 +86,6 @@ class _ProposerPageState extends State<ProposerManager> {
       //hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
       splitHint = widget.listOfQuestions[0]['doc'];
 
-      /*Iterable matches = re.allMatches(hint);
-      for (Match m in matches) {
-        if (m.group(0).split(" ").length <= 7) {
-          continue;
-        } else {
-          //checks if the first word starts with uppercase
-          if (m.group(0)[0].toUpperCase() != m.group(0)[0]) {
-            String match = m.group(0);
-            if (splitHint.length > 0) {
-              splitHint.add(splitHint[splitHint.length - 1] + match);
-              splitHint.removeAt(splitHint.length - 2);
-            }
-          }
-          //checks if first word starts with uppercase and last word does not end with .
-          if (m.group(0)[0].toUpperCase() == m.group(0)[0] &&
-              m.group(0)[m.group(0).length - 1] != ".") {
-            if (splitHint.length > 0) {
-              String match = m.group(0);
-              splitHint.add(splitHint[splitHint.length - 1] + match);
-              splitHint.removeAt(splitHint.length - 2);
-            } else {
-              String match = m.group(0);
-              splitHint.add(match);
-            }
-          }
-          // checks if sentence starts with space
-          if (m.group(0)[0] == ' ') {
-            String match = m.group(0);
-            splitHint.add(splitHint[splitHint.length - 1] + match);
-            splitHint.removeAt(splitHint.length - 2);
-          }
-          //checks if sentence starts with number
-          if (m.group(0)[0] == RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$')) {
-            String match = m.group(0);
-            splitHint.add(splitHint[splitHint.length - 1] + match);
-            splitHint.removeAt(splitHint.length - 2);
-          } else {
-            String match = m.group(0);
-            splitHint.add(match);
-          }
-        }
-      }
-
-       */
       _selected = splitHint[0];
       print("HINT!!!!!!");
       print(splitHint);
@@ -195,6 +151,7 @@ class _ProposerPageState extends State<ProposerManager> {
       _questionNumber++;
     });
     splitHint.clear();
+    scoreList.clear();
     for (int i = 0; i < playerIDList.length; i++) {
       await lobbydatabaseHelper.getScore("respondent", playerIDList[i]);
       if (lobbydatabaseHelper.proposerScore != null) {
@@ -236,7 +193,7 @@ class _ProposerPageState extends State<ProposerManager> {
       canceltimer = true;
     });
     //adds delay so the user can see the answer
-    Timer(Duration(seconds: 2), nextquestion);
+    //Timer(Duration(seconds: 2), nextquestion);
   }
 
   Widget hintButton(String k) {
@@ -374,6 +331,22 @@ class _ProposerPageState extends State<ProposerManager> {
                                   fontFamily: "Quando",
                                 ),
                               ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 20.0,
+                        ),
+                        child: Text(
+                          "Answer: $answer",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green,
+                            fontFamily: "Quando",
+                          ),
+                          maxLines: 1,
+                        ),
                       ),
                       SizedBox(
                         height: 30,

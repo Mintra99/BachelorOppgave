@@ -37,10 +37,10 @@ class _GameFinished extends State<GameFinishedManager> {
     if (response.statusCode == err) {
       setState(() {
         finalScore = widget.finalscore;//prefs.getInt('guesserScore');// we are get the score from local storage (we already this integer in guesser.dart file)
+        print("finalscore" + finalScore.toString());
         if (finalScore == null) {
           finalScore = 0;
         }
-        print(finalScore);
       });
     }
   }
@@ -70,7 +70,7 @@ class _GameFinished extends State<GameFinishedManager> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => new Home()),
                   );
                 },
                 child: Text("Return to main menu",

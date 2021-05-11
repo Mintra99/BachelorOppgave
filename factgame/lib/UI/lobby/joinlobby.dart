@@ -86,7 +86,6 @@ class _JoinLobbyState extends State<JoinLobby> {
                             BorderRadius.all(Radius.circular(12.0)),
                             color: Colors.grey.shade800,
                             child: ListTile(
-
                               // tileColor: Colors.grey.shade800,
                                 onTap: () async {
                                   SharedPreferences prefs =

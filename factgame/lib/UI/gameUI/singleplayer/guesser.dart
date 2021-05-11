@@ -116,6 +116,7 @@ class _GuesserPageState extends State<GuesserManager> {
       mapResponse[i] = mapResponse[n];
       mapResponse[n] = temp;
     }
+    starttimer();
   }
 
   void showQuestion() {
@@ -149,7 +150,6 @@ class _GuesserPageState extends State<GuesserManager> {
   @override
   void initState() {
     fitchData();
-    starttimer();
     super.initState();
   }
 
@@ -188,6 +188,7 @@ class _GuesserPageState extends State<GuesserManager> {
     btncolor["True"] = Colors.transparent;
     btncolor["Mostly true"] = Colors.transparent;
     btncolor["Barely true"] = Colors.transparent;
+    btncolor["Half true"] = Colors.transparent;
     btncolor["Mostly false"] = Colors.transparent;
     btncolor["False"] = Colors.transparent;
     btncolor["Pants on Fire"] = Colors.transparent;
@@ -511,6 +512,7 @@ class _GuesserPageState extends State<GuesserManager> {
                                     choiceButton('True'),
                                     choiceButton('Mostly true'),
                                     choiceButton('Barely true'),
+                                    choiceButton('Half true'),
                                     choiceButton('Mostly false'),
                                     choiceButton('False'),
                                     choiceButton('Pants on Fire'),

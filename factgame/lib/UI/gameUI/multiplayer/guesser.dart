@@ -444,6 +444,7 @@ class _GuesserPageState extends State<GuesserManagerMP> {
                                   choiceButton('True'),
                                   choiceButton('Mostly true'),
                                   choiceButton('Barely true'),
+                                  choiceButton('Half true'),
                                   choiceButton('Mostly false'),
                                   choiceButton('False'),
                                   choiceButton('Pants on Fire'),
