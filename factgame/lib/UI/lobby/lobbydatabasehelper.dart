@@ -196,29 +196,7 @@ class LobbydatabaseHelper {
       print('you should select Claim');
     }
   }
-  joinSuccessful(String game_name, String join_successfuly) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //var gameId = prefs.getInt('currentGameId'); // we use it in post method
-    //print('this is our game id : $gameId');
-    final key = 'access';
-    final value = prefs.get(key) ?? 0;
-    String myUrl = "$serverUrl/game/lobby_doc/$game_name/";
-    if (game_name != null) {
-      final response = await http.put(myUrl, headers: {
-        'Authorization': 'Bearer $value'
-      }, body: {
-        "join_successfuly": "$join_successfuly",
-      }).then((response) {
-        mapResponse = json.decode(response.body);
-        print('succesful join id');
-        print('Response status : ${response.statusCode}');
-        print('Response status : ${response.body} ');
-      });
-      print('try to bring hint : $mapResponse');
-    } else {
-      print('you should select Claim');
-    }
-  }
+
 
   getHint(int claimId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
