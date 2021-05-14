@@ -53,7 +53,6 @@ class MultiPlayer {
   }
 
   joinGame(int game_id, String game_name) async {
-    print("JOINGAME");
     print(game_id);
     print(game_name);
     final prefs = await SharedPreferences.getInstance();
@@ -67,10 +66,6 @@ class MultiPlayer {
     });
     mapResponse = json.decode(response.body);
     premierKey = mapResponse['question_set'];
-    print('i hope this have pk : $premierKey');
-    print("JOINGAMESTATUS");
-    print('Response status : ${response.statusCode}');
-    print('Response status : ${response.body} ');
 
     noQuestions = response.body.contains('restult');
     playerIn = response.body.contains('user already joined the game');
@@ -79,36 +74,19 @@ class MultiPlayer {
 
     playerID = data['player']['id'];
 
-    print("DATA!!!");
-    print(data);
-    print("PLAYERID!!!!");
-    print(playerID);
-    //dataQ = data['question_set'];
-    //dataGame= data['player']['game_id'];
-    print('222222222222222222222222222223333333333');
-    print(noQuestions);
-    print(playerIn);
+
     if (noQuestions) {
-      print("existingQ is false");
       setExQ(false);
-      print('game has no questions: $data');
 
     } else if (playerIn) {
-      print("existingP is true");
       setExP(true);
-      print('Player already joined the game: $data');
     } else {
       setExP(false);
       setExQ(true);
-      print("everything is fine");
       setDataQ(data['question_set']);
-      print("DATAQ!!!!!");
       print(getDataQ());
       dataGame = data['player']['game_id'];
-      print('function multiplayer helper Joingame $dataGame');
       prefs.setInt('currentGameId', dataGame);
-      print('game is ok and you join the game: ${data['message']}');
-
     }
   }
 }

@@ -67,9 +67,7 @@ class _ProposerPageState extends State<ProposerManager> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     playerID = prefs.getInt('playerID') + 1;
     for (int i = 1; i < widget.playerNum; i++) {
-      print("PLAYERID");
       playerIDList.add(prefs.getInt('playerID') + i);
-      print(playerIDList);
     }
     if (widget.listOfQuestions == null) {
       print('nooooooooo');
@@ -83,21 +81,14 @@ class _ProposerPageState extends State<ProposerManager> {
     if (widget.listOfQuestions.length > 0) {
       question = widget.listOfQuestions[0]['question_text'].toString();
       answer = widget.listOfQuestions[0]['correct_answer'].toString();
-      //hint = widget.listOfQuestions[0]['doc'].toString(); //.split("\" ");
       splitHint = widget.listOfQuestions[0]['doc'];
 
       _selected = splitHint[0];
-      print("HINT!!!!!!");
-      print(splitHint);
       answer.toLowerCase();
       print(answer);
       questionid = widget.listOfQuestions[0]['id'].toInt();
-      print('question id that we like it : $questionid');
-      //_loadData();
-      //lobbydatabaseHelper.addGameClaim(questionid);
       widget.listOfQuestions.removeAt(0);
     } else {
-      //MP.dataQ = null;
       lobbydatabaseHelper.updateScore(
           score, "respondent", prefs.get('playerID'));
       canceltimer = true;
@@ -114,8 +105,6 @@ class _ProposerPageState extends State<ProposerManager> {
 
   @override
   void initState() {
-    print("LISTOFHINT");
-    print(widget.listOfQuestions[0]['doc']);
     fitchData();
     starttimer();
     super.initState();
@@ -159,11 +148,8 @@ class _ProposerPageState extends State<ProposerManager> {
       }
     }
     score = scoreList.fold(0, (previous, current) => previous + current);
-    print(scoreList.length);
     if (scoreList.length > 0) {
       score = (score ~/ scoreList.length);
-      print("SUM SCORE");
-      print(score);
     } else {
       print("No players answered");
     }
@@ -185,15 +171,11 @@ class _ProposerPageState extends State<ProposerManager> {
       score += 1;
       prefs.setInt('guesserScore',
           score); // we set key(guesserScore) and value(score) score: is the update score for player, and we set this integer in local Storage
-      print('correct');
     } else {
-      print('wrong');
     }
     setState(() {
       canceltimer = true;
     });
-    //adds delay so the user can see the answer
-    //Timer(Duration(seconds: 2), nextquestion);
   }
 
   Widget hintButton(String k) {

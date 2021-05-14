@@ -5,7 +5,6 @@ import 'package:factgame/UI/gameUI/multiplayer/guesser.dart';
 import 'package:factgame/UI/gameUI/multiplayer/proposer.dart';
 import 'package:factgame/UI/gamemode/multiplayer_manager.dart';
 import 'package:factgame/models/classes/multiplayerdbHelper.dart';
-import 'package:factgame/models/classes/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

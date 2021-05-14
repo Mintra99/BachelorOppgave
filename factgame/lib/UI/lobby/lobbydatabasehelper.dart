@@ -61,19 +61,6 @@ class LobbydatabaseHelper {
     playerNum = index;
   }
 
-/*
-  getData(int id, String name) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    myId = id;
-    myName = name;
-    prefs.setInt('gameId', id);
-    prefs.setString('gameName', name);
-    print("GETDATA!!!");
-    print(getID());
-    MP.joinGame(getID(), getName());
-  }
-
- */
 
   createGame(String game_name, String numPlayers, List listOfClaims) async {
     if (numPlayers.isEmpty) {
@@ -104,15 +91,9 @@ class LobbydatabaseHelper {
 
     questionList = listOfClaims;
     setName(game_name);
-    //getData(currentGameId, game_name);
     addGameQuestions(
         listOfClaims); // because this function make insert to all questions, we need a new function to insert only one question.
 
-    //prefs.setString('lobbyName', mapResponse['game']['game_name']);
-    // prefs.setInt('playerNum', mapResponse['game']['num_of_players']);
-    //playerNum = mapResponse['game']['num_of_players'];
-    //prefs.setInt('currentPlayer', mapResponse['game']['current_players']);
-    //currentPlayer =  mapResponse['game']['current_players'];
     prefs.setInt('currentGameId', mapResponse['game']['id']);
   }
 
