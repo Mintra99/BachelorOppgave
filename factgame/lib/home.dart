@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'Login-and-register/logout.dart';
 import 'UI/gamemode/multiplayer_manager.dart';
 import 'UI/gamemode/singleplayer_manager.dart';
-import 'UI/scoreboard/multip_scoreboard.dart';
-import 'UI/scoreboard/singlep_scoreboard.dart';
 import 'package:factgame/models/global.dart';
 
 class Home extends StatefulWidget {
@@ -73,53 +71,7 @@ class HomeState extends State<Home> {
                     HowToPlayManager()
                   ]),
                 ),
-                /*new Container(
-                    color: darkGrayColor,
-                    child: Column(children: [
-                      Container(
-                        child: Title(
-                            color: Colors.black,
-                            child: Text(
-                              'Scoreboard',
-                              style: globalTitleStyle,
-                              textAlign: TextAlign.center,
-                            )),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 50.0),
-                        child: SPScoreboardManager(),
-                      ),
-                      Container(
-                        child: MPScoreboardManager(),
-                      )
-                    ])),
-                new Container(
-                    color: darkGrayColor,
-                    child: Column(children: [
-                      Container(
-                        child: Title(
-                            color: Colors.black,
-                            child: Text(
 
-                              'Profile',
-                              style: globalTitleStyle,
-                              textAlign: TextAlign.center,
-                            )),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                      Container(
-                        child: Logout(),
-                      ),
-                    ])),
-
-                 */
 
                 new Container(
                     color: darkGrayColor,
@@ -149,14 +101,6 @@ class HomeState extends State<Home> {
                 Tab(
                   icon: new Icon(Icons.videogame_asset),
                 ),
-                /*Tab(
-                  icon: new Icon(Icons.leaderboard),
-                ),
-                Tab(
-                  icon: new Icon(Icons.person),
-                ),
-
-                 */
                 Tab(
                   icon: new Icon(Icons.settings),
                 )
